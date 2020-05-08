@@ -12,6 +12,7 @@ module.exports = {
     "class-methods-use-this": "off",
     "no-console": "off",
     "arrow-body-style": "off",
+    "import/no-duplicates": "off",
     "max-len": ["error", { "code": 140 }]
   },
 };

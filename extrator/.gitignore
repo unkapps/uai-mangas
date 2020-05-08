@@ -9,3 +9,5 @@ node_modules/
 *.code-workspace
 # Local History for Visual Studio Code
 .history/
+
+data/

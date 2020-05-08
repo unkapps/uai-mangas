@@ -30,9 +30,16 @@ export default class Extrator {
   }
 
   private async readCategories() {
-    const response = await axios.get(this.leitorNetUrls.getCategoriesUrl());
-    const categories = response.data.categories_list;
+    if (await this.categoryService.isTimeToCralwer()) {
+      const response = await axios.get(this.leitorNetUrls.getCategoriesUrl());
+      const categories = response.data.categories_list;
 
-    return Promise.all(categories.map((category) => this.categoryService.createOrGet(category as CategoryDto)));
+      await Promise.all(categories.map((category) => this.categoryService.createOrGet(category as CategoryDto)));
+
+      return this.categoryService.saveEndOfCrawler();
+    }
+    console.info('Categories skipped');
+    return null;
+
   }
 }

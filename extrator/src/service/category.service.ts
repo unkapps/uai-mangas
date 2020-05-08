@@ -5,8 +5,13 @@ import slugify from 'slugify';
 import Category from '../entity/category';
 import CategoryDto from '../dto/category.dto';
 
+import WaitBetween from './wait-between';
+import { MINIMUM_HOURS_BETWEEN_CRAWLER_CATEGORY } from './wait-between';
+
+export const STATUS_FILE_PATH = './data/categories';
+
 @autoInjectable()
-export default class CategoryService {
+export default class CategoryService extends WaitBetween {
   public async createOrGet(categoryDto: CategoryDto): Promise<Category> {
     const connection = await getConnection();
 
@@ -32,5 +37,13 @@ export default class CategoryService {
     c.slug = slugify(c.name);
 
     return c;
+  }
+
+  public async isTimeToCralwer(): Promise<boolean> {
+    return super.isTimeToCralwer(STATUS_FILE_PATH, MINIMUM_HOURS_BETWEEN_CRAWLER_CATEGORY);
+  }
+
+  public saveEndOfCrawler(): Promise<void> {
+    return super.saveEndOfCrawler(STATUS_FILE_PATH);
   }
 }
