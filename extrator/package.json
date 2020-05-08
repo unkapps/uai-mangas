@@ -1,0 +1,30 @@
+{
+  "name": "extrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node node_modules/ts-node/dist/bin.js ./src/main.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-plugin-import": "^2.20.2",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
+    "slugify": "^1.4.0",
+    "tsyringe": "^4.2.0",
+    "typeorm": "^0.2.24",
+    "typeorm-naming-strategies": "^1.1.0"
+  }
+}
