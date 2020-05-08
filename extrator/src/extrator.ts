@@ -40,6 +40,5 @@ export default class Extrator {
     }
     console.info('Categories skipped');
     return null;
-
   }
 }
