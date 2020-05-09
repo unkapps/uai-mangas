@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "name": "Run",
+      "type": "node",
+      "request": "launch",
+      "args": [
+        "${workspaceRoot}/src/main.ts"
+      ],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register"
+      ],
+      "protocol": "inspector",
+      "cwd": "${workspaceRoot}"
+    }
+  ]
+}
