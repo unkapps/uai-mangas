@@ -3,7 +3,6 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
   OneToMany,
@@ -15,7 +14,16 @@ import Chapter from './chapter';
 
 @Entity()
 export default class Manga {
-  @PrimaryGeneratedColumn({ unsigned: true })
+  @Column(
+    'decimal',
+    {
+      precision: 11,
+      scale: 1,
+      unsigned: true,
+      primary: true,
+      generated: 'increment',
+    },
+  )
   id: number;
 
   @Column({
