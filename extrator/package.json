@@ -4,7 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node node_modules/ts-node/dist/bin.js ./src/main.ts"
+    "ts-node": "node node_modules/ts-node/dist/bin.js",
+    "start": "npm run ts-node -- ./src/main.ts",
+    "migration:run": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:run",
+    "migration:revert": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:revert"
   },
   "author": "",
   "license": "ISC",
