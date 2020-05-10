@@ -6,6 +6,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Category from './category';
@@ -14,16 +15,7 @@ import Chapter from './chapter';
 
 @Entity()
 export default class Manga {
-  @Column(
-    'decimal',
-    {
-      precision: 11,
-      scale: 1,
-      unsigned: true,
-      primary: true,
-      generated: 'increment',
-    },
-  )
+  @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column({
@@ -47,12 +39,18 @@ export default class Manga {
   @ManyToMany(() => Category, (category) => category.mangas)
   categories: Category[];
 
-  @ManyToMany(() => Author, (author) => author.mangas)
+  @ManyToMany(() => Author, (author) => author.createdMangas)
   @JoinTable()
-  authors: Author[];
+  authors?: Author[];
+
+  @ManyToMany(() => Author, (author) => author.drawnMangas)
+  @JoinTable({
+    name: 'manga_artist',
+  })
+  artists?: Author[];
 
   @OneToMany(() => Chapter, (chapter) => chapter.manga)
-  chapters: Chapter[];
+  chapters?: Chapter[];
 
   @Column({
     unsigned: true,
@@ -65,4 +63,10 @@ export default class Manga {
     unique: true,
   })
   leitorNetUrl: string;
+
+  @Column({
+    length: 255,
+    nullable: true,
+  })
+  coverUrl?: string;
 }

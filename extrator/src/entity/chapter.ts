@@ -22,7 +22,14 @@ export default class Chapter {
   })
   name: string;
 
-  @Column('smallint')
+  @Column(
+    'decimal',
+    {
+      precision: 6,
+      scale: 1,
+      unsigned: true,
+    },
+  )
   number: number;
 
   @ManyToOne(() => Manga, (manga) => manga.chapters)

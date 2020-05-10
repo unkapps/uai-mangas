@@ -5,7 +5,7 @@ export class MangaCategories1589050082905 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE \`manga_categories\` (
         \`category_id\` INT UNSIGNED NOT NULL,
-        \`manga_id\` DECIMAL(11,1) UNSIGNED NOT NULL,
+        \`manga_id\` INT UNSIGNED NOT NULL,
         INDEX \`fkIdx_20\` (\`category_id\` ASC) VISIBLE,
         INDEX \`fkIdx_23\` (\`manga_id\` ASC) VISIBLE,
         CONSTRAINT \`FK_20\`

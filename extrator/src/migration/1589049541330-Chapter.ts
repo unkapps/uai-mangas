@@ -5,8 +5,8 @@ export class Chapter1589049541330 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE \`chapter\` (
         \`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-        \`number\` SMALLINT NOT NULL,
-        \`manga_id\` DECIMAL(11,1) UNSIGNED NOT NULL,
+        \`number\` DECIMAL(6, 1) NOT NULL,
+        \`manga_id\` INT UNSIGNED NOT NULL,
         \`scan_id\` INT UNSIGNED NOT NULL,
         \`date\` DATETIME NOT NULL,
         \`title\` TINYTEXT NULL DEFAULT NULL,

@@ -4,7 +4,7 @@ export class Manga1589048007076 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`
       CREATE TABLE \`manga\` (
-        \`id\` DECIMAL(11,1) UNSIGNED NOT NULL,
+        \`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT,
         \`name\` VARCHAR(100) NOT NULL,
         \`slug\` VARCHAR(110) NOT NULL,
         \`finished\` TINYINT(1) NULL DEFAULT NULL,
