@@ -102,6 +102,8 @@ export default class Extrator {
 
             if (manga.justGotSaved || (await this.mangaService.areChaptersAvailable(manga, mangaDto))) {
               await this.readChapters(manga);
+
+              console.log(`${new Date().toISOString()} - '${manga.name}' saved :)`);
             }
 
             await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
@@ -133,9 +135,7 @@ export default class Extrator {
 
       for (const chapterDto of chaptersDto) {
         await this.chapterService.createOrGet(chapterDto as ChapterDto, manga);
-
-
-        await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
+        // await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
       }
 
       page += 1;
