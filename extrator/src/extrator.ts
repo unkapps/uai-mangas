@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm';
 import { autoInjectable, singleton } from 'tsyringe';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { setTimeout } from 'timers';
 import util from 'util';
 
@@ -16,6 +16,7 @@ import ExitService from './service/exit.service';
 import ChapterService from './service/chapter.service';
 import ChapterDto from './dto/chapter.dto';
 import Manga from './entity/manga';
+import Category from './entity/category';
 
 const setTimeoutPromise = util.promisify(setTimeout);
 
@@ -70,6 +71,12 @@ export default class Extrator {
     return null;
   }
 
+  private doRequestForMangas(page: number, category: Category): Promise<AxiosResponse<any>> {
+    return axios.get(this.leitorNetUrls.getSeriesUrl(page, category.id), {
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
+    });
+  }
+
   private async readMangas(): Promise<void> {
     if (await this.mangaService.isTimeToCralwer()) {
       const categoryIdPageOnCrawlerBegin = await this.categoryService.getIdFromCurrentCategoryOnCrawler();
@@ -86,9 +93,8 @@ export default class Extrator {
           page,
         });
 
-        for (let response = await axios.get(this.leitorNetUrls.getSeriesUrl(page, category.id), {
-          headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
-        }); response.data.series.length > 0;) {
+        let response = await this.doRequestForMangas(page, category);
+        while (response.data.series.length > 0) {
           const mangasDto = response.data.series;
 
           for (const mangaDto of mangasDto) {
@@ -102,6 +108,7 @@ export default class Extrator {
           }
 
           page += 1;
+          response = await this.doRequestForMangas(page, category);
         }
       }
 
@@ -111,11 +118,17 @@ export default class Extrator {
     return null;
   }
 
+  private doRequestForChapters(page: number, manga: Manga): Promise<AxiosResponse<any>> {
+    return axios.get(this.leitorNetUrls.getChaptersListUrl(page, manga.leitorNetId), {
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
+    });
+  }
+
   private async readChapters(manga: Manga) {
     let page = 1;
-    for (let response = await axios.get(this.leitorNetUrls.getChaptersListUrl(page, manga.leitorNetId), {
-      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
-    }); response.data.chapters && response.data.chapters.length > 0;) {
+    let response = await this.doRequestForChapters(page, manga);
+
+    while (response.data.chapters && response.data.chapters.length > 0) {
       const chaptersDto = response.data.chapters;
 
       for (const chapterDto of chaptersDto) {
@@ -126,6 +139,7 @@ export default class Extrator {
       }
 
       page += 1;
+      response = await this.doRequestForChapters(page, manga);
     }
   }
 }
