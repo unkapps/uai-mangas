@@ -44,7 +44,8 @@ export default class ChapterService {
 
     const scan: ScanDto = dto.releases[Object.keys(dto.releases)[0]];
 
-    entity.number = Number(dto.number);
+    // eslint-disable-next-line no-useless-escape
+    entity.number = Number(dto.number.replace(/[\,,\-]/, '.'));
     entity.title = dto.name;
     entity.manga = manga;
     entity.leitorNetId = dto.id_chapter;
