@@ -61,7 +61,7 @@ export default class Manga {
   leitorNetId: number;
 
   @Column({
-    length: 110,
+    length: 255,
     unique: true,
   })
   leitorNetUrl: string;

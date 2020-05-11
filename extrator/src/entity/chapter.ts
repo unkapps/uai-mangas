@@ -55,7 +55,7 @@ export default class Chapter {
   leitorNetReleaseId: number;
 
   @Column({
-    length: 110,
+    length: 255,
     unique: true,
   })
   leitorNetUrl: string;
