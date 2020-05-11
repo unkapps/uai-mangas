@@ -17,6 +17,7 @@ module.exports = {
     "no-restricted-syntax": "off",
     "consistent-return": "off",
     "no-underscore-dangle": "off",
+    "no-empty": "off",
     "max-len": ["error", { "code": 140 }]
   },
 };

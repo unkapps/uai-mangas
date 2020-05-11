@@ -31,12 +31,16 @@ export default class PageService {
 
     const pages: Page[] = [];
 
+    let i = 1;
     for (const imagePath of imagePaths) {
       const page: Page = new Page();
 
       page.chapter = chapter;
       page.imageFilePath = imagePath;
       page.imageUrl = page.imageFilePath.replace(CHAPTERS_PATH, '');
+      page.number = i;
+
+      i += 1;
 
       pages.push(page);
     }
@@ -75,8 +79,11 @@ export default class PageService {
     this.exitService.currentChapterFolderPath = pathWithoutFile;
 
     for (const url of urls) {
-      const path = await saveImageFromHttp(url, this.getImageFileName(chapter), pathWithoutFile);
-      paths.push(path);
+      try {
+        const path = await saveImageFromHttp(url, this.getImageFileName(chapter), pathWithoutFile);
+        paths.push(path);
+      } catch (err) {
+      }
     }
 
     await compressImage(pathWithoutFile);
