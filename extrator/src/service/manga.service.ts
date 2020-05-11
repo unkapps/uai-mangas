@@ -51,6 +51,7 @@ export default class MangaService extends WaitBetween {
     const entity = new Manga();
 
     entity.name = dto.name;
+    entity.description = dto.description;
     entity.leitorNetUrl = dto.link.replace(/\\\//g, '/');
     entity.leitorNetId = dto.id_serie;
     entity.slug = slugify(entity.name);
