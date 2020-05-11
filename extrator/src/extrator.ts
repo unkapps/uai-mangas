@@ -99,6 +99,7 @@ export default class Extrator {
             if (manga.justGotSaved || (await this.mangaService.areChaptersAvailable(manga, mangaDto))) {
               await this.readChapters(manga);
 
+              console.clear();
               console.log(`${new Date().toISOString()} - '${manga.name}' saved :)`);
 
               await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
