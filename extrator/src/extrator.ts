@@ -105,9 +105,11 @@ export default class Extrator {
             }
           }
 
+          console.log(`*** Page ${page} of '${category.name}' finished :)`);
           page += 1;
           response = await this.doRequestForMangas(page, category);
         }
+        console.log(`/*/*/* Category '${category.name}' finished :)`);
       }
 
       return this.mangaService.saveEndOfCrawler();
