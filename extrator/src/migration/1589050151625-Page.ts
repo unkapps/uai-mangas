@@ -5,9 +5,11 @@ export class Page1589050151625 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE \`page\` (
         \`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        \`number\` TINYINT UNSIGNED NOT NULL,
         \`chapter_id\` INT UNSIGNED NOT NULL,
         \`url\` VARCHAR(255) NOT NULL,
         PRIMARY KEY (\`id\`),
+        INDEX \`idx_number\` (\`number\` ASC) VISIBLE,
         INDEX \`fkIdx_53\` (\`chapter_id\` ASC) VISIBLE,
         CONSTRAINT \`FK_53\`
           FOREIGN KEY (\`chapter_id\`)

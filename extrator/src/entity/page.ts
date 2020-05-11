@@ -14,6 +14,9 @@ export default class Page {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
+  @Column('tinyint')
+  number: number;
+
   @Column({
     length: 255,
   })
