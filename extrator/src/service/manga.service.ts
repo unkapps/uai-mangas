@@ -8,10 +8,8 @@ import MangaDto from '../dto/manga.dto';
 import Manga from '../entity/manga';
 import CategoryService from './category.service';
 import AuthorService from './author.service';
-import { saveImageFromHttp } from '../util';
-import { STATUS_CRAWLER_MANGA_FILE_PATH, COVER_PATH, DATA_PATH } from '../config/general-craweler.config';
+import { STATUS_CRAWLER_MANGA_FILE_PATH } from '../config/general-craweler.config';
 import generateUid from '../util/generator-id';
-import ExitService from './exit.service';
 import ChapterService from './chapter.service';
 
 @singleton()
@@ -20,7 +18,6 @@ export default class MangaService extends WaitBetween {
   constructor(
     private categoryService: CategoryService,
     private authorService: AuthorService,
-    private exitService: ExitService,
     private chapterService: ChapterService,
   ) {
     super();
@@ -45,7 +42,6 @@ export default class MangaService extends WaitBetween {
 
     return connection.transaction(async (manager) => {
       const manga = await manager.save(await this.dtoToEntity(dto, manager));
-      this.exitService.currentMangaCoverFilePath = undefined;
       manga.justGotSaved = true;
       return manga;
     });
@@ -59,9 +55,7 @@ export default class MangaService extends WaitBetween {
     entity.leitorNetId = dto.id_serie;
     entity.slug = slugify(entity.name);
     entity.finished = dto.is_complete;
-    entity.coverFilePath = await saveImageFromHttp(dto.cover, this.getCoverFileName(entity), `${COVER_PATH}/`);
-    this.exitService.currentMangaCoverFilePath = entity.coverFilePath;
-    entity.coverUrl = entity.coverFilePath.replace(DATA_PATH, '');
+    entity.coverUrl = dto.cover;
 
     entity.categories = await this.categoryService.createOrGetList(dto.categories, manager);
     entity.authors = await this.authorService.createOrGetList(dto.author.split(' & '), manager);

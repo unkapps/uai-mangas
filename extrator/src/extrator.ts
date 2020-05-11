@@ -10,9 +10,8 @@ import CategoryDto from './dto/category.dto';
 import DatabaseConfig from './config/database.config';
 import MangaDto from './dto/manga.dto';
 import MangaService from './service/manga.service';
-import { MS_WAIT_BETWEEN_PAGES, COVER_PATH, CHAPTERS_PATH } from './config/general-craweler.config';
+import { MS_WAIT_BETWEEN_PAGES, DATA_PATH } from './config/general-craweler.config';
 import { mkdir } from './util';
-import ExitService from './service/exit.service';
 import ChapterService from './service/chapter.service';
 import ChapterDto from './dto/chapter.dto';
 import Manga from './entity/manga';
@@ -31,9 +30,7 @@ export default class Extrator {
     private mangaService: MangaService,
     private databaseConfig: DatabaseConfig,
     private chapterService: ChapterService,
-    exitService: ExitService,
   ) {
-    exitService.doActionBeforeExit();
   }
 
   public async run(): Promise<void> {
@@ -48,9 +45,8 @@ export default class Extrator {
     }
   }
 
-  private async createNecessaryFolders(): Promise<string> {
-    await mkdir(COVER_PATH, { recursive: true });
-    return mkdir(CHAPTERS_PATH, { recursive: true });
+  private async createNecessaryFolders(): Promise<void> {
+    await mkdir(DATA_PATH, { recursive: true });
   }
 
   private async readCategories(): Promise<void> {

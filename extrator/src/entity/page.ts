@@ -24,6 +24,7 @@ export default class Page {
 
   @Column({
     length: 255,
+    nullable: true,
   })
   imageFilePath?: string;
 

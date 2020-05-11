@@ -6,7 +6,6 @@ import Manga from '../entity/manga';
 import ChapterDto, { ScanDto } from '../dto/chapter.dto';
 import ScanlatorService from './scanlator.service';
 import PageService from './page.service';
-import ExitService from './exit.service';
 
 export const STATUS_FILE_PATH = './data/categories';
 
@@ -16,7 +15,6 @@ export default class ChapterService {
   constructor(
     private scanlatorService: ScanlatorService,
     private pageService: PageService,
-    private exitService: ExitService,
   ) { }
 
   public async createOrGet(dto: ChapterDto, manga: Manga): Promise<Chapter> {
@@ -37,9 +35,7 @@ export default class ChapterService {
     }
 
     return connection.transaction(async (manager) => {
-      const entity = await manager.save(await this.dtoToEntity(dto, manager, manga));
-      this.exitService.currentChapterFolderPath = undefined;
-      return entity;
+      return manager.save(await this.dtoToEntity(dto, manager, manga));
     });
   }
 
