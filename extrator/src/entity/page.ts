@@ -17,7 +17,12 @@ export default class Page {
   @Column({
     length: 255,
   })
-  url: string;
+  imageUrl: string;
+
+  @Column({
+    length: 255,
+  })
+  imageFilePath?: string;
 
   @ManyToOne(() => Chapter, (chapter) => chapter.pages)
   chapter: Chapter;

@@ -13,6 +13,10 @@ module.exports = {
     "no-console": "off",
     "arrow-body-style": "off",
     "import/no-duplicates": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
+    "consistent-return": "off",
+    "no-underscore-dangle": "off",
     "max-len": ["error", { "code": 140 }]
   },
 };

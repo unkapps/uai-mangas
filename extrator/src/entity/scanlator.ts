@@ -10,7 +10,7 @@ import Chapter from './chapter';
 
 
 @Entity()
-export default class Scan {
+export default class Scanlator {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
@@ -20,7 +20,7 @@ export default class Scan {
   })
   name: string;
 
-  @OneToMany(() => Chapter, (chapter) => chapter.scan)
+  @OneToMany(() => Chapter, (chapter) => chapter.scanlator)
   chapters: Chapter[];
 
   @Column({

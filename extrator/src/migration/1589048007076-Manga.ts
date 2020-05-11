@@ -5,8 +5,8 @@ export class Manga1589048007076 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE \`manga\` (
         \`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-        \`name\` VARCHAR(100) NOT NULL,
-        \`slug\` VARCHAR(110) NOT NULL,
+        \`name\` VARCHAR(150) NOT NULL,
+        \`slug\` VARCHAR(200) NOT NULL,
         \`finished\` TINYINT(1) NULL DEFAULT NULL,
         \`description\` TEXT NULL DEFAULT NULL,
         \`leitor_net_id\` INT UNSIGNED NOT NULL,

@@ -1,6 +1,7 @@
 import { fileExists, writeFile, readFile } from '../util';
 
 export const MINIMUM_HOURS_BETWEEN_CRAWLER_CATEGORY = 48;
+export const MINIMUM_HOURS_BETWEEN_CRAWLER_MANGA = 48;
 
 export default abstract class WaitBetween {
   protected async isTimeToCralwer(filePath: string, minimumHoursBetweenCrawler: number): Promise<boolean> {

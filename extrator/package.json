@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "scripts": {
     "ts-node": "node node_modules/ts-node/dist/bin.js",
     "start": "npm run ts-node -- ./src/main.ts",
@@ -22,9 +25,15 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@types/imagemin": "^7.0.0",
+    "@types/imagemin-jpegtran": "^5.0.0",
     "axios": "^0.19.2",
+    "imagemin": "^7.0.1",
+    "imagemin-jpegtran": "^6.0.0",
+    "imagemin-pngquant": "^8.0.0",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
+    "short-unique-id": "^3.0.0-rc1",
     "slugify": "^1.4.0",
     "tsyringe": "^4.2.0",
     "typeorm": "^0.2.24",

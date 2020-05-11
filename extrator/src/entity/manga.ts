@@ -40,7 +40,9 @@ export default class Manga {
   categories: Category[];
 
   @ManyToMany(() => Author, (author) => author.createdMangas)
-  @JoinTable()
+  @JoinTable({
+    name: 'manga_author',
+  })
   authors?: Author[];
 
   @ManyToMany(() => Author, (author) => author.drawnMangas)
@@ -69,4 +71,12 @@ export default class Manga {
     nullable: true,
   })
   coverUrl?: string;
+
+  @Column({
+    length: 255,
+    nullable: true,
+  })
+  coverFilePath?: string;
+
+  justGotSaved?: boolean;
 }

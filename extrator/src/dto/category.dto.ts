@@ -3,13 +3,13 @@ export default interface CategoryDto {
 
   name: string;
 
-  label: string;
+  label?: string;
 
-  value: string;
+  value?: string;
 
-  titles: number;
+  titles?: number;
 
-  view_count: number;
+  view_count?: number;
 
   link: string;
 }

@@ -16,9 +16,13 @@ export default class Author {
 
   @Column({
     length: 100,
+    unique: true,
   })
   name: string;
 
   @ManyToMany(() => Manga, (manga) => manga.authors)
-  mangas: Manga[];
+  createdMangas: Manga[];
+
+  @ManyToMany(() => Manga, (manga) => manga.artists)
+  drawnMangas: Manga[];
 }
