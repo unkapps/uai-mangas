@@ -33,7 +33,7 @@ export default class MangaService extends WaitBetween {
     const mangaDatabase = await connection
       .getRepository(Manga)
       .createQueryBuilder('manga')
-      .where('manga.leitorNetId = :leitorNetId', { leitorNetId: dto.id_serie })
+      .where('manga.name = :name', { name: dto.name })
       .getOne();
 
     if (mangaDatabase) {
@@ -59,8 +59,13 @@ export default class MangaService extends WaitBetween {
     entity.coverUrl = dto.cover;
 
     entity.categories = await this.categoryService.createOrGetList(dto.categories, manager);
-    entity.authors = await this.authorService.createOrGetList(dto.author.split(' & '), manager);
-    entity.artists = await this.authorService.createOrGetList(dto.artist.split(' & '), manager);
+
+    if (dto.author) {
+      entity.authors = await this.authorService.createOrGetList(dto.author.split(' & '), manager);
+    }
+    if (dto.artist) {
+      entity.artists = await this.authorService.createOrGetList(dto.artist.split(' & '), manager);
+    }
 
     return entity;
   }
