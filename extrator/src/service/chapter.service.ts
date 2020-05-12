@@ -45,7 +45,7 @@ export default class ChapterService {
     const scan: ScanDto = dto.releases[Object.keys(dto.releases)[0]];
 
     // eslint-disable-next-line no-useless-escape
-    entity.number = Number(dto.number.replace(/[\,,\-]/, '.'));
+    entity.number = this.convertNumberStringToNumber(dto);
     entity.title = dto.name;
     entity.manga = manga;
     entity.leitorNetId = dto.id_chapter;
@@ -56,6 +56,25 @@ export default class ChapterService {
     entity.pages = await this.pageService.createFromChapter(entity, scan);
 
     return entity;
+  }
+
+  private convertNumberStringToNumber(dto: ChapterDto) {
+    const regexWord = /(\d)([a-zA-Z]+)/;
+
+    // eslint-disable-next-line no-useless-escape
+    let numberS = dto.number.replace(/[\,,\-]/, '.');
+
+    const matches = regexWord.exec(numberS);
+
+    if (matches) {
+      const charCode = matches[2].charCodeAt(0);
+
+      const decimalPlace = charCode >= 97 ? charCode - 97 : charCode - 65;
+
+      numberS = numberS.replace(matches[2], `.${decimalPlace}`);
+    }
+
+    return Number(numberS);
   }
 
 
