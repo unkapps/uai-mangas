@@ -18,14 +18,11 @@ export default class Chapter {
   id: number;
 
   @Column(
-    'decimal',
     {
-      precision: 6,
-      scale: 1,
-      unsigned: true,
+      width: 10,
     },
   )
-  number: number;
+  number: string;
 
   @ManyToOne(() => Manga, (manga) => manga.chapters)
   manga: Manga;
