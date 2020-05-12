@@ -58,7 +58,7 @@ export default class ChapterService {
     return entity;
   }
 
-  standardizeNumber (dto: ChapterDto): string {
+  standardizeNumber(dto: ChapterDto): string {
     const regexWord = /^(\d+)([a-zA-Z]+)$/;
 
     // eslint-disable-next-line no-useless-escape
