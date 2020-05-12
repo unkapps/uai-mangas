@@ -109,6 +109,11 @@ export default class Extrator {
           console.log(`*** Page ${page} of '${category.name}' finished :)`);
           page += 1;
           response = await this.doRequestForMangas(page, category);
+
+          await this.categoryService.setIdFromCurrentCategoryOnCrawler({
+            categoryId: category.id,
+            page,
+          });
         }
         console.log(`/*/*/* Category '${category.name}' finished :)`);
       }
