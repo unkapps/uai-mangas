@@ -1,7 +1,6 @@
 
 import { Controller, Get } from '@nestjs/common';
 
-import Manga from 'src/entity/manga';
 import { MangaService } from './manga-service';
 import LastManga from './dto/last-manga';
 
