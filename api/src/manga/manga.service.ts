@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import Manga from 'src/entity/manga';
-import { MangaRepository } from './manga-repository';
+import { MangaRepository } from './manga.repository';
 import LastManga from './dto/last-manga';
 
 @Injectable()
