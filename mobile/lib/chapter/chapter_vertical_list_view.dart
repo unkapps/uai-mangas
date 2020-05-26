@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:leitor_manga/page/page.dto.dart';
+import 'package:leitor_manga/chapter/chapter.dto.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class MangaPageVerticalListView extends StatefulWidget {
-  MangaPageVerticalListView(this.pages, {Key key, this.onPageChange})
+class ChapterVerticalListView extends StatefulWidget {
+  ChapterVerticalListView(this.chapter, {Key key, this.onPageChange})
       : super(key: key);
 
   final Function(int) onPageChange;
-  final List<PageDto> pages;
+  final ChapterDto chapter;
 
   @override
-  _MangaPageVerticalListViewState createState() =>
-      _MangaPageVerticalListViewState(this.pages);
+  _ChapterVerticalListViewState createState() =>
+      _ChapterVerticalListViewState(this.chapter);
 }
 
-class _MangaPageVerticalListViewState extends State<MangaPageVerticalListView> {
-  final List<PageDto> pages;
+class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
+  final ChapterDto chapter;
 
-  _MangaPageVerticalListViewState(this.pages);
+  _ChapterVerticalListViewState(this.chapter);
   var currentIndex = 0;
   var qtyLoaded = 3;
 
@@ -33,7 +33,7 @@ class _MangaPageVerticalListViewState extends State<MangaPageVerticalListView> {
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemBuilder: (context, position) {
-          var page = pages[position];
+          var page = chapter.pages[position];
           var imageLoaded = false;
 
           return VisibilityDetector(
@@ -74,12 +74,12 @@ class _MangaPageVerticalListViewState extends State<MangaPageVerticalListView> {
             ),
           );
         },
-        itemCount: pages.length,
+        itemCount: chapter.pages.length,
       ),
       onNotification: (ScrollNotification scrollInfo) {
         if (scrollInfo.metrics.pixels >=
                 scrollInfo.metrics.maxScrollExtent - 500 &&
-            qtyLoaded < pages.length) {
+            qtyLoaded < chapter.pages.length) {
           setState(() {
             qtyLoaded += 3;
           });

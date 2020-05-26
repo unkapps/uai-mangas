@@ -1,26 +1,27 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
-import 'package:leitor_manga/page/manga_page_vertical_list_view.dart';
-import 'package:leitor_manga/page/page.dto.dart';
-import 'package:leitor_manga/page/page.service.dart';
+import 'package:leitor_manga/chapter/chapter.dto.dart';
+import 'package:leitor_manga/chapter/chapter.service.dart';
+import 'package:leitor_manga/chapter/chapter_vertical_list_view.dart';
 
-class MangaPage extends StatefulWidget {
-  MangaPage({Key key, this.title}) : super(key: key);
-
-  final String title;
+class ChapterPage extends StatefulWidget {
+  ChapterPage({Key key}) : super(key: key);
 
   @override
-  _MangaPageState createState() => _MangaPageState();
+  _ChapterPageState createState() => _ChapterPageState();
 }
 
-class _MangaPageState extends State<MangaPage> {
-  PageService service = PageService();
+class _ChapterPageState extends State<ChapterPage> {
+  ChapterService service = ChapterService();
 
+  Future<ChapterDto> _chapterFuture;
   var currentPage = 1;
+  var title = 'Carregando...';
 
   @override
   void initState() {
+    _chapterFuture = service.getChapter();
     super.initState();
   }
 
@@ -28,17 +29,19 @@ class _MangaPageState extends State<MangaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: FutureBuilder(
-        future: service.getPages(),
-        builder: (BuildContext context, AsyncSnapshot<List<PageDto>> snapshot) {
+        future: _chapterFuture,
+        builder: (BuildContext context, AsyncSnapshot<ChapterDto> snapshot) {
           if (snapshot.hasData) {
-            List<PageDto> pages = snapshot.data;
+            ChapterDto chapter = snapshot.data;
+
+            title = chapter.getTitle();
 
             return Stack(children: <Widget>[
-              MangaPageVerticalListView(
-                pages,
+              ChapterVerticalListView(
+                chapter,
                 onPageChange: (pageNumber) {
                   setState(() {
                     currentPage = pageNumber + 1;
@@ -56,7 +59,7 @@ class _MangaPageState extends State<MangaPage> {
                     child: Row(
                       children: [
                         Text(
-                          '$currentPage/${pages.length}',
+                          '$currentPage/${chapter.pages.length}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

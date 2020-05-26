@@ -24,6 +24,13 @@ export default class Chapter {
   )
   number: string;
 
+  @Column(
+    {
+      unsigned: true,
+    },
+  )
+  numberInt: number;
+
   @ManyToOne(() => Manga, (manga) => manga.chapters)
   manga: Manga;
 

@@ -7,7 +7,7 @@ import { getConnectionOptions } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MangaModule } from './manga/manga.module';
-import { PageModule } from './page/page.module';
+import { ChapterModule } from './chapter/chapter.module';
 
 const envFilePath = process.env.NODE_ENV === 'prod' ? '.env' : '.local.env';
 
@@ -20,15 +20,16 @@ const envFilePath = process.env.NODE_ENV === 'prod' ? '.env' : '.local.env';
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
         const connectionOptions = await getConnectionOptions();
+        
 
         return Object.assign(connectionOptions, {
           namingStrategy: new SnakeNamingStrategy(),
-          logging: process.env.LOGGING,
+          logging: true,
         });
       },
     }),
     MangaModule,
-    PageModule,
+    ChapterModule,
   ],
   controllers: [
     AppController,
@@ -39,6 +40,6 @@ const envFilePath = process.env.NODE_ENV === 'prod' ? '.env' : '.local.env';
 })
 export class AppModule {
   constructor() {
-    console.log(`Running application in env: ${envFilePath} ${process.env.LOGGING}`);
+    console.log(`Running application in env: ${envFilePath} ${process.env.TYPE_ORM_LOGGING}`);
   }
 }
