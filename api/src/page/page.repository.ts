@@ -5,7 +5,7 @@ import PageDto from './dto/page.dto';
 
 @EntityRepository(Page)
 export class PageRepository extends Repository<Page> {
-  getPagesOfChapter(chapterId: number, limit = 10): Promise<PageDto[]> {
+  getPagesOfChapter(chapterId: number): Promise<PageDto[]> {
     return this
       .createQueryBuilder('page')
       .select('page.id', 'id')
@@ -14,7 +14,6 @@ export class PageRepository extends Repository<Page> {
         chapterId,
       })
       .orderBy('page.number', 'ASC')
-      .limit(limit)
       .getRawMany();
   }
 }
