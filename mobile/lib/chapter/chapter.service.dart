@@ -5,9 +5,7 @@ import 'package:leitor_manga/chapter/chapter.dto.dart';
 import 'package:leitor_manga/config/environment_config.dart';
 
 class ChapterService {
-  Future<ChapterDto> getChapter() async {
-    var chapterId = 11858;
-
+  Future<ChapterDto> getChapter(int chapterId) async {
     Response res = await get(
         Uri.http(EnvironmentConfig.SITE_ADDRESS, '/chapter/$chapterId'));
 
