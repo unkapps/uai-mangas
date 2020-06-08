@@ -25,23 +25,24 @@ class ChapterVerticalListView extends StatefulWidget {
 }
 
 class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
-  Map<int, PageLoad> pageIsLoaded;
-  Map<int, GlobalKey> gloalKeyByPageIndex;
+  final Map<int, PageLoad> pageIsLoaded;
   final ChapterDto chapter;
   final ChapterController _controller;
+
+  Map<int, GlobalKey> gloalKeyByPageIndex;
 
   ProgressDialog progressDialog;
   double _olderScrollPosition;
   Timer timerScaleChanged;
 
   _ChapterVerticalListViewState(this.chapter, {ChapterController controller})
-      : _controller = controller ?? ChapterController();
+      : _controller = controller ?? ChapterController(),
+        pageIsLoaded = controller.pageIsLoaded;
 
   @override
   void initState() {
     _olderScrollPosition = 0;
 
-    pageIsLoaded = new Map();
     gloalKeyByPageIndex = new Map();
 
     for (int i = 0; i < chapter.pages.length; i++) {
@@ -158,7 +159,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
     return DiagonalScrollView(
       // scrollDirection: Axis.vertical,
       maxWidth: width,
-      maxHeight: _controller.height,
+      maxHeight: _controller.height + 60,
       minScale: 1,
       maxScale: 3,
       enableZoom: true,
@@ -175,7 +176,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
       onScroll: (Offset offset) {
         double dy = offset.dy * -1;
 
-        _controller._onScrollNotification(dy);
+        _controller.notifyScrollChange(dy);
 
         if (dy > _olderScrollPosition &&
             pageIsLoaded[_controller.currentPage].status ==
@@ -264,16 +265,24 @@ class ChapterTree implements Comparable {
   }
 }
 
+typedef PageChangeListener = void Function(int);
+typedef ScrollChangeListener = void Function(double);
+
 class ChapterController {
   ChapterDto chapter;
-  final List<Function(int)> pageChangeListeners = [];
+  final List<PageChangeListener> pageChangeListeners = [];
+  final List<ScrollChangeListener> scrollChangeListeners = [];
+  final Map<int, PageLoad> pageIsLoaded = Map();
+
   void Function(int value, bool showDialog, VoidCallback callback)
       checkIfPageIsLoaded;
   AvlTreeSet<ChapterTree> chaptersTree;
 
   DiagonalScrollViewController scrollController;
 
-  ChapterController();
+  ChapterController() {
+    this.scrollChangeListeners.add((scroll) => _onScrollNotification(scroll));
+  }
 
   int _currentPage = 0;
   double _height = 0;
@@ -289,8 +298,23 @@ class ChapterController {
         .forEach((pageChangeListener) => pageChangeListener(page));
   }
 
-  void addPageChangeListener(Function(int) pageChangeListener) {
+  void addPageChangeListener(PageChangeListener pageChangeListener) {
     pageChangeListeners.add(pageChangeListener);
+  }
+
+  void notifyScrollChange(double scroll) {
+    scrollChangeListeners
+        .forEach((scrollChangeListener) => scrollChangeListener(scroll));
+  }
+
+  void addScrollChangeListener(ScrollChangeListener scrollChangeListener) {
+    scrollChangeListeners.add(scrollChangeListener);
+  }
+
+  bool allPagesLoaded() {
+    return pageIsLoaded.values
+            .any((pageLoad) => pageLoad.status == PageLoadStatus.NOT_LOADED) ==
+        false;
   }
 
   Future<void> scrollToPage(int pageNumber, {updatePageNumber: true}) {

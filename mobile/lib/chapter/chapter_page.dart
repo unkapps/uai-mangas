@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
@@ -5,6 +7,8 @@ import 'package:leitor_manga/chapter/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/chapter_bar.dart';
 import 'package:leitor_manga/chapter/chapter_vertical_list_view.dart';
+
+const double _opacityChapterBar = 0.8;
 
 class ChapterPage extends StatefulWidget {
   final int chapterId;
@@ -24,6 +28,8 @@ class _ChapterPageState extends State<ChapterPage> {
 
   String title;
   int currentPage;
+  double _oldScroll;
+  double _opacity;
 
   _ChapterPageState(this.chapterId);
 
@@ -31,6 +37,8 @@ class _ChapterPageState extends State<ChapterPage> {
   void initState() {
     title = 'Carregando...';
     currentPage = 1;
+    _oldScroll = 0;
+    _opacity = _opacityChapterBar;
 
     _chapterFuture = service.getChapter(this.chapterId);
     _chapterFuture.then((chapter) {
@@ -42,6 +50,25 @@ class _ChapterPageState extends State<ChapterPage> {
     _chapterController.addPageChangeListener((pageNumber) {
       setState(() {
         currentPage = pageNumber + 1;
+      });
+    });
+    _chapterController.addScrollChangeListener((scroll) {
+      var scrollYEnd =
+          _chapterController.scrollController.getContainerSize().height +
+              scroll;
+      var childSize =
+          _chapterController.scrollController.getChildSize().height + 40;
+      var endOfScroll =
+          scrollYEnd > childSize && _chapterController.allPagesLoaded();
+
+      setState(() {
+        if (!endOfScroll && scroll > _oldScroll + 2) {
+          _opacity = 0;
+        } else if (endOfScroll || scroll < _oldScroll - 2) {
+          _opacity = _opacityChapterBar;
+        }
+
+        _oldScroll = scroll;
       });
     });
     super.initState();
@@ -67,7 +94,7 @@ class _ChapterPageState extends State<ChapterPage> {
               Positioned(
                 bottom: 0,
                 child: Opacity(
-                  opacity: 0.8,
+                  opacity: _opacity,
                   child: ChapterBar(chapter, _chapterController),
                 ),
               ),
