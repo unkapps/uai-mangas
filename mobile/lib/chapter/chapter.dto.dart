@@ -33,6 +33,6 @@ class ChapterDto {
   }
 
   getTitle() {
-    return '$mangaName - $number';
+    return '$number - $mangaName';
   }
 }
