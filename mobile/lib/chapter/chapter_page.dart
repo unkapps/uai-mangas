@@ -30,7 +30,6 @@ class _ChapterPageState extends State<ChapterPage> {
   @override
   void initState() {
     title = 'Carregando...';
-    debugPrint('init state');
     currentPage = 1;
 
     _chapterFuture = service.getChapter(this.chapterId);
@@ -39,13 +38,12 @@ class _ChapterPageState extends State<ChapterPage> {
         title = chapter.getTitle();
       });
     });
-    _chapterController = ChapterController(
-      onPageChange: (pageNumber) {
-        setState(() {
-          currentPage = pageNumber + 1;
-        });
-      },
-    );
+    _chapterController = ChapterController();
+    _chapterController.addPageChangeListener((pageNumber) {
+      setState(() {
+        currentPage = pageNumber + 1;
+      });
+    });
     super.initState();
   }
 

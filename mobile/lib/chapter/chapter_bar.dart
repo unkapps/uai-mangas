@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:leitor_manga/chapter/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter_page.dart';
+import 'package:leitor_manga/chapter/chapter_page_dialog.dart';
 import 'package:leitor_manga/chapter/chapter_vertical_list_view.dart';
 
 class ChapterBar extends StatelessWidget {
@@ -54,12 +56,18 @@ class ChapterBar extends StatelessWidget {
                 constraints: new BoxConstraints(
                   minWidth: 80.0,
                 ),
-                child: Text(
-                  '${_chapterController.currentPage + 1}/${_chapter.pages.length}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
+                child: InkWell(
+                  child: Text(
+                    '${_chapterController.currentPage + 1}/${_chapter.pages.length}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
+                  onTap: () {
+                    debugPrint('ue');
+                    _chapterDialog(context);
+                  },
                 ),
               ),
               _chapterController.currentPage + 1 < _chapter.pages.length
@@ -103,5 +111,18 @@ class ChapterBar extends StatelessWidget {
       MaterialPageRoute(builder: (context) => ChapterPage(chapterId)),
       (Route<dynamic> route) => false,
     );
+  }
+
+  Future<void> _chapterDialog(BuildContext context) async {
+    int chosenPage = await showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return ChapterPageDialog(this._chapter);
+        });
+
+    if (chosenPage != null) {
+      chosenPage = chosenPage - 1;
+      this._chapterController.goToPage(chosenPage, true);
+    }
   }
 }
