@@ -34,11 +34,11 @@ class MangaDto {
       coverUrl: json['coverUrl'] as String,
       qtyChapters: json['qtyChapters'] as int,
       authors: (json['authors'])
-          .map((dynamic jsonPage) => AuthorDto.fromJson(jsonPage))
+          .map((dynamic jsonPage) => AuthorDto.fromJson(jsonPage, false))
           .toList()
           .cast<AuthorDto>(),
       artists: (json['artists'])
-          .map((dynamic jsonPage) => AuthorDto.fromJson(jsonPage))
+          .map((dynamic jsonPage) => AuthorDto.fromJson(jsonPage, true))
           .toList()
           .cast<AuthorDto>(),
       categories: (json['categories'])

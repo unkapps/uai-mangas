@@ -157,7 +157,6 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
     var width = MediaQuery.of(context).size.width;
 
     return DiagonalScrollView(
-      // scrollDirection: Axis.vertical,
       maxWidth: width,
       maxHeight: _controller.height + 60,
       minScale: 1,
@@ -211,6 +210,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
       },
       child: LayoutBuilder(
         builder: (context, constraints) {
+          debugPrint('olaa');
           List<Widget> widgets = [];
           for (int index = 0; index < chapter.pages.length; index++) {
             var page = chapter.pages[index];

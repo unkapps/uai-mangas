@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+
 import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/single/chapter_bar.dart';
@@ -71,6 +72,14 @@ class _ChapterPageState extends State<ChapterPage> {
         _oldScroll = scroll;
       });
     });
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     super.initState();
   }
 
