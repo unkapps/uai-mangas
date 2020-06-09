@@ -64,6 +64,7 @@ class _MangaPageState extends State<MangaPage> {
                     fit: BoxFit.fitWidth,
                     height: size.height * 0.6,
                     width: size.width,
+                    cache: true,
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
