@@ -1,4 +1,4 @@
-import 'package:leitor_manga/chapter/page.dto.dart';
+import 'package:leitor_manga/chapter/single/page.dto.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:leitor_manga/chapter/chapter.dto.dart';
+import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 
 class ChapterPageDialog extends StatefulWidget {
   final ChapterDto _chapter;

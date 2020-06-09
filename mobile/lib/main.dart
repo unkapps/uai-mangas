@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leitor_manga/chapter/chapter_page.dart';
+import 'package:leitor_manga/manga/single/manga.page.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ChapterPage(11858),
+      home: MangaPage(),
     );
   }
 }

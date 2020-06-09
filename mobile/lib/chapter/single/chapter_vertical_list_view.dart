@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:diagonal_scrollview/diagonal_scrollview.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:leitor_manga/chapter/page.dart' as MangaPage;
+import 'package:leitor_manga/chapter/single/page.dart' as MangaPage;
 import 'package:quiver/collection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:leitor_manga/chapter/chapter.dto.dart';
+import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 
 import 'package:progress_dialog/progress_dialog.dart';
 

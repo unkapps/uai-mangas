@@ -27,6 +27,7 @@ export default class Manga {
   @Column({
     length: 110,
     unique: true,
+    select: false,
   })
   slug: string;
 
@@ -57,12 +58,14 @@ export default class Manga {
   @Column({
     unsigned: true,
     unique: true,
+    select: false,
   })
   leitorNetId: number;
 
   @Column({
     length: 255,
     unique: true,
+    select: false,
   })
   leitorNetUrl: string;
 
@@ -75,8 +78,11 @@ export default class Manga {
   @Column({
     length: 255,
     nullable: true,
+    select: false,
   })
   coverFilePath?: string;
 
   justGotSaved?: boolean;
+
+  qtyChapters: number;
 }

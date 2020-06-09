@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
-import 'package:leitor_manga/chapter/chapter.dto.dart';
+import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
-import 'package:leitor_manga/chapter/chapter_bar.dart';
-import 'package:leitor_manga/chapter/chapter_vertical_list_view.dart';
+import 'package:leitor_manga/chapter/single/chapter_bar.dart';
+import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
 
 const double _opacityChapterBar = 0.8;
 

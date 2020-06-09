@@ -3,9 +3,26 @@ import { EntityRepository, Repository } from 'typeorm';
 import Chapter from 'src/entity/chapter';
 import PageDto from 'src/page/dto/page.dto';
 import ChapterDto from './dto/chapter.dto';
+import ChapterListDto from './dto/chapter-list.dto';
 
 @EntityRepository(Chapter)
 export class ChapterRepository extends Repository<Chapter> {
+  list(mangaId: number, offset = 0, size = 10): Promise<ChapterListDto[]> {
+    return this
+      .createQueryBuilder('chapter')
+      .select('chapter.id', 'id')
+      .addSelect('chapter.number', 'number')
+      .addSelect('chapter.date', 'date')
+      .where('chapter.manga_id = :mangaId', {
+        mangaId,
+      })
+      .orderBy('chapter.number_int', 'DESC')
+      .addOrderBy('chapter.number', 'DESC')
+      .limit(size)
+      .offset(offset)
+      .getRawMany();
+  }
+
   async getChapter(chapterId: number): Promise<ChapterDto> {
     const results = await this
       .createQueryBuilder('chapter')

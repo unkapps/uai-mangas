@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:leitor_manga/chapter/chapter.dto.dart';
-import 'package:leitor_manga/chapter/chapter_page.dart';
-import 'package:leitor_manga/chapter/chapter_page_dialog.dart';
-import 'package:leitor_manga/chapter/chapter_vertical_list_view.dart';
+import 'package:leitor_manga/chapter/single/chapter.dto.dart';
+import 'package:leitor_manga/chapter/single/chapter_page.dart';
+import 'package:leitor_manga/chapter/single/chapter_page_dialog.dart';
+import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
 
 class ChapterBar extends StatelessWidget {
   final ChapterDto _chapter;

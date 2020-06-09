@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:leitor_manga/chapter/page.dto.dart';
+import 'package:leitor_manga/chapter/single/page.dto.dart';
 
 class ChapterDto {
   final int id;

@@ -24,18 +24,21 @@ export default class Category {
   @Column({
     length: 60,
     unique: true,
+    select: false,
   })
   slug: string;
 
   @Column({
     unsigned: true,
     unique: true,
+    select: false,
   })
   leitorNetId: number;
 
   @Column({
     length: 60,
     unique: true,
+    select: false,
   })
   leitorNetUrl: string;
 
