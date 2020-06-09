@@ -1,7 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:leitor_manga/chapter/list/chapter_list_page.dart';
+import 'package:leitor_manga/chapter/list/chapter_list.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
 
@@ -20,7 +20,7 @@ class _MangaPageState extends State<MangaPage> {
 
   String _title;
   Future<MangaDto> _future;
-  GlobalKey<ChapterListPageState> _chapterListPageKey;
+  GlobalKey<ChapterListState> _chapterListPageKey;
 
   ScrollController _scrollController;
 
@@ -72,7 +72,7 @@ class _MangaPageState extends State<MangaPage> {
                       header: Text('Resumo'),
                       collapsed: Text(
                         manga.description,
-                        softWrap: true,
+                        softWrap: true,             
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.justify,
@@ -88,7 +88,7 @@ class _MangaPageState extends State<MangaPage> {
                     padding: EdgeInsets.all(8.0),
                     child: Text('Capitulos'),
                   ),
-                  ChapterListPage(
+                  ChapterList(
                     qtyChapters: manga.qtyChapters,
                     key: _chapterListPageKey,
                   ),

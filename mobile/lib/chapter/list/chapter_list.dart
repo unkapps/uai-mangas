@@ -4,17 +4,17 @@ import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/list/chapter-list.dto.dart';
 import 'package:leitor_manga/chapter/single/chapter_page.dart';
 
-class ChapterListPage extends StatefulWidget {
+class ChapterList extends StatefulWidget {
   final int qtyChapters;
-  ChapterListPage({Key key, @required this.qtyChapters}) : super(key: key);
+  ChapterList({Key key, @required this.qtyChapters}) : super(key: key);
 
   @override
-  ChapterListPageState createState() => ChapterListPageState();
+  ChapterListState createState() => ChapterListState();
 }
 
 enum Status { LOADING, ERROR, DONE }
 
-class ChapterListPageState extends State<ChapterListPage> {
+class ChapterListState extends State<ChapterList> {
   final ChapterService _service = ChapterService();
 
   List<ChapterListDto> _list;
