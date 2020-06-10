@@ -1,5 +1,5 @@
 
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 
 import Manga from 'src/entity/manga';
 import { MangaService } from './manga.service';
@@ -10,8 +10,8 @@ export class MangaController {
   constructor(private readonly mangaService: MangaService) { }
 
   @Get('last')
-  findAll(): Promise<LastManga[]> {
-    return this.mangaService.getLastMangasWithUpdates();
+  findAll(@Query('size') size?: number): Promise<LastManga[]> {
+    return this.mangaService.getLastMangasWithUpdates(size);
   }
 
   @Get(':id')

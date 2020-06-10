@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leitor_manga/manga/single/manga.page.dart';
+import 'package:leitor_manga/home/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MangaPage(mangaId: 577),
+      home: HomePage(),
     );
   }
 }

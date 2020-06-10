@@ -10,8 +10,8 @@ export class MangaService {
     private mangaRepository: MangaRepository,
   ) {}
 
-  getLastMangasWithUpdates(): Promise<LastManga[]> {
-    return this.mangaRepository.getLastMangasWithUpdates();
+  getLastMangasWithUpdates(size?: number): Promise<LastManga[]> {
+    return this.mangaRepository.getLastMangasWithUpdates(size);
   }
 
   findById(id: number): Promise<Manga> {

@@ -6,17 +6,18 @@ import LastManga from './dto/last-manga';
 
 @EntityRepository(Manga)
 export class MangaRepository extends Repository<Manga> {
-  getLastMangasWithUpdates(limit = 10): Promise<LastManga[]> {
+  getLastMangasWithUpdates(size = 10): Promise<LastManga[]> {
     return this.manager.getRepository(Chapter)
       .createQueryBuilder('chapter')
       .select('manga.id', 'id')
       .addSelect('manga.name', 'name')
-      .addSelect('chapter.number', 'chapter_number')
+      .addSelect('chapter.number', 'chapterNumber')
+      .addSelect('chapter.id', 'chapterId')
       .addSelect('chapter.date', 'date')
       .addSelect('manga.coverUrl', 'coverUrl')
       .innerJoin('chapter.manga', 'manga')
       .orderBy('chapter.date', 'DESC')
-      .limit(limit)
+      .limit(size)
       .getRawMany();
   }
 
