@@ -24,7 +24,8 @@ class ChapterVerticalListView extends StatefulWidget {
           controller: this.chapterController);
 }
 
-class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
+class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
+    with WidgetsBindingObserver {
   final Map<int, PageLoad> pageIsLoaded;
   final ChapterDto chapter;
   final ChapterController _controller;
@@ -54,7 +55,16 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
     _controller.initState(this.chapter);
 
     _controller.checkIfPageIsLoaded = _checkIfPageIsLoaded;
+
+    WidgetsBinding.instance.addObserver(this);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Future<void> _loadImage(pageNumber) {
@@ -150,6 +160,15 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
   }
 
   @override
+  void didChangeMetrics() {
+    setState(() {
+      _controller.recalculateHeightOfPages(gloalKeyByPageIndex);
+      _controller.rebuildChaptersMap();
+      _controller.goToPage(_controller.currentPage, false);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     progressDialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
@@ -204,13 +223,11 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
 
         _olderScrollPosition = dy;
       },
-
       onCreated: (DiagonalScrollViewController controller) {
         _controller.scrollController = controller;
       },
       child: LayoutBuilder(
         builder: (context, constraints) {
-          debugPrint('olaa');
           List<Widget> widgets = [];
           for (int index = 0; index < chapter.pages.length; index++) {
             var page = chapter.pages[index];
@@ -240,6 +257,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView> {
                     },
                   ));
           }
+
           return Column(
             children: widgets,
           );
@@ -371,6 +389,19 @@ class ChapterController {
 
   Future<int> previousPage() async {
     return goToPage(currentPage - 1, true);
+  }
+
+  void recalculateHeightOfPages(Map<int, GlobalKey> gloalKeyByPageIndex) {
+    for (int i = 0; i < this.chapter.pages.length; i++) {
+      var page = chapter.pages[i];
+
+      var currentContext = gloalKeyByPageIndex[i].currentContext;
+      if (currentContext != null) {
+        RenderBox box = currentContext.findRenderObject();
+
+        page.height = box.size.height;
+      }
+    }
   }
 
   void _chapterLoaded(double height, int pageIndex) {

@@ -65,7 +65,6 @@ class ChapterBar extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    debugPrint('ue');
                     _chapterDialog(context);
                   },
                 ),

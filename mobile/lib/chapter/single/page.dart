@@ -25,7 +25,6 @@ class Page extends StatefulWidget {
 
   @override
   _PageState createState() => _PageState(
-        width: this.width,
         page: this.page,
         index: this.index,
         loadingBuilder: this.loadingBuilder,
@@ -34,7 +33,6 @@ class Page extends StatefulWidget {
 }
 
 class _PageState extends State<Page> {
-  final double width;
   final PageDto page;
   final int index;
 
@@ -42,7 +40,6 @@ class _PageState extends State<Page> {
   final LoadingBuilder loadingBuilder;
 
   _PageState({
-    @required this.width,
     @required this.page,
     @required this.index,
     @required this.loadingBuilder,
@@ -58,7 +55,7 @@ class _PageState extends State<Page> {
       child: ExtendedImage.network(
         page.imageUrl,
         fit: BoxFit.fitWidth,
-        width: width,
+        width: widget.width,
         mode: ExtendedImageMode.none,
         cache: false,
         clearMemoryCacheIfFailed: true,
