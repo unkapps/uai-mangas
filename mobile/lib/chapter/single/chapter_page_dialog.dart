@@ -42,8 +42,9 @@ class _ChapterPageDialogState extends State<ChapterPageDialog> {
     return Container(
       child: AlertDialog(
         title: const Text('Navegar para página'),
-        content: SingleChildScrollView(
-          child: ListBody(
+        scrollable: true,
+        content: 
+           ListBody(
             children: <Widget>[
               TextField(
                 controller: textController,
@@ -67,7 +68,7 @@ class _ChapterPageDialogState extends State<ChapterPageDialog> {
               ),
             ],
           ),
-        ),
+        
         actions: <Widget>[
           FlatButton(
             child: Text('Cancelar'),
@@ -84,6 +85,7 @@ class _ChapterPageDialogState extends State<ChapterPageDialog> {
                 : null,
           ),
         ],
+        buttonPadding: EdgeInsets.zero,
       ),
     );
   }
