@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:extended_future_builder/extended_future_builder.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,6 @@ import 'package:leitor_manga/category/categories.dart';
 import 'package:leitor_manga/chapter/list/chapter_list.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
-import 'package:leitor_manga/shared/extended-future-builder.dart';
 
 class MangaPage extends StatefulWidget {
   final MangaService service = MangaService();

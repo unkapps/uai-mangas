@@ -1,3 +1,4 @@
+import 'package:extended_future_builder/extended_future_builder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/single/chapter_bar.dart';
 import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
-import 'package:leitor_manga/shared/extended-future-builder.dart';
 
 const double _opacityChapterBar = 0.8;
 

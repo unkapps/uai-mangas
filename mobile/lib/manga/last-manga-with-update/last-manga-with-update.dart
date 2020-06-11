@@ -5,7 +5,7 @@ import 'package:leitor_manga/chapter/single/chapter_page.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/single/manga.page.dart';
-import 'package:leitor_manga/shared/extended-future-builder.dart';
+import 'package:extended_future_builder/extended_future_builder.dart';
 
 class LastMangaWithUpdate extends StatefulWidget {
   LastMangaWithUpdate({Key key}) : super(key: key);
