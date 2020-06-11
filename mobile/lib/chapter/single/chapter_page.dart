@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,7 @@ import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/single/chapter_bar.dart';
 import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
+import 'package:leitor_manga/shared/extended-future-builder.dart';
 
 const double _opacityChapterBar = 0.8;
 
@@ -24,7 +23,6 @@ class _ChapterPageState extends State<ChapterPage> {
   final ChapterService service = ChapterService();
   final int chapterId;
 
-  Future<ChapterDto> _chapterFuture;
   ChapterController _chapterController;
 
   String title;
@@ -41,12 +39,6 @@ class _ChapterPageState extends State<ChapterPage> {
     _oldScroll = 0;
     _opacity = _opacityChapterBar;
 
-    _chapterFuture = service.getChapter(this.chapterId);
-    _chapterFuture.then((chapter) {
-      setState(() {
-        title = chapter.getTitle();
-      });
-    });
     _chapterController = ChapterController();
     _chapterController.addPageChangeListener((pageNumber) {
       setState(() {
@@ -98,29 +90,42 @@ class _ChapterPageState extends State<ChapterPage> {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: FutureBuilder(
-        future: _chapterFuture,
-        builder: (BuildContext context, AsyncSnapshot<ChapterDto> snapshot) {
-          if (snapshot.hasData) {
-            ChapterDto chapter = snapshot.data;
-
-            return Stack(children: <Widget>[
-              ChapterVerticalListView(
-                chapter,
-                chapterController: _chapterController,
+      body: ExtendedFutureBuilder<ChapterDto>(
+        futureResponseBuilder: () => service.getChapter(this.chapterId),
+        ftrStarted: () {
+          setState(() {
+            title = 'Carregando...';
+          });
+        },
+        ftrThen: (chapter) {
+          setState(() {
+            title = chapter.getTitle();
+          });
+        },
+        ftrCatch: (err) {
+          setState(() {
+            title = 'Erro ao carregar :(';
+          });
+        },
+        errorBuilder: (BuildContext context, error) {
+          return Center(
+            child: Text('Erro! Clique para tentar novamente.'),
+          );
+        },
+        successBuilder: (BuildContext context, ChapterDto chapter) {
+          return Stack(children: <Widget>[
+            ChapterVerticalListView(
+              chapter,
+              chapterController: _chapterController,
+            ),
+            Positioned(
+              bottom: 0,
+              child: Opacity(
+                opacity: _opacity,
+                child: ChapterBar(chapter, _chapterController),
               ),
-              Positioned(
-                bottom: 0,
-                child: Opacity(
-                  opacity: _opacity,
-                  child: ChapterBar(chapter, _chapterController),
-                ),
-              ),
-            ]);
-          } else {
-            debugPrint('snap has no data');
-            return Center(child: CircularProgressIndicator());
-          }
+            ),
+          ]);
         },
       ),
     );

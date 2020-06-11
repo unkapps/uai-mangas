@@ -1,40 +1,38 @@
-import 'dart:convert';
-
-import 'package:http/http.dart';
-import 'package:leitor_manga/config/environment_config.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
 
 class MangaService {
+  static final Dio dio = DioConfig.dio;
+
   Future<MangaDto> getManga(int mangaId) async {
-    Response res =
-        await get(Uri.http(EnvironmentConfig.SITE_ADDRESS, '/manga/$mangaId'));
+    Response res = await dio.get('/manga/$mangaId');
 
     if (res.statusCode == 200) {
-      dynamic body = jsonDecode(res.body);
-
-      return MangaDto.fromJson(body);
+      return MangaDto.fromJson(res.data);
     }
 
     return null;
   }
 
   Future<List<LastMangaWithUpdateDto>> getLastMangaWithUpdate() async {
-    Response res = await get(Uri.http(
-      EnvironmentConfig.SITE_ADDRESS,
+    Response res = await dio.get(
       '/manga/last',
-      {
-        'size': '5',
+      queryParameters: {
+        'size': '3',
       },
-    ));
+    );
 
     if (res.statusCode == 200) {
-      dynamic body = jsonDecode(res.body);
-      return body
+      return res.data
           .map((dynamic json) => LastMangaWithUpdateDto.fromJson(json))
           .toList()
           .cast<LastMangaWithUpdateDto>();
     }
+
+    debugPrint('${res.statusCode}');
 
     return null;
   }

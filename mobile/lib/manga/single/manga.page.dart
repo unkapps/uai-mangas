@@ -10,6 +10,7 @@ import 'package:leitor_manga/category/categories.dart';
 import 'package:leitor_manga/chapter/list/chapter_list.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
+import 'package:leitor_manga/shared/extended-future-builder.dart';
 
 class MangaPage extends StatefulWidget {
   final MangaService service = MangaService();
@@ -25,7 +26,6 @@ class _MangaPageState extends State<MangaPage> {
   final int mangaId;
 
   String _title;
-  Future<MangaDto> _future;
   GlobalKey<ChapterListState> _chapterListPageKey;
 
   ScrollController _scrollController;
@@ -35,12 +35,6 @@ class _MangaPageState extends State<MangaPage> {
   @override
   void initState() {
     _title = 'Carregando';
-    _future = widget.service.getManga(mangaId);
-    _future.then((manga) {
-      setState(() {
-        _title = manga.name;
-      });
-    });
 
     _chapterListPageKey = GlobalKey();
     _scrollController = ScrollController();
@@ -59,78 +53,91 @@ class _MangaPageState extends State<MangaPage> {
       appBar: AppBar(
         title: Text(_title),
       ),
-      body: FutureBuilder(
-        future: _future,
-        builder: (BuildContext context, AsyncSnapshot<MangaDto> snapshot) {
-          if (snapshot.hasData) {
-            var manga = snapshot.data;
+      body: ExtendedFutureBuilder<MangaDto>(
+        futureResponseBuilder: () => widget.service.getManga(mangaId),
+        ftrStarted: () {
+          setState(() {
+            _title = 'Carregando...';
+          });
+        },
+        ftrThen: (manga) {
+          setState(() {
+            _title = manga.name;
+          });
+        },
+        ftrCatch: (err) {
+          setState(() {
+            _title = 'Erro ao carregar :(';
+          });
+        },
+        errorBuilder: (BuildContext context, error) {
+          return Center(
+            child: Text('Erro! Clique para tentar novamente.'),
+          );
+        },
+        successBuilder: (BuildContext context, MangaDto manga) {
+          var authors = List<AuthorDto>.from(manga.authors);
+          authors.addAll(manga.artists);
 
-            var authors = List<AuthorDto>.from(manga.authors);
-            authors.addAll(manga.artists);
+          Size size = MediaQuery.of(context).size;
 
-            Size size = MediaQuery.of(context).size;
-
-            return NotificationListener(
-              child: ListView(
-                controller: _scrollController,
-                children: <Widget>[
-                  ExtendedImage.network(
-                    manga.coverUrl,
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter,
-                    height: size.height * 0.6,
-                    width: size.width,
-                    cache: true,
+          return NotificationListener(
+            child: ListView(
+              controller: _scrollController,
+              children: <Widget>[
+                ExtendedImage.network(
+                  manga.coverUrl,
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
+                  height: size.height * 0.6,
+                  width: size.width,
+                  cache: true,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Authors(
+                    authors: authors,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Authors(
-                      authors: authors,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ExpandablePanel(
+                    header: Text('Resumo'),
+                    collapsed: Text(
+                      manga.description,
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.justify,
+                    ),
+                    expanded: Text(
+                      manga.description,
+                      softWrap: true,
+                      textAlign: TextAlign.justify,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ExpandablePanel(
-                      header: Text('Resumo'),
-                      collapsed: Text(
-                        manga.description,
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.justify,
-                      ),
-                      expanded: Text(
-                        manga.description,
-                        softWrap: true,
-                        textAlign: TextAlign.justify,
-                      ),
-                    ),
-                  ),
-                  Categories(
-                    categories: manga.categories,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Capitulos'),
-                  ),
-                  ChapterList(
-                    qtyChapters: manga.qtyChapters,
-                    key: _chapterListPageKey,
-                  ),
-                ],
-              ),
-              onNotification: (ScrollNotification scrollInfo) {
-                if (_chapterListPageKey.currentState != null) {
-                  return _chapterListPageKey.currentState.onNotification(
-                      scrollInfo, _scrollController.position.maxScrollExtent);
-                }
-                return false;
-              },
-            );
-          } else {
-            debugPrint('snap has no data');
-            return Center(child: CircularProgressIndicator());
-          }
+                ),
+                Categories(
+                  categories: manga.categories,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Capitulos'),
+                ),
+                ChapterList(
+                  qtyChapters: manga.qtyChapters,
+                  key: _chapterListPageKey,
+                ),
+              ],
+            ),
+            onNotification: (ScrollNotification scrollInfo) {
+              if (_chapterListPageKey.currentState != null) {
+                return _chapterListPageKey.currentState.onNotification(
+                    scrollInfo, _scrollController.position.maxScrollExtent);
+              }
+              return false;
+            },
+          );
         },
       ),
     );
