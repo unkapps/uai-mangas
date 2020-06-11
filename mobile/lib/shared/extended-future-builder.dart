@@ -17,9 +17,7 @@ typedef FutureBuilderFtrCatch = void Function(dynamic error);
 /// ExtendedFutureBuilder<User>(
 ///         futureResponseBuilder: () => service.getUser(userId),
 ///         ftrStarted: () {
-///           setState(() {
-///             title = 'Loading...';
-///           });
+///           title = 'Loading...';
 ///         },
 ///         ftrThen: (user) {
 ///           setState(() {

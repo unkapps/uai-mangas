@@ -56,18 +56,20 @@ class _MangaPageState extends State<MangaPage> {
       body: ExtendedFutureBuilder<MangaDto>(
         futureResponseBuilder: () => widget.service.getManga(mangaId),
         ftrStarted: () {
-          setState(() {
-            _title = 'Carregando...';
-          });
+          _title = 'Carregando...';
         },
         ftrThen: (manga) {
           setState(() {
-            _title = manga.name;
+            if (mounted) {
+              _title = manga.name;
+            }
           });
         },
         ftrCatch: (err) {
           setState(() {
-            _title = 'Erro ao carregar :(';
+            if (mounted) {
+              _title = 'Erro ao carregar :(';
+            }
           });
         },
         errorBuilder: (BuildContext context, error) {

@@ -93,9 +93,7 @@ class _ChapterPageState extends State<ChapterPage> {
       body: ExtendedFutureBuilder<ChapterDto>(
         futureResponseBuilder: () => service.getChapter(this.chapterId),
         ftrStarted: () {
-          setState(() {
             title = 'Carregando...';
-          });
         },
         ftrThen: (chapter) {
           setState(() {
