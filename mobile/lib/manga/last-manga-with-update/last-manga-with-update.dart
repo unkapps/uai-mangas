@@ -44,76 +44,75 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
           itemBuilder: (BuildContext context, int index) {
             var manga = mangas[index];
 
-            return Container(
-              height: 130,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ExtendedImage.network(
-                    manga.coverUrl,
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.topCenter,
-                    cache: true,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        MangaPage(mangaId: manga.id)),
-                              );
-                            },
-                            child: Text(
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MangaPage(mangaId: manga.id)),
+                );
+              },
+              child: Container(
+                height: 130,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ExtendedImage.network(
+                      manga.coverUrl,
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.topCenter,
+                      cache: true,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
                               manga.name,
                               style: Theme.of(context).textTheme.headline6,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                            width: 60,
-                            child: OutlineButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MangaPage(mangaId: manga.id)),
-                                );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChapterPage(manga.chapterId)),
-                                );
-                              },
-                              child: Text(
-                                manga.chapterNumber,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
+                            SizedBox(
+                              height: 30,
+                              width: 60,
+                              child: OutlineButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MangaPage(mangaId: manga.id)),
+                                  );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChapterPage(manga.chapterId)),
+                                  );
+                                },
+                                child: Text(
+                                  manga.chapterNumber,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                  ),
                                 ),
+                                borderSide: BorderSide(color: Colors.blue),
+                                shape: StadiumBorder(),
                               ),
-                              borderSide: BorderSide(color: Colors.blue),
-                              shape: StadiumBorder(),
                             ),
-                          ),
-                          Text(DateFormat('dd/MM/yyyy')
-                              .format(manga.date.toLocal())),
-                        ],
+                            Text(DateFormat('dd/MM/yyyy')
+                                .format(manga.date.toLocal())),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
