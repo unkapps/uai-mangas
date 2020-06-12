@@ -9,6 +9,8 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     return SizedBox(
       height: 30,
       child: ListView.separated(
@@ -31,7 +33,7 @@ class Categories extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: theme.accentColor),
           );
         },
       ),

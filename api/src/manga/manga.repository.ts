@@ -2,11 +2,12 @@ import { EntityRepository, Repository } from 'typeorm';
 
 import Manga from 'src/entity/manga';
 import Chapter from 'src/entity/chapter';
-import LastManga from './dto/last-manga';
+import LastMangaDto from './dto/last-manga.dto';
+import AllMangaDto from './dto/all-manga.dto';
 
 @EntityRepository(Manga)
 export class MangaRepository extends Repository<Manga> {
-  getLastMangasWithUpdates(size = 10): Promise<LastManga[]> {
+  getLastMangasWithUpdates(size = 10): Promise<LastMangaDto[]> {
     return this.manager.getRepository(Chapter)
       .createQueryBuilder('chapter')
       .select('manga.id', 'id')
@@ -17,6 +18,16 @@ export class MangaRepository extends Repository<Manga> {
       .addSelect('manga.coverUrl', 'coverUrl')
       .innerJoin('chapter.manga', 'manga')
       .orderBy('chapter.date', 'DESC')
+      .limit(size)
+      .getRawMany();
+  }
+
+  getAllMangas(size = 10): Promise<AllMangaDto[]> {
+    return this
+      .createQueryBuilder('manga')
+      .select('manga.id', 'id')
+      .addSelect('manga.name', 'name')
+      .addSelect('manga.coverUrl', 'coverUrl')
       .limit(size)
       .getRawMany();
   }

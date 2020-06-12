@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import Manga from 'src/entity/manga';
 import { MangaRepository } from './manga.repository';
-import LastManga from './dto/last-manga';
+import LastMangaDto from './dto/last-manga.dto';
+import AllMangaDto from './dto/all-manga.dto';
 
 @Injectable()
 export class MangaService {
@@ -10,8 +11,12 @@ export class MangaService {
     private mangaRepository: MangaRepository,
   ) {}
 
-  getLastMangasWithUpdates(size?: number): Promise<LastManga[]> {
+  getLastMangasWithUpdates(size?: number): Promise<LastMangaDto[]> {
     return this.mangaRepository.getLastMangasWithUpdates(size);
+  }
+
+  getAllMangas(size?: number): Promise<AllMangaDto[]> {
+    return this.mangaRepository.getAllMangas(size);
   }
 
   findById(id: number): Promise<Manga> {

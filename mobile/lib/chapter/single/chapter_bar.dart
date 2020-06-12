@@ -27,7 +27,6 @@ class ChapterBar extends StatelessWidget {
               ? IconButton(
                   icon: Icon(
                     Icons.skip_previous,
-                    color: Colors.white,
                   ),
                   tooltip: 'Capítulo anterior',
                   onPressed: () {
@@ -43,7 +42,6 @@ class ChapterBar extends StatelessWidget {
                   ? IconButton(
                       icon: Icon(
                         Icons.keyboard_arrow_left,
-                        color: Colors.white,
                       ),
                       tooltip: 'Página anterior',
                       onPressed: () {
@@ -62,7 +60,6 @@ class ChapterBar extends StatelessWidget {
                     '${_chapterController.currentPage + 1}/${_chapter.pages.length}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
                     ),
                   ),
                   onTap: () {
@@ -74,7 +71,6 @@ class ChapterBar extends StatelessWidget {
                   ? IconButton(
                       icon: Icon(
                         Icons.keyboard_arrow_right,
-                        color: Colors.white,
                       ),
                       tooltip: 'Próxima página',
                       onPressed: () {
@@ -90,7 +86,6 @@ class ChapterBar extends StatelessWidget {
               ? IconButton(
                   icon: Icon(
                     Icons.skip_next,
-                    color: Colors.white,
                   ),
                   tooltip: 'Próximo capítulo',
                   onPressed: () {

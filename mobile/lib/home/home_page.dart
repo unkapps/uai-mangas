@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dart';
+import 'package:leitor_manga/manga/list/manga_list.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -9,31 +12,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  PageStorageKey _lastMangaWithUpdateKey;
+  PageStorageKey _allMangaWithUpdateKey;
+
+  @override
+  void initState() {
+    _lastMangaWithUpdateKey = PageStorageKey('l');
+    _allMangaWithUpdateKey = PageStorageKey('a');
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Title'),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Últimas atualizações',
-                style: Theme.of(context).textTheme.headline5,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: LastMangaWithUpdate(),
-              ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Uai Mangás'),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Últimas atualizações'),
+              Tab(text: 'Todos'),
             ],
           ),
+        ),
+        body: TabBarView(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              child: LastMangaWithUpdate(key: _lastMangaWithUpdateKey),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: MangaList(key: _allMangaWithUpdateKey),
+            ),
+          ],
         ),
       ),
     );

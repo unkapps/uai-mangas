@@ -1,4 +1,4 @@
-export default interface LastManga {
+export default interface LastMangaDto {
   id: number;
   name: string;
   chapterNumber: string;

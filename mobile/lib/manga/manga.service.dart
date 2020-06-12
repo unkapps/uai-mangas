@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
+import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
 
 class MangaService {
@@ -21,7 +22,7 @@ class MangaService {
     var res = await dio.get(
       '/manga/last',
       queryParameters: {
-        'size': '3',
+        'size': '4',
       },
     );
 
@@ -30,6 +31,26 @@ class MangaService {
           .map((dynamic json) => LastMangaWithUpdateDto.fromJson(json))
           .toList()
           .cast<LastMangaWithUpdateDto>();
+    }
+
+    debugPrint('${res.statusCode}');
+
+    return null;
+  }
+
+  Future<List<MangaListDto>> getAllManga() async {
+    var res = await dio.get(
+      '/manga',
+      queryParameters: {
+        'size': '4',
+      },
+    );
+
+    if (res.statusCode == 200) {
+      return res.data
+          .map((dynamic json) => MangaListDto.fromJson(json))
+          .toList()
+          .cast<MangaListDto>();
     }
 
     debugPrint('${res.statusCode}');

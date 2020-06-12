@@ -16,13 +16,11 @@ class LastMangaWithUpdate extends StatefulWidget {
 
 class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
   final MangaService mangaService = MangaService();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     return ExtendedFutureBuilder<List<LastMangaWithUpdateDto>>(
       futureResponseBuilder: () => mangaService.getLastMangaWithUpdate(),
       errorBuilder: (BuildContext context, error) {
@@ -34,8 +32,6 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
           (BuildContext context, List<LastMangaWithUpdateDto> mangas) {
         return ListView.separated(
           itemCount: mangas.length,
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
           separatorBuilder: (BuildContext context, int index) {
             return Container(
               height: 5,
@@ -72,7 +68,7 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
                           children: <Widget>[
                             Text(
                               manga.name,
-                              style: Theme.of(context).textTheme.headline6,
+                              style: theme.textTheme.headline6,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -101,7 +97,7 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
                                     fontSize: 12,
                                   ),
                                 ),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: theme.accentColor),
                                 shape: StadiumBorder(),
                               ),
                             ),
