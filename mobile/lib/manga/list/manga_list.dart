@@ -17,6 +17,8 @@ class _MangaListState extends State<MangaList> {
 
   @override
   Widget build(BuildContext context) {
+    final columnWidth = 200.0;
+
     final theme = Theme.of(context);
 
     return ExtendedFutureBuilder<List<MangaListDto>>(
@@ -30,7 +32,7 @@ class _MangaListState extends State<MangaList> {
         return GridView.builder(
           itemCount: mangas.length,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
+            maxCrossAxisExtent: columnWidth,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
             childAspectRatio: 0.62,
@@ -58,6 +60,8 @@ class _MangaListState extends State<MangaList> {
                       child: ExtendedImage.network(
                         manga.coverUrl,
                         fit: BoxFit.fitHeight,
+                        width: columnWidth,
+                        height: 262,
                         alignment: Alignment.topCenter,
                         cache: true,
                       ),
