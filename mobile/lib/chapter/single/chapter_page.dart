@@ -16,7 +16,7 @@ class ChapterPage extends StatefulWidget {
   ChapterPage(this.chapterId, {Key key}) : super(key: key);
 
   @override
-  _ChapterPageState createState() => _ChapterPageState(this.chapterId);
+  _ChapterPageState createState() => _ChapterPageState(chapterId);
 }
 
 class _ChapterPageState extends State<ChapterPage> {
@@ -91,9 +91,9 @@ class _ChapterPageState extends State<ChapterPage> {
         title: Text(title),
       ),
       body: ExtendedFutureBuilder<ChapterDto>(
-        futureResponseBuilder: () => service.getChapter(this.chapterId),
+        futureResponseBuilder: () => service.getChapter(chapterId),
         ftrStarted: () {
-            title = 'Carregando...';
+          title = 'Carregando...';
         },
         ftrThen: (chapter) {
           setState(() {

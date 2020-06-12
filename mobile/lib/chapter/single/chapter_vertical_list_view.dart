@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:diagonal_scrollview/diagonal_scrollview.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:leitor_manga/chapter/single/page.dart' as MangaPage;
+import 'package:leitor_manga/chapter/single/page.dart' as manga_page;
+import 'package:pedantic/pedantic.dart';
 import 'package:quiver/collection.dart';
 
 import 'package:flutter/material.dart';
@@ -20,8 +22,7 @@ class ChapterVerticalListView extends StatefulWidget {
 
   @override
   _ChapterVerticalListViewState createState() =>
-      _ChapterVerticalListViewState(this.chapter,
-          controller: this.chapterController);
+      _ChapterVerticalListViewState(chapter, controller: chapterController);
 }
 
 class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
@@ -44,15 +45,15 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
   void initState() {
     _olderScrollPosition = 0;
 
-    gloalKeyByPageIndex = new Map();
+    gloalKeyByPageIndex = HashMap();
 
-    for (int i = 0; i < chapter.pages.length; i++) {
-      pageIsLoaded[i] = new PageLoad(
+    for (var i = 0; i < chapter.pages.length; i++) {
+      pageIsLoaded[i] = PageLoad(
           i < 2 ? PageLoadStatus.IN_PROGRESS : PageLoadStatus.NOT_LOADED);
-      gloalKeyByPageIndex[i] = new GlobalKey();
+      gloalKeyByPageIndex[i] = GlobalKey();
     }
 
-    _controller.initState(this.chapter);
+    _controller.initState(chapter);
 
     _controller.checkIfPageIsLoaded = _checkIfPageIsLoaded;
 
@@ -68,7 +69,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
   }
 
   Future<void> _loadImage(pageNumber) {
-    var completer = new Completer<void>();
+    var completer = Completer<void>();
 
     if (pageIsLoaded[pageNumber]._status == PageLoadStatus.NOT_LOADED) {
       pageIsLoaded[pageNumber].onPageLoadChanged = ((status) {
@@ -90,7 +91,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
 
   void _checkIfPageIsLoaded(
       int pageNumber, bool showDialog, VoidCallback callback) async {
-    var completer = new Completer<void>();
+    var completer = Completer<void>();
 
     var loadPreviousPage = pageNumber > 0 &&
         pageIsLoaded[pageNumber - 1].status == PageLoadStatus.NOT_LOADED;
@@ -118,9 +119,9 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
       });
     });
 
-    completer.future.then((_) async {
+    unawaited(completer.future.then((_) async {
       if (loadNextPage) {
-        _loadImage(pageNumber + 1);
+        unawaited(_loadImage(pageNumber + 1));
       }
 
       if (showDialog) {
@@ -128,7 +129,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
       }
 
       callback();
-    });
+    }));
   }
 
   Widget _getProgressBarForPage(containerHeight) {
@@ -147,7 +148,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
     );
   }
 
-  _informHeightAndInxOfPage(index) {
+  void _informHeightAndInxOfPage(index) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (gloalKeyByPageIndex[index].currentContext != null) {
         RenderBox box =
@@ -192,7 +193,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
         });
       },
       onScroll: (Offset offset) {
-        double dy = offset.dy * -1;
+        var dy = offset.dy * -1;
 
         _controller.notifyScrollChange(dy);
 
@@ -204,7 +205,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
                 PageLoadStatus.IN_PROGRESS;
           });
         } else if (dy > _olderScrollPosition &&
-            _controller.currentPage + 1 < this.chapter.pages.length &&
+            _controller.currentPage + 1 < chapter.pages.length &&
             pageIsLoaded[_controller.currentPage + 1].status ==
                 PageLoadStatus.NOT_LOADED) {
           setState(() {
@@ -228,13 +229,13 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
       },
       child: LayoutBuilder(
         builder: (context, constraints) {
-          List<Widget> widgets = [];
-          for (int index = 0; index < chapter.pages.length; index++) {
+          var widgets = <Widget>[];
+          for (var index = 0; index < chapter.pages.length; index++) {
             var page = chapter.pages[index];
 
             widgets.add(pageIsLoaded[index].status == PageLoadStatus.NOT_LOADED
                 ? _getProgressBarForPage(page.height)
-                : MangaPage.Page(
+                : manga_page.Page(
                     key: gloalKeyByPageIndex[index],
                     width: width,
                     page: page,
@@ -290,7 +291,7 @@ class ChapterController {
   ChapterDto chapter;
   final List<PageChangeListener> pageChangeListeners = [];
   final List<ScrollChangeListener> scrollChangeListeners = [];
-  final Map<int, PageLoad> pageIsLoaded = Map();
+  final Map<int, PageLoad> pageIsLoaded = <int, PageLoad>{};
 
   void Function(int value, bool showDialog, VoidCallback callback)
       checkIfPageIsLoaded;
@@ -299,7 +300,7 @@ class ChapterController {
   DiagonalScrollViewController scrollController;
 
   ChapterController() {
-    this.scrollChangeListeners.add((scroll) => _onScrollNotification(scroll));
+    scrollChangeListeners.add((scroll) => _onScrollNotification(scroll));
   }
 
   int _currentPage = 0;
@@ -335,8 +336,8 @@ class ChapterController {
         false;
   }
 
-  Future<void> scrollToPage(int pageNumber, {updatePageNumber: true}) {
-    var completer = new Completer<void>();
+  Future<void> scrollToPage(int pageNumber, {updatePageNumber = true}) {
+    var completer = Completer<void>();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       rebuildChaptersMap();
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -358,12 +359,12 @@ class ChapterController {
   }
 
   Future<int> goToPage(int pageNumber, bool showDialog) async {
-    var completer = new Completer<int>();
+    var completer = Completer<int>();
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       scrollToPage(pageNumber).then((_) async {
         if (checkIfPageIsLoaded != null) {
-          var checkPageCompleter = new Completer<void>();
+          var checkPageCompleter = Completer<void>();
           checkIfPageIsLoaded(pageNumber, showDialog, () {
             checkPageCompleter.complete();
           });
@@ -373,9 +374,9 @@ class ChapterController {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
           chaptersTree.clear();
           rebuildChaptersMap();
-          scrollToPage(pageNumber).then((_) {
+          unawaited(scrollToPage(pageNumber).then((_) {
             completer.complete();
-          });
+          }));
         });
       });
     });
@@ -392,7 +393,7 @@ class ChapterController {
   }
 
   void recalculateHeightOfPages(Map<int, GlobalKey> gloalKeyByPageIndex) {
-    for (int i = 0; i < this.chapter.pages.length; i++) {
+    for (var i = 0; i < chapter.pages.length; i++) {
       var page = chapter.pages[i];
 
       var currentContext = gloalKeyByPageIndex[i].currentContext;
@@ -405,20 +406,20 @@ class ChapterController {
   }
 
   void _chapterLoaded(double height, int pageIndex) {
-    this.chapter.pages[pageIndex].height = height;
+    chapter.pages[pageIndex].height = height;
 
     rebuildChaptersMap();
   }
 
-  void rebuildChaptersMap({scale: 1}) {
+  void rebuildChaptersMap({scale = 1}) {
     _height = 0;
     chaptersTree.clear();
 
-    double currentPosition = 0;
+    var currentPosition = 0.0;
 
-    for (int i = 0; i < this.chapter.pages.length; i++) {
-      var page = this.chapter.pages[i];
-      chaptersTree.add(new ChapterTree(currentPosition, i));
+    for (var i = 0; i < chapter.pages.length; i++) {
+      var page = chapter.pages[i];
+      chaptersTree.add(ChapterTree(currentPosition, i));
       page.height *= scale;
       currentPosition += page.height;
       _height += page.height;
@@ -426,7 +427,7 @@ class ChapterController {
   }
 
   void _onScrollNotification(double dy) {
-    var chapterTree = chaptersTree.nearest(new ChapterTree(dy, -1),
+    var chapterTree = chaptersTree.nearest(ChapterTree(dy, -1),
         nearestOption: TreeSearch.GREATER_THAN);
     if (chapterTree != null) {
       currentPage = chapterTree.listIndex;
@@ -435,7 +436,7 @@ class ChapterController {
 
   void initState(ChapterDto chapter) {
     // scrollController = new ScrollController();
-    chaptersTree = new AvlTreeSet(comparator: (a, b) => a.compareTo(b));
+    chaptersTree = AvlTreeSet(comparator: (a, b) => a.compareTo(b));
     this.chapter = chapter;
   }
 }

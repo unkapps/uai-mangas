@@ -9,8 +9,7 @@ class ChapterPageDialog extends StatefulWidget {
   ChapterPageDialog(this._chapter, {Key key}) : super(key: key);
 
   @override
-  _ChapterPageDialogState createState() =>
-      _ChapterPageDialogState(this._chapter);
+  _ChapterPageDialogState createState() => _ChapterPageDialogState(_chapter);
 }
 
 class _ChapterPageDialogState extends State<ChapterPageDialog> {
@@ -43,32 +42,30 @@ class _ChapterPageDialogState extends State<ChapterPageDialog> {
       child: AlertDialog(
         title: const Text('Navegar para página'),
         scrollable: true,
-        content: 
-           ListBody(
-            children: <Widget>[
-              TextField(
-                controller: textController,
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly
-                ],
-                decoration: InputDecoration(
-                  labelText: 'Página',
-                  errorText: !valid && touched ? 'Página inválida' : null,
-                ),
-                onSubmitted: (String value) async {
-                  if (value != '') {
-                    int choisedPage = int.parse(value);
-                    if (_pageValid(choisedPage)) {
-                      Navigator.pop(context, choisedPage);
-                    }
-                  }
-                },
+        content: ListBody(
+          children: <Widget>[
+            TextField(
+              controller: textController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              decoration: InputDecoration(
+                labelText: 'Página',
+                errorText: !valid && touched ? 'Página inválida' : null,
               ),
-            ],
-          ),
-        
+              onSubmitted: (String value) async {
+                if (value != '') {
+                  var choisedPage = int.parse(value);
+                  if (_pageValid(choisedPage)) {
+                    Navigator.pop(context, choisedPage);
+                  }
+                }
+              },
+            ),
+          ],
+        ),
         actions: <Widget>[
           FlatButton(
             child: Text('Cancelar'),
@@ -91,7 +88,7 @@ class _ChapterPageDialogState extends State<ChapterPageDialog> {
   }
 
   bool _pageValid(int pageNumber) {
-    return pageNumber > 0 && pageNumber <= this._chapter.pages.length;
+    return pageNumber > 0 && pageNumber <= _chapter.pages.length;
   }
 
   bool _pageStrValid(String pageNumber) {

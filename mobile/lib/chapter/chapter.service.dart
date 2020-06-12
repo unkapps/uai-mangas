@@ -8,7 +8,7 @@ class ChapterService {
 
   Future<List<ChapterListDto>> getList(
       int mangaId, int size, int offset) async {
-    Response res = await dio.get('/chapter/', queryParameters: {
+    var res = await dio.get('/chapter/', queryParameters: {
       'mangaId': '$mangaId',
       'size': '$size',
       'offset': '$offset',
@@ -25,7 +25,7 @@ class ChapterService {
   }
 
   Future<ChapterDto> getChapter(int chapterId) async {
-    Response res = await dio.get('/chapter/$chapterId');
+    var res = await dio.get('/chapter/$chapterId');
 
     if (res.statusCode == 200) {
       return ChapterDto.fromJson(res.data);

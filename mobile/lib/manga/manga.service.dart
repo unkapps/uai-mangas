@@ -8,7 +8,7 @@ class MangaService {
   static final Dio dio = DioConfig.dio;
 
   Future<MangaDto> getManga(int mangaId) async {
-    Response res = await dio.get('/manga/$mangaId');
+    var res = await dio.get('/manga/$mangaId');
 
     if (res.statusCode == 200) {
       return MangaDto.fromJson(res.data);
@@ -18,7 +18,7 @@ class MangaService {
   }
 
   Future<List<LastMangaWithUpdateDto>> getLastMangaWithUpdate() async {
-    Response res = await dio.get(
+    var res = await dio.get(
       '/manga/last',
       queryParameters: {
         'size': '3',

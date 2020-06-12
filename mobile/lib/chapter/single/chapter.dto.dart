@@ -26,13 +26,16 @@ class ChapterDto {
       mangaName: json['mangaName'] as String,
       mangaId: json['mangaId'] as int,
       number: json['number'] as String,
-      pages: (json['pages']).map((dynamic jsonPage) => PageDto.fromJson(jsonPage)).toList().cast<PageDto>(),
+      pages: (json['pages'])
+          .map((dynamic jsonPage) => PageDto.fromJson(jsonPage))
+          .toList()
+          .cast<PageDto>(),
       previousChapterId: json['previousChapterId'] as int,
       nextChapterId: json['nextChapterId'] as int,
     );
   }
 
-  getTitle() {
+  String getTitle() {
     return '$number - $mangaName';
   }
 }

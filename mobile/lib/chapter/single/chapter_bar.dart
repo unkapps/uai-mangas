@@ -5,6 +5,7 @@ import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/single/chapter_page.dart';
 import 'package:leitor_manga/chapter/single/chapter_page_dialog.dart';
 import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
+import 'package:pedantic/pedantic.dart';
 
 class ChapterBar extends StatelessWidget {
   final ChapterDto _chapter;
@@ -52,8 +53,8 @@ class ChapterBar extends StatelessWidget {
                   : Container(
                       width: 48,
                     ),
-              new ConstrainedBox(
-                constraints: new BoxConstraints(
+              ConstrainedBox(
+                constraints: BoxConstraints(
                   minWidth: 80.0,
                 ),
                 child: InkWell(
@@ -113,15 +114,15 @@ class ChapterBar extends StatelessWidget {
   }
 
   Future<void> _chapterDialog(BuildContext context) async {
-    int chosenPage = await showDialog<int>(
+    var chosenPage = await showDialog<int>(
         context: context,
         builder: (BuildContext context) {
-          return ChapterPageDialog(this._chapter);
+          return ChapterPageDialog(_chapter);
         });
 
     if (chosenPage != null) {
       chosenPage = chosenPage - 1;
-      this._chapterController.goToPage(chosenPage, true);
+      unawaited(_chapterController.goToPage(chosenPage, true));
     }
   }
 }

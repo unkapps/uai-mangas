@@ -22,7 +22,7 @@ class AuthorDto {
   String getNameDescribingIfArtist() {
     var name = this.name;
 
-    if (this.artist) {
+    if (artist) {
       name += ' (artista)';
     }
 

@@ -25,10 +25,10 @@ class Page extends StatefulWidget {
 
   @override
   _PageState createState() => _PageState(
-        page: this.page,
-        index: this.index,
-        loadingBuilder: this.loadingBuilder,
-        loadStatusChanged: this.loadStatusChanged,
+        page: page,
+        index: index,
+        loadingBuilder: loadingBuilder,
+        loadStatusChanged: loadStatusChanged,
       );
 }
 
@@ -80,7 +80,7 @@ class _PageState extends State<Page> {
                       size: 100,
                     ),
                     Text(
-                      "Clique para tentar carregar novamente",
+                      'Clique para tentar carregar novamente',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.grey),
                     ),

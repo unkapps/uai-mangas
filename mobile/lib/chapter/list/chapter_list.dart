@@ -19,7 +19,7 @@ class ChapterListState extends State<ChapterList> {
 
   List<ChapterListDto> _list;
   Status _status;
-  bool get _endGettingChapters => this.widget.qtyChapters == _list.length;
+  bool get _endGettingChapters => widget.qtyChapters == _list.length;
 
   @override
   void initState() {
@@ -75,11 +75,11 @@ class ChapterListState extends State<ChapterList> {
     );
   }
 
-  _getMorePages({size = 100}) async {
+  void _getMorePages({size = 100}) async {
     setState(() {
       _status = Status.LOADING;
     });
-    List<ChapterListDto> list = await _service.getList(577, size, _list.length);
+    var list = await _service.getList(577, size, _list.length);
 
     setState(() {
       if (list.isNotEmpty) {

@@ -19,7 +19,7 @@ class MangaPage extends StatefulWidget {
   MangaPage({Key key, @required this.mangaId}) : super(key: key);
 
   @override
-  _MangaPageState createState() => _MangaPageState(mangaId: this.mangaId);
+  _MangaPageState createState() => _MangaPageState(mangaId: mangaId);
 }
 
 class _MangaPageState extends State<MangaPage> {
@@ -81,7 +81,7 @@ class _MangaPageState extends State<MangaPage> {
           var authors = List<AuthorDto>.from(manga.authors);
           authors.addAll(manga.artists);
 
-          Size size = MediaQuery.of(context).size;
+          var size = MediaQuery.of(context).size;
 
           return NotificationListener(
             child: ListView(
