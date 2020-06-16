@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
+import 'package:leitor_manga/manga/manga_sort.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
+import 'package:leitor_manga/shared/pageable.dto.dart';
 
 class MangaService {
   static final Dio dio = DioConfig.dio;
@@ -33,27 +35,29 @@ class MangaService {
           .cast<LastMangaWithUpdateDto>();
     }
 
-    debugPrint('${res.statusCode}');
-
     return null;
   }
 
-  Future<List<MangaListDto>> getAllManga() async {
+  Future<PageableDto<MangaListDto>> getAllManga(
+      MangaSortingChoice sortingChoice) async {
+    var sort = sortingChoice.sort;
+
     var res = await dio.get(
       '/manga',
       queryParameters: {
-        'size': '4',
+        'size': '9',
+        'sorting': sort.toString(),
       },
     );
 
     if (res.statusCode == 200) {
-      return res.data
-          .map((dynamic json) => MangaListDto.fromJson(json))
-          .toList()
-          .cast<MangaListDto>();
+      return PageableDto<MangaListDto>.fromJson(res.data, (dynamic json) {
+        return json
+            .map((dynamic jsonPage) => MangaListDto.fromJson(jsonPage))
+            .toList()
+            .cast<MangaListDto>();
+      });
     }
-
-    debugPrint('${res.statusCode}');
 
     return null;
   }

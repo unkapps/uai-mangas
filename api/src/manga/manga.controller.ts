@@ -7,6 +7,9 @@ import {
 } from '@nestjs/common';
 
 import Manga from 'src/entity/manga';
+import SortingDto from 'src/shared/sorting.dto';
+import PageableDto from 'src/shared/pageable.dto';
+
 import { MangaService } from './manga.service';
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
@@ -21,8 +24,9 @@ export class MangaController {
   }
 
   @Get('')
-  findAll(@Query('size') size?: number): Promise<AllMangaDto[]> {
-    return this.mangaService.getAllMangas(size);
+  findAll(@Query('size') size?: number, @Query('sorting') sortingStr?: string): Promise<PageableDto<AllMangaDto>> {
+    const sortingDto = SortingDto.fromString(sortingStr);
+    return this.mangaService.getAllMangas(size, sortingDto);
   }
 
   @Get(':id')

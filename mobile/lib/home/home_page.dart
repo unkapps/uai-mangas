@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               padding: EdgeInsets.all(10),
-              child: MangaList(key: _allMangaWithUpdateKey),
+              child: MangaList(key: _allMangaWithUpdateKey, showCount: true,),
             ),
           ],
         ),

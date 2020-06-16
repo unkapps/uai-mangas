@@ -2,6 +2,9 @@ import { EntityRepository, Repository } from 'typeorm';
 
 import Manga from 'src/entity/manga';
 import Chapter from 'src/entity/chapter';
+import SortingDto from 'src/shared/sorting.dto';
+import PageableDto from 'src/shared/pageable.dto';
+
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
 
@@ -22,14 +25,24 @@ export class MangaRepository extends Repository<Manga> {
       .getRawMany();
   }
 
-  getAllMangas(size = 10): Promise<AllMangaDto[]> {
-    return this
+  async getAllMangas(size = 10, sortingDto?: SortingDto): Promise<PageableDto<AllMangaDto>> {
+    const query = this
       .createQueryBuilder('manga')
       .select('manga.id', 'id')
       .addSelect('manga.name', 'name')
       .addSelect('manga.coverUrl', 'coverUrl')
-      .limit(size)
-      .getRawMany();
+      .limit(size);
+
+    if (sortingDto) {
+      query.orderBy(sortingDto.name, sortingDto.direction);
+    }
+
+    const data = await query.getRawMany();
+
+    return {
+      data,
+      qtyPages: await query.getCount(),
+    };
   }
 
   async findById(id: number): Promise<Manga> {

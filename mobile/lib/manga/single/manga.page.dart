@@ -94,6 +94,18 @@ class _MangaPageState extends State<MangaPage> {
                   height: size.height * 0.6,
                   width: size.width,
                   cache: true,
+                  loadStateChanged: (ExtendedImageState state) {
+                    switch (state.extendedImageLoadState) {
+                      case LoadState.failed:
+                        return Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                          size: 100,
+                        );
+                      default:
+                        return null;
+                    }
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
