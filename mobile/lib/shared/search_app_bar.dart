@@ -152,8 +152,6 @@ class _SearchAppBarState extends State<SearchAppBar>
 
   Widget _buildSearch(BuildContext context) {
     if (searchMode) {
-      // return widget.builder(context);
-
       return SearchWidget(
         height: widget.preferredSize.height,
         streamController: widget.streamController,
@@ -161,8 +159,6 @@ class _SearchAppBarState extends State<SearchAppBar>
         onCancelSearch: () {
           _cancelSearch();
         },
-        // textCapitalization: widget.capitalization,
-        // hintText: widget.hintText,
       );
     }
 
