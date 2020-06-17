@@ -44,7 +44,7 @@ class _InfiniteScrollState<T> extends State<InfiniteScroll<T>> {
         Expanded(
           child: NotificationListener<ScrollNotification>(
             onNotification: (scrollNotification) {
-              if (scrollNotification.metrics.pixels >=
+              if ( scrollNotification.metrics.pixels >=
                   scrollNotification.metrics.maxScrollExtent - 50) {
                 _loadMoreItems();
               }

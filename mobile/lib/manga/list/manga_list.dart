@@ -10,9 +10,13 @@ import 'package:leitor_manga/shared/pageable.dto.dart';
 
 class MangaList extends StatefulWidget {
   final bool showCount;
+  final String mangaName;
 
-  MangaList({Key key, bool showCount})
-      : showCount = showCount ?? false,
+  MangaList({
+    Key key,
+    bool showCount,
+    this.mangaName,
+  })  : showCount = showCount ?? false,
         super(key: key);
 
   @override
@@ -41,7 +45,8 @@ class _MangaListState extends State<MangaList> {
 
     return ExtendedFutureBuilder<PageableDto<MangaListDto>>(
         key: _globalKey,
-        futureResponseBuilder: () => mangaService.getAllManga(_sortingChoice),
+        futureResponseBuilder: () =>
+            mangaService.getAllManga(_sortingChoice, name: widget.mangaName),
         errorBuilder: (BuildContext context, error) {
           return Center(
             child: Text('Erro! Clique para tentar novamente.'),
@@ -104,8 +109,10 @@ class _MangaListState extends State<MangaList> {
                   length: mangas.length,
                   limit: page.qtyPages,
                   getMoreItems: () => mangaService.getAllMangaWithoutCount(
-                      _sortingChoice,
-                      offset: mangas.length),
+                    _sortingChoice,
+                    offset: mangas.length,
+                    name: widget.mangaName,
+                  ),
                   onNewItemsReceived: (List<MangaListDto> items) {
                     setState(() {
                       mangas.addAll(items);
