@@ -39,8 +39,12 @@ export class MangaRepository extends Repository<Manga> {
       .limit(size);
 
     if (name != null) {
-      query.where(`MATCH(manga.name)
-      AGAINST(:name IN BOOLEAN MODE)`, { name: `*${name}*` });
+      const nameForQuery = name.replace(/[^\p{L}\p{N}_\s]+/u, '');
+
+      if (nameForQuery.trim().length > 0) {
+        query.where(`MATCH(manga.name)
+          AGAINST(:name IN BOOLEAN MODE)`, { name: `*${nameForQuery}*` });
+      }
     }
 
     if (sortingDto) {
