@@ -39,7 +39,8 @@ export class MangaRepository extends Repository<Manga> {
       .limit(size);
 
     if (name != null) {
-      query.where('manga.name like :name', { name: `%${name}%` });
+      query.where(`MATCH(manga.name)
+      AGAINST(:name IN BOOLEAN MODE)`, { name: `*${name}*` });
     }
 
     if (sortingDto) {
