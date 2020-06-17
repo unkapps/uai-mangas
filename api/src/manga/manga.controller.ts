@@ -24,9 +24,25 @@ export class MangaController {
   }
 
   @Get('')
-  findAll(@Query('size') size?: number, @Query('sorting') sortingStr?: string): Promise<PageableDto<AllMangaDto>> {
+  findAll(
+    @Query('size') size?: number,
+      @Query('offset') offset?: number,
+      @Query('sorting') sortingStr?: string,
+      @Query('name') name?: string,
+  ): Promise<PageableDto<AllMangaDto>> {
     const sortingDto = SortingDto.fromString(sortingStr);
-    return this.mangaService.getAllMangas(size, sortingDto);
+    return this.mangaService.getAllMangas(size, offset, sortingDto, name);
+  }
+
+  @Get('loadMore')
+  loadMore(
+    @Query('size') size?: number,
+      @Query('offset') offset?: number,
+      @Query('sorting') sortingStr?: string,
+      @Query('name') name?: string,
+  ): Promise<AllMangaDto[]> {
+    const sortingDto = SortingDto.fromString(sortingStr);
+    return this.mangaService.loadMore(size, offset, sortingDto, name);
   }
 
   @Get(':id')

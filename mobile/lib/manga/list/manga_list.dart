@@ -5,6 +5,7 @@ import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/manga_sort.dart';
 import 'package:leitor_manga/manga/single/manga.page.dart';
+import 'package:leitor_manga/shared/infinite_scroll.dart';
 import 'package:leitor_manga/shared/pageable.dto.dart';
 
 class MangaList extends StatefulWidget {
@@ -98,82 +99,96 @@ class _MangaListState extends State<MangaList> {
                 ),
               ),
               Expanded(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: mangas.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: columnWidth,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    //childAspectRatio: 0.40,
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 0.85),
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    var manga = mangas[index];
+                child: InfiniteScroll<MangaListDto>(
+                  color: theme.accentColor,
+                  length: mangas.length,
+                  limit: page.qtyPages,
+                  getMoreItems: () => mangaService.getAllMangaWithoutCount(
+                      _sortingChoice,
+                      offset: mangas.length),
+                  onNewItemsReceived: (List<MangaListDto> items) {
+                    setState(() {
+                      mangas.addAll(items);
+                    });
+                  },
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: mangas.length,
+                    physics: BouncingScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: columnWidth,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      //childAspectRatio: 0.40,
+                      childAspectRatio: MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height / 0.85),
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      var manga = mangas[index];
 
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MangaPage(mangaId: manga.id)),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: theme.dividerColor,
-                          ),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              //  width: columnWidth,
-                              //   height: 200,
-                              child: ExtendedImage.network(
-                                manga.coverUrl,
-                                fit: BoxFit.fitHeight,
-                                width: columnWidth,
-                                alignment: Alignment.topCenter,
-                                cache: true,
-                                retries: 0,
-                                loadStateChanged: (ExtendedImageState state) {
-                                  switch (state.extendedImageLoadState) {
-                                    case LoadState.failed:
-                                      return Icon(
-                                        Icons.broken_image,
-                                        color: Colors.grey,
-                                        size: 50,
-                                      );
-                                    default:
-                                      return null;
-                                  }
-                                },
-                              ),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MangaPage(mangaId: manga.id)),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: theme.dividerColor,
                             ),
-                            SizedBox(
-                              //  fit: BoxFit.,
-                              height: 60.4,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  manga.name,
-                                  style: theme.textTheme.subtitle1,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                //  width: columnWidth,
+                                //   height: 200,
+                                child: ExtendedImage.network(
+                                  manga.coverUrl,
+                                  fit: BoxFit.fitHeight,
+                                  width: columnWidth,
+                                  alignment: Alignment.topCenter,
+                                  cache: true,
+                                  retries: 0,
+                                  loadStateChanged: (ExtendedImageState state) {
+                                    switch (state.extendedImageLoadState) {
+                                      case LoadState.failed:
+                                        return Icon(
+                                          Icons.broken_image,
+                                          color: Colors.grey,
+                                          size: 50,
+                                        );
+                                      default:
+                                        return null;
+                                    }
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                //  fit: BoxFit.,
+                                height: 60.4,
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    manga.name,
+                                    style: theme.textTheme.subtitle1,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              )
+              ),
             ],
           );
         });

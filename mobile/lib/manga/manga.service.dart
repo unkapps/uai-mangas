@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
@@ -38,16 +37,38 @@ class MangaService {
     return null;
   }
 
-  Future<PageableDto<MangaListDto>> getAllManga(
-      MangaSortingChoice sortingChoice) async {
+  Map<String, String> _getQueryParamatersForAllManga(
+    MangaSortingChoice sortingChoice, {
+    String name,
+    int offset,
+  }) {
     var sort = sortingChoice.sort;
 
+    var queryParameters = {
+      'size': '9',
+      'sorting': sort.toString(),
+    };
+
+    if (name != null) {
+      queryParameters['name'] = name;
+    }
+
+    if (offset != null) {
+      queryParameters['offset'] = offset.toString();
+    }
+
+    return queryParameters;
+  }
+
+  Future<PageableDto<MangaListDto>> getAllManga(
+    MangaSortingChoice sortingChoice, {
+    String name,
+    int offset,
+  }) async {
     var res = await dio.get(
       '/manga',
-      queryParameters: {
-        'size': '9',
-        'sorting': sort.toString(),
-      },
+      queryParameters: _getQueryParamatersForAllManga(sortingChoice,
+          name: name, offset: offset),
     );
 
     if (res.statusCode == 200) {
@@ -57,6 +78,27 @@ class MangaService {
             .toList()
             .cast<MangaListDto>();
       });
+    }
+
+    return null;
+  }
+
+  Future<List<MangaListDto>> getAllMangaWithoutCount(
+    MangaSortingChoice sortingChoice, {
+    String name,
+    int offset,
+  }) async {
+    var res = await dio.get(
+      '/manga/loadMore',
+      queryParameters: _getQueryParamatersForAllManga(sortingChoice,
+          name: name, offset: offset),
+    );
+
+    if (res.statusCode == 200) {
+      return res.data
+          .map((dynamic jsonPage) => MangaListDto.fromJson(jsonPage))
+          .toList()
+          .cast<MangaListDto>();
     }
 
     return null;

@@ -25,7 +25,12 @@ export class MangaRepository extends Repository<Manga> {
       .getRawMany();
   }
 
-  async getAllMangas(size = 10, sortingDto?: SortingDto): Promise<PageableDto<AllMangaDto>> {
+  async getAllMangas(
+    doCount = true,
+    size = 10, offset?: number,
+    sortingDto?: SortingDto,
+    name?: string,
+  ): Promise<PageableDto<AllMangaDto>> {
     const query = this
       .createQueryBuilder('manga')
       .select('manga.id', 'id')
@@ -33,16 +38,29 @@ export class MangaRepository extends Repository<Manga> {
       .addSelect('manga.coverUrl', 'coverUrl')
       .limit(size);
 
+    if (name != null) {
+      query.where('manga.name = :name', { name });
+    }
+
     if (sortingDto) {
       query.orderBy(sortingDto.name, sortingDto.direction);
     }
 
+    if (offset != null) {
+      query.offset(offset);
+    }
+
     const data = await query.getRawMany();
 
-    return {
+    const pageableDto: PageableDto<AllMangaDto> = {
       data,
-      qtyPages: await query.getCount(),
     };
+
+    if (doCount) {
+      pageableDto.qtyPages = await query.getCount();
+    }
+
+    return pageableDto;
   }
 
   async findById(id: number): Promise<Manga> {
