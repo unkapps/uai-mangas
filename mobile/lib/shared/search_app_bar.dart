@@ -110,7 +110,7 @@ class _SearchAppBarState extends State<SearchAppBar>
     actions.insert(widget.searchButtonPosition, searchButton);
 
     return AppBar(
-      title: widget.appBar.title,
+      title: searchMode ? null : widget.appBar.title,
       bottom: searchMode ? null : widget.appBar.bottom,
       backgroundColor: widget.appBar.backgroundColor,
       iconTheme: widget.appBar.iconTheme,
