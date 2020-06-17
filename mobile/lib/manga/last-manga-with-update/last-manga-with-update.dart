@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leitor_manga/chapter/single/chapter_page.dart';
@@ -44,7 +45,7 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                       builder: (context) => MangaPage(mangaId: manga.id)),
                 );
               },
@@ -79,13 +80,13 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
+                                    CupertinoPageRoute(
                                         builder: (context) =>
                                             MangaPage(mangaId: manga.id)),
                                   );
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
+                                    CupertinoPageRoute(
                                         builder: (context) =>
                                             ChapterPage(manga.chapterId)),
                                   );

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -103,7 +104,7 @@ class ChapterBar extends StatelessWidget {
   void _goToChapter(BuildContext context, int chapterId) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => ChapterPage(chapterId)),
+      CupertinoPageRoute(builder: (context) => ChapterPage(chapterId)),
       (Route<dynamic> route) => false,
     );
   }

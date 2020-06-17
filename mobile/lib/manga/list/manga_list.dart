@@ -1,5 +1,6 @@
 import 'package:extended_future_builder/extended_future_builder.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
@@ -137,7 +138,7 @@ class _MangaListState extends State<MangaList> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            CupertinoPageRoute(
                                 builder: (context) =>
                                     MangaPage(mangaId: manga.id)),
                           );

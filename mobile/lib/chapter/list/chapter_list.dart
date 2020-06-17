@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
@@ -66,7 +67,7 @@ class ChapterListState extends State<ChapterList> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
+              CupertinoPageRoute(
                   builder: (context) => ChapterPage(chapterDto.id)),
             );
           },
