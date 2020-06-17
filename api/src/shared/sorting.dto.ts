@@ -1,3 +1,5 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+
 export default class SortingDto {
   direction: 'ASC' | 'DESC';
 
@@ -18,13 +20,13 @@ export default class SortingDto {
       const name = match[1];
       let direction;
 
-      if (match.length > 3) {
+      if (match.length > 3 && match[3] != null) {
         direction = match[3].toUpperCase();
       }
 
       return new SortingDto(name, direction);
     }
 
-    throw new Error(`Invalid string: ${string}`);
+    throw new HttpException(`Invalid sort: '${string}'`, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
