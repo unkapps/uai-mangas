@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:leitor_manga/home/home_drawer.dart';
 
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dart';
 import 'package:leitor_manga/manga/list/manga_list.dart';
@@ -70,37 +70,7 @@ class _HomePageState extends State<HomePage> {
                   ),
           ),
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: const <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text(
-                  'Drawer Header',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.message),
-                title: Text('Messages'),
-              ),
-              ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Profile'),
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
-              ),
-            ],
-          ),
-        ),
+        drawer: HomeDrawer(),
         body: StreamBuilder<String>(
           stream: _streamController.stream,
           builder: (context, snapshot) {
