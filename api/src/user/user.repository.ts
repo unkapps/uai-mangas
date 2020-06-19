@@ -8,7 +8,7 @@ export class UserRepository extends Repository<User> {
     const result = await this
       .createQueryBuilder('user')
       .select('user.id', 'id')
-      .where('user.uid', { uid })
+      .where('user.uid = :uid', { uid })
       .getRawOne();
 
     if (result) {

@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
 import 'package:leitor_manga/user/login_dialog.dart';
+import 'package:leitor_manga/user/user_page.dart';
+import 'package:pedantic/pedantic.dart';
 
 class HomeDrawer extends StatefulWidget {
   HomeDrawer({Key key}) : super(key: key);
@@ -13,61 +16,65 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var authBloc = context.bloc<AuthBloc>();
-
+    final theme = Theme.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         children: <Widget>[
-          Container(
-            height: 100,
-            child: DrawerHeader(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: theme.accentColor,
-              ),
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (BuildContext context, AuthState state) {
-                  return InkWell(
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (BuildContext context, AuthState state) {
+              return Container(
+                height: 100,
+                child: Material(
+                  color: theme.accentColor,
+                  child: InkWell(
                     onTap: () async {
                       if (state is Loading) {
                         return;
                       }
 
                       if (state is Authenticated) {
-                        authBloc.add(LoggedOut());
+                        unawaited(Navigator.push(
+                          context,
+                          CupertinoPageRoute(builder: (context) => UserPage()),
+                        ));
                       } else {
                         LoginDialog.createAndShowDialog(context);
                       }
                     },
-                    child: state is Loading
-                        ? Container(
-                            width: 20,
-                            height: 20,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                  backgroundColor: Colors.white),
-                            ),
-                          )
-                        : Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: _textBasedOnState(state, theme),
+                    child: DrawerHeader(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: state is Loading
+                          ? Container(
+                              width: 20,
+                              height: 20,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white),
                               ),
-                              Container(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Icon(
-                                  Icons.arrow_drop_down,
+                            )
+                          : Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: _textBasedOnState(state, theme),
                                 ),
-                              ),
-                            ],
-                          ),
-                  );
-                },
-              ),
-            ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Icon(
+                                    Icons.arrow_drop_down,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.notifications),
