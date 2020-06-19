@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "87122301971",
+    "firebase_url": "https://uai-mangas.firebaseio.com",
+    "project_id": "uai-mangas",
+    "storage_bucket": "uai-mangas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87122301971:android:2b5f8b3e0308ff8b721be6",
+        "android_client_info": {
+          "package_name": "com.unkapps.uai_mangas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87122301971-2amregvsbbrcbt4o3uabsbn3qa2i9ufe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unkapps.uai_mangas",
+            "certificate_hash": "e013ffc062d0fa2857fc2777498e8bdcfbdcf048"
+          }
+        },
+        {
+          "client_id": "87122301971-1k9ebcrgnm69tlroe5tbakllfq1lq2tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMHZXPZ4hz0r0NzbFkCg3zrxKMEwRrRnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87122301971-1k9ebcrgnm69tlroe5tbakllfq1lq2tv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

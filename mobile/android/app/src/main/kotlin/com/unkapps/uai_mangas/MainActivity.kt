@@ -1,4 +1,4 @@
-package com.example.leitor_manga
+package com.unkapps.uai_mangas
 
 import io.flutter.embedding.android.FlutterActivity
 
