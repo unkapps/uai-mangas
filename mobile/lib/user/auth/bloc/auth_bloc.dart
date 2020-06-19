@@ -30,6 +30,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapLoggedOutToState();
     } else if (event is LoginWithFacebookPressed) {
       yield* _mapLoginWithFacebookPressedToState();
+    } else if (event is LoginWithGooglePressed) {
+      yield* _mapLoginWithGooglePressedToState();
     }
   }
 
@@ -61,6 +63,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       yield Loading();
       if ((await userService.signInWithFacebook()) != null) {
+        yield* _mapLoggedInToState();
+      } else {
+        yield Unauthenticated();
+      }
+    } catch (_) {
+      yield LoginFailed();
+    }
+  }
+
+  Stream<AuthState> _mapLoginWithGooglePressedToState() async* {
+    try {
+      yield Loading();
+      if ((await userService.signInWithGoogle()) != null) {
         yield* _mapLoggedInToState();
       } else {
         yield Unauthenticated();

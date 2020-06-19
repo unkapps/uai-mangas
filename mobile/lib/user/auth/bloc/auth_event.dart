@@ -22,3 +22,8 @@ class LoginWithFacebookPressed extends AuthEvent {
   @override
   String toString() => 'LoginWithFacebookPressed';
 }
+
+class LoginWithGooglePressed extends AuthEvent {
+  @override
+  String toString() => 'LoginWithGooglePressed';
+}

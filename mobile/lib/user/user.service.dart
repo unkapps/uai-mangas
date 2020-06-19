@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 
 class UserService {
@@ -9,10 +10,15 @@ class UserService {
 
   final FirebaseAuth _firebaseAuth;
   final FacebookLogin _facebookLogin;
+  final GoogleSignIn _googleSignIn;
 
-  UserService({FirebaseAuth firebaseAuth, FacebookLogin facebookLogin})
+  UserService(
+      {FirebaseAuth firebaseAuth,
+      FacebookLogin facebookLogin,
+      GoogleSignIn googleSignIn})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _facebookLogin = facebookLogin ?? FacebookLogin();
+        _facebookLogin = facebookLogin ?? FacebookLogin(),
+        _googleSignIn = googleSignIn ?? GoogleSignIn();
 
   Future<FirebaseUser> signInWithFacebook() async {
     final result = await _facebookLogin.logIn(['email']);
@@ -21,10 +27,10 @@ class UserService {
       case FacebookLoginStatus.loggedIn:
         final facebookAuthCred = FacebookAuthProvider.getCredential(
             accessToken: result.accessToken.token);
-            try {
-        var authResult =
-            await _firebaseAuth.signInWithCredential(facebookAuthCred);
-        
+        try {
+          var authResult =
+              await _firebaseAuth.signInWithCredential(facebookAuthCred);
+
           await _sendTokenToBack((await authResult.user.getIdToken()).token);
         } catch (_) {
           await signOut();
@@ -37,6 +43,26 @@ class UserService {
         return null;
       default:
         return null;
+    }
+  }
+
+  Future<FirebaseUser> signInWithGoogle() async {
+    try {
+      final googleUser = await _googleSignIn.signIn();
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      var authResult = await _firebaseAuth.signInWithCredential(credential);
+      await _sendTokenToBack((await authResult.user.getIdToken()).token);
+      return _firebaseAuth.currentUser();
+    } catch (_) {
+      await signOut();
+      rethrow;
     }
   }
 

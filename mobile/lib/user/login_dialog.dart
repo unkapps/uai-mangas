@@ -22,6 +22,15 @@ class LoginDialog {
                 ),
               ),
               SimpleDialogOption(
+                child: SignInButton(
+                  Buttons.Google,
+                  text: 'Entrar com Google',
+                  onPressed: () {
+                    Navigator.pop(context, LoginType.GOOGLE);
+                  },
+                ),
+              ),
+              SimpleDialogOption(
                 child: SignInButtonBuilder(
                   text: 'Fechar',
                   icon: Icons.close,
@@ -37,6 +46,9 @@ class LoginDialog {
       case LoginType.FACEBOOK:
         context.bloc<AuthBloc>().add(LoginWithFacebookPressed());
         break;
+      case LoginType.GOOGLE:
+        context.bloc<AuthBloc>().add(LoginWithGooglePressed());
+        break;
       default:
         break;
     }
@@ -45,5 +57,6 @@ class LoginDialog {
 
 enum LoginType {
   FACEBOOK,
+  GOOGLE,
   NONE,
 }
