@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapLoggedInToState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
-    } else if(event is LoginWithFacebookPressed) {
+    } else if (event is LoginWithFacebookPressed) {
       yield* _mapLoginWithFacebookPressedToState();
     }
   }
@@ -57,11 +57,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield Unauthenticated();
   }
 
-    Stream<AuthState> _mapLoginWithFacebookPressedToState() async* {
+  Stream<AuthState> _mapLoginWithFacebookPressedToState() async* {
     try {
       yield Loading();
-      await userService.signInWithFacebook();
-      yield* _mapLoggedInToState();
+      if ((await userService.signInWithFacebook()) != null) {
+        yield* _mapLoggedInToState();
+      } else {
+        yield Unauthenticated();
+      }
     } catch (_) {
       yield LoginFailed();
     }

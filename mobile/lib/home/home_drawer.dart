@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
+import 'package:leitor_manga/user/login_dialog.dart';
 
 class HomeDrawer extends StatefulWidget {
   HomeDrawer({Key key}) : super(key: key);
@@ -38,7 +39,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       if (state is Authenticated) {
                         authBloc.add(LoggedOut());
                       } else {
-                        authBloc.add(LoginWithFacebookPressed());
+                        LoginDialog.createAndShowDialog(context);
                       }
                     },
                     child: state is Loading
