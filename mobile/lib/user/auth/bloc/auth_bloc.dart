@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_it/get_it.dart';
+import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/user/user.service.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -11,9 +13,8 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final UserService userService;
-
-  AuthBloc({@required this.userService});
+  static final getIt = GetIt.instance;
+  final UserService userService = getIt<UserService>();
 
   @override
   AuthState get initialState => Uninitialized();
@@ -42,10 +43,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = await userService.getUser();
         yield Authenticated(user);
       } else {
-        yield Unauthenticated();
+        yield* _unauthenticated();
       }
     } catch (_) {
-      yield Unauthenticated();
+        yield* _unauthenticated();
     }
   }
 
@@ -56,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapLoggedOutToState() async* {
     yield Loading();
     await unawaited(userService.signOut());
-    yield Unauthenticated();
+        yield* _unauthenticated();
   }
 
   Stream<AuthState> _mapLoginWithFacebookPressedToState() async* {
@@ -65,7 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if ((await userService.signInWithFacebook()) != null) {
         yield* _mapLoggedInToState();
       } else {
-        yield Unauthenticated();
+        yield* _unauthenticated();
       }
     } catch (_) {
       yield LoginFailed();
@@ -78,10 +79,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if ((await userService.signInWithGoogle()) != null) {
         yield* _mapLoggedInToState();
       } else {
-        yield Unauthenticated();
+        yield* _unauthenticated();
       }
     } catch (_) {
       yield LoginFailed();
     }
+  }
+
+  Stream<AuthState> _unauthenticated() async* {
+    DioConfig.removeToken();
+    yield Unauthenticated();
   }
 }

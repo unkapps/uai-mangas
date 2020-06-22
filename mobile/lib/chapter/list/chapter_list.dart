@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/list/chapter-list.dto.dart';
@@ -16,7 +17,8 @@ class ChapterList extends StatefulWidget {
 enum Status { LOADING, ERROR, DONE }
 
 class ChapterListState extends State<ChapterList> {
-  final ChapterService _service = ChapterService();
+  static final getIt = GetIt.instance;
+  final ChapterService _service = getIt<ChapterService>();
 
   List<ChapterListDto> _list;
   Status _status;

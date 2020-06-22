@@ -4,6 +4,7 @@ import Manga from 'src/entity/manga';
 import Chapter from 'src/entity/chapter';
 import SortingDto from 'src/shared/sorting.dto';
 import PageableDto from 'src/shared/pageable.dto';
+import FollowingManga from 'src/entity/following-manga';
 
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
@@ -68,15 +69,23 @@ export class MangaRepository extends Repository<Manga> {
     return pageableDto;
   }
 
-  async findById(id: number): Promise<Manga> {
-    const manga = await this.manager.getRepository(Manga)
+  async findById(id: number, userId?: number): Promise<Manga> {
+    const queryBuilder = this.manager.getRepository(Manga)
       .createQueryBuilder('manga')
       .innerJoinAndSelect('manga.authors', 'author')
+
       .innerJoinAndSelect('manga.artists', 'artist')
       .innerJoinAndSelect('manga.categories', 'category')
       .leftJoin('manga.chapters', 'chapter')
-      .where('manga.id = :id', { id })
-      .getOne();
+      .where('manga.id = :id', { id });
+
+    if (userId != null) {
+      queryBuilder.leftJoin('manga.favoriteMangas', 'favoriteMangas',
+        'favoriteMangas.manga_id = manga.id and favoriteMangas.user_id = :userId', { userId });
+      queryBuilder.addSelect('case when favoriteMangas.user_id is null then 0 else 1 end', 'manga_favorite_num');
+    }
+
+    const manga = await queryBuilder.getOne();
 
     if (manga) {
       const resultQty = await this.manager.getRepository(Chapter)
@@ -90,5 +99,16 @@ export class MangaRepository extends Repository<Manga> {
     }
 
     return manga;
+  }
+
+  async addMangaFavorite(userId: number, mangaId: number): Promise<void> {
+    await this.manager.insert(FollowingManga, [{
+      userId,
+      mangaId,
+    }]);
+  }
+
+  async removeMangaFavorite(userId: number, mangaId: number): Promise<void> {
+    await this.manager.getRepository(FollowingManga).delete({ userId, mangaId });
   }
 }

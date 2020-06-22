@@ -21,21 +21,17 @@ class Authors extends StatelessWidget {
         ),
         SizedBox(
           height: 15,
-          child: ListView.separated(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.all(1),
             itemCount: authors.length,
             shrinkWrap: true,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                width: 5,
-              );
-            },
             itemBuilder: (BuildContext context, int index) {
+              var separator = index < authors.length -1 ? ' - ' : '';
               return InkWell(
                 onTap: () {},
                 child: Text(
-                  authors[index].getNameDescribingIfArtist(),
+                  '${authors[index].getNameDescribingIfArtist()}$separator',
                   style: style,
                 ),
               );

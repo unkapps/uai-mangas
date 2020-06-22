@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:leitor_manga/chapter/single/chapter_page.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
@@ -16,7 +17,8 @@ class LastMangaWithUpdate extends StatefulWidget {
 }
 
 class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
-  final MangaService mangaService = MangaService();
+  static final getIt = GetIt.instance;
+  final MangaService mangaService = getIt<MangaService>();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +100,8 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
                                     fontSize: 12,
                                   ),
                                 ),
-                                borderSide: BorderSide(color: theme.accentColor),
+                                borderSide:
+                                    BorderSide(color: theme.accentColor),
                                 shape: StadiumBorder(),
                               ),
                             ),

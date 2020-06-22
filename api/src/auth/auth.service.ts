@@ -13,6 +13,20 @@ export class AuthService {
     });
   }
 
+  async getUserId(tokenId: string): Promise<number> {
+    if (tokenId == null) {
+      return null;
+    }
+
+    try {
+      const decodedToken = await this.adminApp.auth().verifyIdToken(tokenId, true);
+
+      return this.userService.getUserIdByUid(decodedToken.uid);
+    } catch (err) {
+      return null;
+    }
+  }
+
   async firebaseAuth(tokenId: string) {
     const decodedToken = await this.adminApp.auth().verifyIdToken(tokenId);
 

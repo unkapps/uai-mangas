@@ -20,22 +20,37 @@ class MangaService {
     return null;
   }
 
-  Future<List<LastMangaWithUpdateDto>> getLastMangaWithUpdate() async {
-    try {
-    var res = await dio.get(
-      '/manga/last',
+  Future<bool> setMangaFavorite(int mangaId, bool mangaFavorite) async {
+    var res = await dio.put<String>(
+      '/manga/favorite/$mangaId',
       queryParameters: {
-        'size': '4',
+        'mangaFavorite': mangaFavorite,
       },
     );
 
     if (res.statusCode == 200) {
-      return res.data
-          .map((dynamic json) => LastMangaWithUpdateDto.fromJson(json))
-          .toList()
-          .cast<LastMangaWithUpdateDto>();
+      return res.data.toLowerCase() == 'true';
     }
-    }catch(err) {
+
+    return null;
+  }
+
+  Future<List<LastMangaWithUpdateDto>> getLastMangaWithUpdate() async {
+    try {
+      var res = await dio.get(
+        '/manga/last',
+        queryParameters: {
+          'size': '4',
+        },
+      );
+
+      if (res.statusCode == 200) {
+        return res.data
+            .map((dynamic json) => LastMangaWithUpdateDto.fromJson(json))
+            .toList()
+            .cast<LastMangaWithUpdateDto>();
+      }
+    } catch (err) {
       debugPrint(err);
     }
 

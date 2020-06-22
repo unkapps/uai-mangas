@@ -12,6 +12,7 @@ class MangaDto {
   final List<AuthorDto> artists;
   final List<CategoryDto> categories;
   final int qtyChapters;
+  final bool favorite;
 
   MangaDto({
     @required this.id,
@@ -23,6 +24,7 @@ class MangaDto {
     @required this.artists,
     @required this.categories,
     @required this.qtyChapters,
+    @required this.favorite,
   });
 
   factory MangaDto.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class MangaDto {
       description: json['description'] as String,
       coverUrl: json['coverUrl'] as String,
       qtyChapters: json['qtyChapters'] as int,
+      favorite: json['favorite'] as bool,
       authors: (json['authors'])
           .map((dynamic jsonPage) => AuthorDto.fromJson(jsonPage, false))
           .toList()

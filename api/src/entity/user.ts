@@ -4,7 +4,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
+import FollowingManga from './following-manga';
 
 @Entity()
 export default class User {
@@ -16,4 +18,7 @@ export default class User {
     unique: true,
   })
   uid: string;
+
+  @OneToMany(() => FollowingManga, (followingManga) => followingManga.user)
+  favoriteMangas: FollowingManga[];
 }

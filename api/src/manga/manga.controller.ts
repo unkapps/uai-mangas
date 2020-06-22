@@ -4,12 +4,18 @@ import {
   Get,
   Param,
   Query,
+  UseGuards,
+  Req,
+  Put,
 } from '@nestjs/common';
+import { UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 
 import Manga from 'src/entity/manga';
 import SortingDto from 'src/shared/sorting.dto';
 import PageableDto from 'src/shared/pageable.dto';
+import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
 
+import { FirebaseAuthOptionalGuard } from 'src/auth/firebase-auth-optional.guard';
 import { MangaService } from './manga.service';
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
@@ -26,9 +32,9 @@ export class MangaController {
   @Get('')
   findAll(
     @Query('size') size?: number,
-      @Query('offset') offset?: number,
-      @Query('sorting') sortingStr?: string,
-      @Query('name') name?: string,
+    @Query('offset') offset?: number,
+    @Query('sorting') sortingStr?: string,
+    @Query('name') name?: string,
   ): Promise<PageableDto<AllMangaDto>> {
     const sortingDto = SortingDto.fromString(sortingStr);
     return this.mangaService.getAllMangas(size, offset, sortingDto, name);
@@ -37,16 +43,24 @@ export class MangaController {
   @Get('loadMore')
   loadMore(
     @Query('size') size?: number,
-      @Query('offset') offset?: number,
-      @Query('sorting') sortingStr?: string,
-      @Query('name') name?: string,
+    @Query('offset') offset?: number,
+    @Query('sorting') sortingStr?: string,
+    @Query('name') name?: string,
   ): Promise<AllMangaDto[]> {
     const sortingDto = SortingDto.fromString(sortingStr);
     return this.mangaService.loadMore(size, offset, sortingDto, name);
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<Manga> {
-    return this.mangaService.findById(id);
+  @UseGuards(FirebaseAuthOptionalGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  findById(@Req() request: any, @Param('id') id: number): Promise<Manga> {
+    return this.mangaService.findById(id, request.userId);
+  }
+
+  @Put('favorite/:id')
+  @UseGuards(FirebaseAuthGuard)
+  setMangaFavorite(@Req() request: any, @Param('id') mangaId: number, @Query('mangaFavorite') mangaFavorite: boolean): Promise<boolean> {
+    return this.mangaService.setMangaFavorite(request.userId, mangaId, mangaFavorite);
   }
 }

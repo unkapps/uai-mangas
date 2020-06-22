@@ -28,7 +28,17 @@ export class MangaService {
     return pageableDto.data;
   }
 
-  findById(id: number): Promise<Manga> {
-    return this.mangaRepository.findById(id);
+  findById(id: number, userId?: number): Promise<Manga> {
+    return this.mangaRepository.findById(id, userId);
+  }
+
+  async setMangaFavorite(userId: number, mangaId: number, mangaFavorite: boolean): Promise<boolean> {
+    if (mangaFavorite) {
+      await this.mangaRepository.addMangaFavorite(userId, mangaId);
+    } else {
+      await this.mangaRepository.removeMangaFavorite(userId, mangaId);
+    }
+
+    return mangaFavorite;
   }
 }

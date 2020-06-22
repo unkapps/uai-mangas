@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -12,6 +13,7 @@ import {
 import Category from './category';
 import Author from './author';
 import Chapter from './chapter';
+import FollowingManga from './following-manga';
 
 @Entity()
 export default class Manga {
@@ -85,4 +87,28 @@ export default class Manga {
   justGotSaved?: boolean;
 
   qtyChapters: number;
+
+  @Exclude()
+  private _favoriteNum : number;
+
+  @Column({
+    select: false,
+    nullable: true,
+    insert: false,
+    update: false,
+  })
+  set favoriteNum(number: number) {
+    // eslint-disable-next-line eqeqeq
+    this.favorite = number == 1;
+    this._favoriteNum = number;
+  }
+
+  get favoriteNum(): number {
+    return this._favoriteNum;
+  }
+
+  favorite: boolean;
+
+  @OneToMany(() => FollowingManga, (followingManga) => followingManga.manga)
+  favoriteMangas: FollowingManga[];
 }

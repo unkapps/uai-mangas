@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/home/home_page.dart';
+import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/splash_screen.dart';
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
 import 'package:leitor_manga/user/user.service.dart';
@@ -15,13 +18,13 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final UserService userService = UserService();
   AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
-    _authBloc = AuthBloc(userService: userService);
+    _registerServices();
+    _authBloc = AuthBloc();
     _authBloc.add(AppStarted());
   }
 
@@ -51,5 +54,12 @@ class _AppState extends State<App> {
         ),
       ),
     );
+  }
+
+  void _registerServices() {
+    final getIt = GetIt.instance;
+    getIt.registerSingleton<MangaService>(MangaService());
+    getIt.registerSingleton<UserService>(UserService());
+    getIt.registerSingleton<ChapterService>(ChapterService());
   }
 }

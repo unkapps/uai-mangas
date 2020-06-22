@@ -46,6 +46,20 @@ class UserService {
     }
   }
 
+  Future<String> getToken() async {
+    var user = await _firebaseAuth.currentUser();
+
+    if (user != null) {
+      try {
+        var idToken = await user.getIdToken();
+
+        return idToken.token;
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
   Future<FirebaseUser> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
@@ -84,9 +98,8 @@ class UserService {
 
   void _sendTokenToBack(String tokenId) async {
     try {
-      await dio.post('/auth/firebase', data: {
-        'tokenId': tokenId,
-      });
+      DioConfig.addToken(tokenId);
+      await dio.post('/auth/firebase');
     } catch (err) {
       debugPrint(err);
     }

@@ -2,6 +2,7 @@ import 'package:extended_future_builder/extended_future_builder.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/manga/manga_sort.dart';
@@ -25,7 +26,8 @@ class MangaList extends StatefulWidget {
 }
 
 class _MangaListState extends State<MangaList> {
-  final mangaService = MangaService();
+  static final getIt = GetIt.instance;
+  final MangaService mangaService = getIt<MangaService>();
 
   MangaSortingChoice _sortingChoice;
 

@@ -2,6 +2,7 @@ import 'package:extended_future_builder/extended_future_builder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
@@ -20,7 +21,9 @@ class ChapterPage extends StatefulWidget {
 }
 
 class _ChapterPageState extends State<ChapterPage> {
-  final ChapterService service = ChapterService();
+  static final getIt = GetIt.instance;
+  final ChapterService service = getIt<ChapterService>();
+
   final int chapterId;
 
   ChapterController _chapterController;
