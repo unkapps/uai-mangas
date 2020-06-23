@@ -14,7 +14,17 @@ export class ChapterService {
     return this.chapterRepository.getChapter(chapterId);
   }
 
-  list(mangaId: number, offset?: number, size?: number): Promise<ChapterListDto[]> {
-    return this.chapterRepository.list(mangaId, offset, size);
+  list(mangaId: number, offset?: number, size?: number, userId?: number): Promise<ChapterListDto[]> {
+    return this.chapterRepository.list(mangaId, offset, size, userId);
+  }
+
+  async setChapterReaded(userId: number, chapterId: number, chapterReaded: boolean): Promise<boolean> {
+    if (chapterReaded) {
+      await this.chapterRepository.addChapterReaded(userId, chapterId);
+    } else {
+      await this.chapterRepository.removeChapterReaded(userId, chapterId);
+    }
+
+    return chapterReaded;
   }
 }

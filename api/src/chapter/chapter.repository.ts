@@ -2,13 +2,14 @@ import { EntityRepository, Repository } from 'typeorm';
 
 import Chapter from 'src/entity/chapter';
 import PageDto from 'src/page/dto/page.dto';
+import ChapterRead from 'src/entity/chapter_read';
 import ChapterDto from './dto/chapter.dto';
 import ChapterListDto from './dto/chapter-list.dto';
 
 @EntityRepository(Chapter)
 export class ChapterRepository extends Repository<Chapter> {
-  list(mangaId: number, offset = 0, size = 10): Promise<ChapterListDto[]> {
-    return this
+  async list(mangaId: number, offset = 0, size = 10, userId? : number): Promise<ChapterListDto[]> {
+    const queryBuilder = this
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
       .addSelect('chapter.number', 'number')
@@ -19,8 +20,17 @@ export class ChapterRepository extends Repository<Chapter> {
       .orderBy('chapter.number_int', 'DESC')
       .addOrderBy('chapter.number', 'DESC')
       .limit(size)
-      .offset(offset)
-      .getRawMany();
+      .offset(offset);
+
+    if (userId != null) {
+      queryBuilder.leftJoin('chapter.chaptersRead', 'chapterRead',
+        'chapterRead.chapter_id = chapter.id and chapterRead.user_id = :userId', { userId });
+      queryBuilder.addSelect('case when chapterRead.user_id is null then 0 else 1 end', 'readed');
+    }
+
+    const teste = await queryBuilder.getRawMany();
+
+    return teste;
   }
 
   async getChapter(chapterId: number): Promise<ChapterDto> {
@@ -89,5 +99,16 @@ export class ChapterRepository extends Repository<Chapter> {
     }
 
     return chapter;
+  }
+
+  async addChapterReaded(userId: number, chapterId: number): Promise<void> {
+    await this.manager.insert(ChapterRead, [{
+      userId,
+      chapterId,
+    }]);
+  }
+
+  async removeChapterReaded(userId: number, chapterId: number): Promise<void> {
+    await this.manager.getRepository(ChapterRead).delete({ userId, chapterId });
   }
 }

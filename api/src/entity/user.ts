@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import FollowingManga from './following-manga';
+import ChapterRead from './chapter_read';
 
 @Entity()
 export default class User {
@@ -21,4 +22,7 @@ export default class User {
 
   @OneToMany(() => FollowingManga, (followingManga) => followingManga.user)
   favoriteMangas: FollowingManga[];
+
+  @OneToMany(() => ChapterRead, (chaptersRead) => chaptersRead.user)
+  chaptersRead: ChapterRead[];
 }

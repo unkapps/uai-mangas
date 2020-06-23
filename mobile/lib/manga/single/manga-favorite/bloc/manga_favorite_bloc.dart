@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
-import 'package:leitor_manga/user/user.service.dart';
 import 'package:meta/meta.dart';
 
 part 'manga_favorite_event.dart';
@@ -15,7 +14,6 @@ class MangaFavoriteBloc extends Bloc<MangaFavoriteEvent, MangaFavoriteState> {
 
   MangaFavoriteBloc(this.mangaId);
 
-  final UserService userService = getIt<UserService>();
   final MangaService mangaService = getIt<MangaService>();
 
   @override

@@ -11,6 +11,7 @@ import {
 import Manga from './manga';
 import Scanlator from './scanlator';
 import Page from './page';
+import ChapterRead from './chapter_read';
 
 @Entity()
 export default class Chapter {
@@ -63,4 +64,7 @@ export default class Chapter {
     unique: true,
   })
   leitorNetUrl: string;
+
+  @OneToMany(() => ChapterRead, (chapterRead) => chapterRead.chapter)
+  chaptersRead: ChapterRead[];
 }

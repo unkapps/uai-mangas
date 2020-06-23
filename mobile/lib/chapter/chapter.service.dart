@@ -5,7 +5,7 @@ import 'package:leitor_manga/config/dio_config.dart';
 class ChapterService {
   Future<List<ChapterListDto>> getList(
       int mangaId, int size, int offset) async {
-    final dio = await DioConfig.withoutToken();
+    final dio = await DioConfig.withToken();
     var res = await dio.get('/chapter/', queryParameters: {
       'mangaId': '$mangaId',
       'size': '$size',
@@ -28,6 +28,22 @@ class ChapterService {
 
     if (res.statusCode == 200) {
       return ChapterDto.fromJson(res.data);
+    }
+
+    return null;
+  }
+
+  Future<bool> setChapterReaded(int chapterId, bool chapterReaded) async {
+    final dio = await DioConfig.withToken();
+    var res = await dio.put<String>(
+      '/chapter/readed/$chapterId',
+      queryParameters: {
+        'chapterReaded': chapterReaded,
+      },
+    );
+
+    if (res.statusCode == 200) {
+      return res.data.toLowerCase() == 'true';
     }
 
     return null;
