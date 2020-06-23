@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/config/environment_config.dart';
+import 'package:leitor_manga/user/user.service.dart';
 
 class DioConfig {
+  static final getIt = GetIt.instance;
+
   static final TOKEN_NAME = 'token-id';
 
   static final BaseOptions options = BaseOptions(
@@ -9,16 +13,14 @@ class DioConfig {
     connectTimeout: 5000,
     receiveTimeout: 3000,
   );
-  static final Dio dio = Dio(options);
 
-  static void addToken(String token) {
-    options.headers ??= {};
-    options.headers[TOKEN_NAME] = token;
+  static Future<Dio> withoutToken() async {
+    return Dio(options);
   }
 
-  static void removeToken() {
-    if (options.headers != null && options.headers.containsKey(TOKEN_NAME)) {
-      options.headers.remove(TOKEN_NAME);
-    }
+  static Future<Dio> withToken() async {
+    final userService = getIt<UserService>();
+    final token = await userService.getToken();
+    return Dio(options.merge(headers: {TOKEN_NAME: token}));
   }
 }

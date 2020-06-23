@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -6,8 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 
 class UserService {
-  static final Dio dio = DioConfig.dio;
-
   final FirebaseAuth _firebaseAuth;
   final FacebookLogin _facebookLogin;
   final GoogleSignIn _googleSignIn;
@@ -98,7 +95,7 @@ class UserService {
 
   void _sendTokenToBack(String tokenId) async {
     try {
-      DioConfig.addToken(tokenId);
+      final dio = await DioConfig.withoutToken();
       await dio.post('/auth/firebase');
     } catch (err) {
       debugPrint(err);

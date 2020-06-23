@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
@@ -8,9 +7,8 @@ import 'package:leitor_manga/manga/single/manga.dto.dart';
 import 'package:leitor_manga/shared/pageable.dto.dart';
 
 class MangaService {
-  static final Dio dio = DioConfig.dio;
-
   Future<MangaDto> getManga(int mangaId) async {
+    final dio = await DioConfig.withToken();
     var res = await dio.get('/manga/$mangaId');
 
     if (res.statusCode == 200) {
@@ -21,6 +19,7 @@ class MangaService {
   }
 
   Future<bool> setMangaFavorite(int mangaId, bool mangaFavorite) async {
+    final dio = await DioConfig.withToken();
     var res = await dio.put<String>(
       '/manga/favorite/$mangaId',
       queryParameters: {
@@ -36,11 +35,12 @@ class MangaService {
   }
 
   Future<List<LastMangaWithUpdateDto>> getLastMangaWithUpdate() async {
+    final dio = await DioConfig.withoutToken();
     try {
       var res = await dio.get(
         '/manga/last',
         queryParameters: {
-          'size': '4',
+          'size': 4,
         },
       );
 
@@ -57,15 +57,15 @@ class MangaService {
     return null;
   }
 
-  Map<String, String> _getQueryParamatersForAllManga(
+  Map<String, dynamic> _getQueryParamatersForAllManga(
     MangaSortingChoice sortingChoice, {
     String name,
     int offset,
   }) {
     var sort = sortingChoice.sort;
 
-    var queryParameters = {
-      'size': '9',
+    var queryParameters = <String, dynamic>{
+      'size': 9,
       'sorting': sort.toString(),
     };
 
@@ -74,7 +74,7 @@ class MangaService {
     }
 
     if (offset != null) {
-      queryParameters['offset'] = offset.toString();
+      queryParameters['offset'] = offset;
     }
 
     return queryParameters;
@@ -85,6 +85,7 @@ class MangaService {
     String name,
     int offset,
   }) async {
+    final dio = await DioConfig.withoutToken();
     var res = await dio.get(
       '/manga',
       queryParameters: _getQueryParamatersForAllManga(sortingChoice,
@@ -108,6 +109,7 @@ class MangaService {
     String name,
     int offset,
   }) async {
+    final dio = await DioConfig.withoutToken();
     var res = await dio.get(
       '/manga/loadMore',
       queryParameters: _getQueryParamatersForAllManga(sortingChoice,

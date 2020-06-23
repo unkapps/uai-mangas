@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:leitor_manga/config/dio_config.dart';
 import 'package:leitor_manga/user/user.service.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -87,7 +86,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Stream<AuthState> _unauthenticated() async* {
-    DioConfig.removeToken();
     yield Unauthenticated();
   }
 }
