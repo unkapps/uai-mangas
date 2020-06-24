@@ -10,8 +10,8 @@ export class ChapterService {
     private chapterRepository: ChapterRepository,
   ) { }
 
-  getPagesOfChapter(chapterId: number): Promise<ChapterDto> {
-    return this.chapterRepository.getChapter(chapterId);
+  getPagesOfChapter(chapterId: number, userId?: number): Promise<ChapterDto> {
+    return this.chapterRepository.getChapter(chapterId, userId);
   }
 
   list(mangaId: number, offset?: number, size?: number, userId?: number): Promise<ChapterListDto[]> {

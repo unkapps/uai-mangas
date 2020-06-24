@@ -8,8 +8,11 @@ import 'package:leitor_manga/chapter/list/chapter-list.dto.dart';
 import 'package:leitor_manga/chapter/single/chapter_page.dart';
 
 class ChapterList extends StatefulWidget {
+  final int mangaId;
   final int qtyChapters;
-  ChapterList({Key key, @required this.qtyChapters}) : super(key: key);
+
+  ChapterList({Key key, @required this.mangaId, @required this.qtyChapters})
+      : super(key: key);
 
   @override
   ChapterListState createState() => ChapterListState();
@@ -68,7 +71,7 @@ class ChapterListState extends State<ChapterList> {
             children: <Widget>[
               ChapterReaded(
                 chapterId: chapterDto.id,
-                readed: chapterDto.readed,
+                initialReaded: chapterDto.readed,
               ),
               const Divider(
                 indent: 10,
@@ -86,7 +89,8 @@ class ChapterListState extends State<ChapterList> {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                  builder: (context) => ChapterPage(chapterDto.id)),
+                  builder: (context) => ChapterPage(
+                      mangaId: widget.mangaId, chapterId: chapterDto.id)),
             );
           },
         );
@@ -98,7 +102,7 @@ class ChapterListState extends State<ChapterList> {
     setState(() {
       _status = Status.LOADING;
     });
-    var list = await _service.getList(577, size, _list.length);
+    var list = await _service.getList(widget.mangaId, size, _list.length);
 
     setState(() {
       if (list.isNotEmpty) {

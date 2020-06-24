@@ -1,8 +1,10 @@
 import 'package:extended_future_builder/extended_future_builder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:leitor_manga/chapter/chapter_readed/bloc/global_chapter_readed_bloc.dart';
 
 import 'package:leitor_manga/chapter/single/chapter.dto.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
@@ -12,19 +14,19 @@ import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
 const double _opacityChapterBar = 0.8;
 
 class ChapterPage extends StatefulWidget {
+  final int mangaId;
   final int chapterId;
 
-  ChapterPage(this.chapterId, {Key key}) : super(key: key);
+  ChapterPage({@required this.mangaId, @required this.chapterId, Key key})
+      : super(key: key);
 
   @override
-  _ChapterPageState createState() => _ChapterPageState(chapterId);
+  _ChapterPageState createState() => _ChapterPageState();
 }
 
 class _ChapterPageState extends State<ChapterPage> {
   static final getIt = GetIt.instance;
   final ChapterService service = getIt<ChapterService>();
-
-  final int chapterId;
 
   ChapterController _chapterController;
 
@@ -33,7 +35,9 @@ class _ChapterPageState extends State<ChapterPage> {
   double _oldScroll;
   double _opacity;
 
-  _ChapterPageState(this.chapterId);
+  bool _chapterReaded;
+
+  _ChapterPageState();
 
   @override
   void initState() {
@@ -43,10 +47,19 @@ class _ChapterPageState extends State<ChapterPage> {
     _opacity = _opacityChapterBar;
 
     _chapterController = ChapterController();
-    _chapterController.addPageChangeListener((pageNumber) {
+    _chapterController.addPageChangeListener((pageNumber, isPageEnd) {
       setState(() {
         currentPage = pageNumber + 1;
       });
+
+      if (isPageEnd && !_chapterReaded) {
+        setState(() {
+          _chapterReaded = true;
+        });
+        context.bloc<GlobalChapterReadedBloc>().add(
+            GlobalChangeChapterReadedEvent(widget.chapterId, pageNumber,
+                isLast: isPageEnd));
+      }
     });
     _chapterController.addScrollChangeListener((scroll) {
       var scrollYEnd =
@@ -94,13 +107,14 @@ class _ChapterPageState extends State<ChapterPage> {
         title: Text(title),
       ),
       body: ExtendedFutureBuilder<ChapterDto>(
-        futureResponseBuilder: () => service.getChapter(chapterId),
+        futureResponseBuilder: () => service.getChapter(widget.chapterId),
         ftrStarted: () {
           title = 'Carregando...';
         },
         ftrThen: (chapter) {
           setState(() {
             title = chapter.getTitle();
+            _chapterReaded = chapter.readed;
           });
         },
         ftrCatch: (err) {

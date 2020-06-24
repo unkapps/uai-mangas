@@ -284,7 +284,7 @@ class ChapterTree implements Comparable {
   }
 }
 
-typedef PageChangeListener = void Function(int);
+typedef PageChangeListener = void Function(int, bool);
 typedef ScrollChangeListener = void Function(double);
 
 class ChapterController {
@@ -314,7 +314,7 @@ class ChapterController {
 
   void _notifyPageChange(int page) {
     pageChangeListeners
-        .forEach((pageChangeListener) => pageChangeListener(page));
+        .forEach((pageChangeListener) => pageChangeListener(page, page +1 == chapter.pages.length));
   }
 
   void addPageChangeListener(PageChangeListener pageChangeListener) {

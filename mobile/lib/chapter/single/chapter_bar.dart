@@ -31,7 +31,9 @@ class ChapterBar extends StatelessWidget {
                   ),
                   tooltip: 'Capítulo anterior',
                   onPressed: () {
-                    _goToChapter(context, _chapter.previousChapterId);
+                    _goToChapter(context,
+                        mangaId: _chapter.mangaId,
+                        chapterId: _chapter.previousChapterId);
                   },
                 )
               : Container(
@@ -60,8 +62,7 @@ class ChapterBar extends StatelessWidget {
                   child: Text(
                     '${_chapterController.currentPage + 1}/${_chapter.pages.length}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                    ),
+                    style: TextStyle(),
                   ),
                   onTap: () {
                     _chapterDialog(context);
@@ -90,7 +91,9 @@ class ChapterBar extends StatelessWidget {
                   ),
                   tooltip: 'Próximo capítulo',
                   onPressed: () {
-                    _goToChapter(context, _chapter.nextChapterId);
+                    _goToChapter(context,
+                        mangaId: _chapter.mangaId,
+                        chapterId: _chapter.nextChapterId);
                   },
                 )
               : Container(
@@ -101,10 +104,13 @@ class ChapterBar extends StatelessWidget {
     );
   }
 
-  void _goToChapter(BuildContext context, int chapterId) {
+  void _goToChapter(BuildContext context,
+      {@required int mangaId, @required int chapterId}) {
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute(builder: (context) => ChapterPage(chapterId)),
+      CupertinoPageRoute(
+          builder: (context) =>
+              ChapterPage(mangaId: mangaId, chapterId: chapterId)),
       (Route<dynamic> route) => false,
     );
   }

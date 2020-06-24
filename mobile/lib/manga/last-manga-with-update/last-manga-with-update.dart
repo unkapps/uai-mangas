@@ -89,8 +89,10 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                        builder: (context) =>
-                                            ChapterPage(manga.chapterId)),
+                                        builder: (context) => ChapterPage(
+                                              mangaId: manga.id,
+                                              chapterId: manga.chapterId,
+                                            )),
                                   );
                                 },
                                 child: Text(

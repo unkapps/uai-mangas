@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leitor_manga/chapter/chapter_readed/bloc/chapter_readed_bloc.dart';
+import 'package:leitor_manga/chapter/chapter_readed/bloc/global_chapter_readed_bloc.dart';
 import 'package:leitor_manga/user/login_dialog.dart';
 
 class ChapterReaded extends StatelessWidget {
   final int chapterId;
-  final bool readed;
+  final bool initialReaded;
 
-  ChapterReaded({Key key, @required this.chapterId, @required this.readed})
+  ChapterReaded({Key key, @required this.chapterId, @required this.initialReaded})
       : super(key: key);
 
   @override
@@ -15,30 +16,39 @@ class ChapterReaded extends StatelessWidget {
     return BlocProvider<ChapterReadedBloc>(
       create: (context) {
         return ChapterReadedBloc(chapterId)
-          ..add(ChapterReadedLoadedEvent(readed));
+          ..add(ChapterReadedLoadedEvent(initialReaded));
       },
-      child: BlocBuilder<ChapterReadedBloc, ChapterReadedState>(
-        builder: (BuildContext context, ChapterReadedState state) {
-          if (state is ChapterReadedLoading) {
-            return Container(
-              width: 24,
-              height: 24,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+      child: BlocListener<GlobalChapterReadedBloc, GlobalChapterReadedState>(
+        listener: (context, state) {
+          if(state is GlobalChapterReadedChanged) {
+            if(state.chapterId == chapterId) {
+              context.bloc<ChapterReadedBloc>().add(ChangeChapterReadedEvent(true));
+            }
           }
-
-          if (state is ChapterReadedLoaded) {
-            return _buildReaded(context, readed: state.readed);
-          }
-
-          if (state is ChangeChapterReadedError) {
-            return _buildReaded(context, readed: state.oldReaded);
-          }
-
-          return Container();
         },
+        child: BlocBuilder<ChapterReadedBloc, ChapterReadedState>(
+          builder: (BuildContext context, ChapterReadedState state) {
+            if (state is ChapterReadedLoading) {
+              return Container(
+                width: 24,
+                height: 24,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            if (state is ChapterReadedLoaded) {
+              return _buildReaded(context, readed: state.readed);
+            }
+
+            if (state is ChangeChapterReadedError) {
+              return _buildReaded(context, readed: state.oldReaded);
+            }
+
+            return Container();
+          },
+        ),
       ),
     );
   }

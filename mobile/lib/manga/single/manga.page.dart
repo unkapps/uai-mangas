@@ -211,6 +211,7 @@ class _MangaPageState extends State<MangaPage> {
           ChapterList(
             qtyChapters: manga.qtyChapters,
             key: _chapterListPageKey,
+            mangaId: manga.id,
           ),
         ],
       ),

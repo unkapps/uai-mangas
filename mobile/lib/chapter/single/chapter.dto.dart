@@ -9,6 +9,7 @@ class ChapterDto {
   final List<PageDto> pages;
   final int previousChapterId;
   final int nextChapterId;
+  final bool readed;
 
   ChapterDto({
     @required this.id,
@@ -18,6 +19,7 @@ class ChapterDto {
     @required this.pages,
     this.previousChapterId,
     this.nextChapterId,
+    this.readed,
   });
 
   factory ChapterDto.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class ChapterDto {
           .cast<PageDto>(),
       previousChapterId: json['previousChapterId'] as int,
       nextChapterId: json['nextChapterId'] as int,
+      readed: (json['readed'] as String == '1'),
     );
   }
 

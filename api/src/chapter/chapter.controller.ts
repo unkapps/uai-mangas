@@ -21,8 +21,9 @@ export class ChapterController {
   constructor(private readonly chapterService: ChapterService) { }
 
   @Get(':id')
-  ofChapter(@Param('id') id: number): Promise<ChapterDto> {
-    return this.chapterService.getPagesOfChapter(id);
+  @UseGuards(FirebaseAuthOptionalGuard)
+  ofChapter(@Req() request: any, @Param('id') id: number): Promise<ChapterDto> {
+    return this.chapterService.getPagesOfChapter(id, request.userId);
   }
 
   @Get()

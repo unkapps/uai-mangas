@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
+import 'package:leitor_manga/chapter/chapter_readed/bloc/global_chapter_readed_bloc.dart';
 import 'package:leitor_manga/home/home_page.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/splash_screen.dart';
@@ -34,6 +35,9 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider<AuthBloc>(
           create: (BuildContext context) => _authBloc,
+        ),
+        BlocProvider<GlobalChapterReadedBloc>(
+          create: (BuildContext context) => GlobalChapterReadedBloc(),
         ),
       ],
       child: MaterialApp(

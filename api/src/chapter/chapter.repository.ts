@@ -8,7 +8,7 @@ import ChapterListDto from './dto/chapter-list.dto';
 
 @EntityRepository(Chapter)
 export class ChapterRepository extends Repository<Chapter> {
-  async list(mangaId: number, offset = 0, size = 10, userId? : number): Promise<ChapterListDto[]> {
+  async list(mangaId: number, offset = 0, size = 10, userId?: number): Promise<ChapterListDto[]> {
     const queryBuilder = this
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
@@ -33,8 +33,8 @@ export class ChapterRepository extends Repository<Chapter> {
     return teste;
   }
 
-  async getChapter(chapterId: number): Promise<ChapterDto> {
-    const results = await this
+  async getChapter(chapterId: number, userId?: number): Promise<ChapterDto> {
+    const queryBuilder = this
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
       .addSelect('manga.name', 'manga_name')
@@ -48,8 +48,16 @@ export class ChapterRepository extends Repository<Chapter> {
       .where('page.chapter_id = :chapterId', {
         chapterId,
       })
-      .orderBy('page.number', 'ASC')
-      .getRawMany();
+      .orderBy('page.number', 'ASC');
+
+
+    if (userId != null) {
+      queryBuilder.leftJoin('chapter.chaptersRead', 'chapterRead',
+        'chapterRead.chapter_id = chapter.id and chapterRead.user_id = :userId', { userId });
+      queryBuilder.addSelect('case when chapterRead.user_id is null then 0 else 1 end', 'readed');
+    }
+
+    const results = await queryBuilder.getRawMany();
 
     if (results.length === 0) {
       return null;
