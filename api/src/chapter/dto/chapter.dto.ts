@@ -11,4 +11,6 @@ export default interface ChapterDto {
 
   previousChapterId?: number;
   nextChapterId?: number;
+
+  readed: string;
 }

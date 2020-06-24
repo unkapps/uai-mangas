@@ -23,7 +23,7 @@ class ChapterService {
   }
 
   Future<ChapterDto> getChapter(int chapterId) async {
-    final dio = await DioConfig.withoutToken();
+    final dio = await DioConfig.withToken();
     var res = await dio.get('/chapter/$chapterId');
 
     if (res.statusCode == 200) {

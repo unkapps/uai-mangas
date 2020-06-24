@@ -109,7 +109,7 @@ class MangaService {
     String name,
     int offset,
   }) async {
-    final dio = await DioConfig.withoutToken();
+    final dio = await DioConfig.withToken();
     var res = await dio.get(
       '/manga/loadMore',
       queryParameters: _getQueryParamatersForAllManga(sortingChoice,

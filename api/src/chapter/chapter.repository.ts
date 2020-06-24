@@ -72,6 +72,7 @@ export class ChapterRepository extends Repository<Chapter> {
       number: results[0].number,
       mangaName: results[0].manga_name,
       mangaId: results[0].manga_id,
+      readed: results[0].readed,
       pages,
     };
 
