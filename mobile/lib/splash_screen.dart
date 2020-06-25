@@ -10,7 +10,7 @@ class SplashScreen extends StatelessWidget {
           children: <Widget>[
             Image(
               image: AssetImage(
-                'assets/splashscreen.png',
+                'assets/images/splashscreen.png',
               ),
               fit: BoxFit.fill,
               alignment: Alignment.bottomRight,
