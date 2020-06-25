@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "87122301971-2amregvsbbrcbt4o3uabsbn3qa2i9ufe.apps.googleusercontent.com",
+          "client_id": "87122301971-ecvhmmng99negaockeedgtl06s15u7kr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.unkapps.uai_mangas",
-            "certificate_hash": "e013ffc062d0fa2857fc2777498e8bdcfbdcf048"
+            "certificate_hash": "35ae9fb52f237aaf27231316b774f0740181f2e3"
           }
         },
         {
