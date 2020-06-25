@@ -28,7 +28,7 @@ class UserService {
           var authResult =
               await _firebaseAuth.signInWithCredential(facebookAuthCred);
 
-          await _sendTokenToBack((await authResult.user.getIdToken()).token);
+          await _sendTokenToBack();
         } catch (_) {
           await signOut();
           rethrow;
@@ -68,8 +68,8 @@ class UserService {
         idToken: googleAuth.idToken,
       );
 
-      var authResult = await _firebaseAuth.signInWithCredential(credential);
-      await _sendTokenToBack((await authResult.user.getIdToken()).token);
+      await _firebaseAuth.signInWithCredential(credential);
+      await _sendTokenToBack();
       return _firebaseAuth.currentUser();
     } catch (_) {
       await signOut();
@@ -93,9 +93,9 @@ class UserService {
     return _firebaseAuth.currentUser();
   }
 
-  void _sendTokenToBack(String tokenId) async {
+  void _sendTokenToBack() async {
     try {
-      final dio = await DioConfig.withoutToken();
+      final dio = await DioConfig.withToken();
       await dio.post('/auth/firebase');
     } catch (err) {
       debugPrint(err);
