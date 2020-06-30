@@ -30,7 +30,7 @@ export default class Chapter {
       unsigned: true,
     },
   )
-  numberInt: number;
+  numberValue: number;
 
   @ManyToOne(() => Manga, (manga) => manga.chapters)
   manga: Manga;

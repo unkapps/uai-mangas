@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
 import 'package:leitor_manga/user/login_dialog.dart';
 import 'package:leitor_manga/user/user_page.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:leitor_manga/feed/feed_page.dart';
 
 class HomeDrawer extends StatefulWidget {
   HomeDrawer({Key key}) : super(key: key);
@@ -79,6 +81,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ListTile(
             leading: Icon(Icons.notifications),
             title: Text('Feed'),
+            onTap: () {
+              unawaited(Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => FeedPage()),
+              ));
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),

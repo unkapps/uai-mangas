@@ -7,6 +7,7 @@ import PageableDto from 'src/shared/pageable.dto';
 import FollowingManga from 'src/entity/following-manga';
 
 import LastMangaDto from './dto/last-manga.dto';
+import FavoriteMangaDto from './dto/favorite-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
 
 @EntityRepository(Manga)
@@ -108,7 +109,63 @@ export class MangaRepository extends Repository<Manga> {
     }]);
   }
 
-  async removeMangaFavorite(userId: number, mangaId: number): Promise<void> {
+  async removeMangaFavorite(userId: number, mangaId: number): Promise<any> {
     await this.manager.getRepository(FollowingManga).delete({ userId, mangaId });
+  }
+
+  async getFavoriteMangas(userId: number): Promise<FavoriteMangaDto> {
+    const rawData = await this.manager.query(
+      `
+        select
+          m.id,
+          m.name,
+          m.cover_url coverUrl,
+          next_chapter.id 'nextChapterId',
+          next_chapter.number 'nextChapterNumber',
+          next_chapter.date 'nextChapterDate',
+          (
+            select
+              case
+                when count(1) = 0 then true else false
+              end
+                from chapter_read cr
+                join chapter c
+              on c.id = cr.chapter_id
+                where
+              cr.user_id = u.id
+                    and c.manga_id = m.id
+          ) 'neverReaded'
+        from following_manga fm
+        join manga m on m.id = fm.manga_id
+        join user u on u.id = fm.user_id
+        left join (
+          select 
+            cr.user_id user_id,
+            c.manga_id manga_id,
+            max(c.number_value) max_chapter_readed
+          from chapter_read cr
+          join chapter c on c.id = cr.chapter_id
+          group by cr.user_id, c.manga_id
+        ) cr
+          on cr.manga_id = m.id
+          and cr.user_id = u.id
+        left join  (
+          select
+            smallest_chapter.id,
+            smallest_chapter.manga_id,
+            smallest_chapter.number,
+            smallest_chapter.number_value,
+            smallest_chapter.date
+          from chapter smallest_chapter
+            order by smallest_chapter.number desc
+        )   next_chapter 
+          on cr.manga_id = next_chapter.manga_id
+          and next_chapter.number_value > cr.max_chapter_readed
+        where u.id = ?
+        group by m.id, m.name, m.cover_url;
+    `, [userId],
+    );
+
+    return rawData as FavoriteMangaDto;
   }
 }

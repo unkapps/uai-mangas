@@ -19,6 +19,7 @@ import { FirebaseAuthOptionalGuard } from 'src/auth/firebase-auth-optional.guard
 import { MangaService } from './manga.service';
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
+import FavoriteMangaDto from './dto/favorite-manga.dto';
 
 @Controller('manga')
 export class MangaController {
@@ -51,9 +52,15 @@ export class MangaController {
     return this.mangaService.loadMore(size, offset, sortingDto, name);
   }
 
+  @Get('favorite')
+  @UseGuards(FirebaseAuthGuard)
+  getFavoriteMangas(@Req() request: any): Promise<FavoriteMangaDto> {
+    return this.mangaService.getFavoriteMangas(request.userId);
+  }
+
   @Get(':id')
   @UseGuards(FirebaseAuthOptionalGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor) // TODO:
   findById(@Req() request: any, @Param('id') id: number): Promise<Manga> {
     return this.mangaService.findById(id, request.userId);
   }

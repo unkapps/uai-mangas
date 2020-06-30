@@ -7,6 +7,7 @@ import 'package:leitor_manga/home/home_page.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/splash_screen.dart';
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
+import 'package:leitor_manga/feed/bloc/feed_bloc.dart';
 import 'package:leitor_manga/user/user.service.dart';
 
 void main() {
@@ -20,12 +21,14 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   AuthBloc _authBloc;
+  FeedBloc _feedBloc;
 
   @override
   void initState() {
     super.initState();
     _registerServices();
     _authBloc = AuthBloc();
+    _feedBloc = FeedBloc();
     _authBloc.add(AppStarted());
   }
 
@@ -39,6 +42,9 @@ class _AppState extends State<App> {
         BlocProvider<GlobalChapterReadedBloc>(
           create: (BuildContext context) => GlobalChapterReadedBloc(),
         ),
+        BlocProvider<FeedBloc>(
+          create: (BuildContext context) => _feedBloc,
+        ),
       ],
       child: MaterialApp(
         title: 'Uai Mangás',
@@ -48,7 +54,14 @@ class _AppState extends State<App> {
           accentColor: Colors.red,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BlocBuilder<AuthBloc, AuthState>(
+        home: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is Authenticated) {
+              _feedBloc.add(LoadFeedEvent());
+            } else if (state is Unauthenticated) {
+              _feedBloc.add(UnauthenticatedFeedEvent());
+            }
+          },
           builder: (BuildContext context, AuthState state) {
             if (state is Uninitialized) {
               return SplashScreen();

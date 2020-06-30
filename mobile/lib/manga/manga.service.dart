@@ -5,6 +5,7 @@ import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/manga_sort.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
 import 'package:leitor_manga/shared/pageable.dto.dart';
+import 'package:leitor_manga/feed/favorite_manga.dto.dart';
 
 class MangaService {
   Future<MangaDto> getManga(int mangaId) async {
@@ -13,6 +14,26 @@ class MangaService {
 
     if (res.statusCode == 200) {
       return MangaDto.fromJson(res.data);
+    }
+
+    return null;
+  }
+
+  Future<List<FavoriteMangaDto>> getFavoriteMangas() async {
+    final dio = await DioConfig.withToken();
+    var res = await dio.get(
+      '/manga/favorite/',
+    );
+
+    try {
+    if (res.statusCode == 200) {
+      return res.data
+          .map((dynamic json) => FavoriteMangaDto.fromJson(json))
+          .toList()
+          .cast<FavoriteMangaDto>();
+    }
+    }catch(err) {
+      debugPrint(err);
     }
 
     return null;

@@ -7,6 +7,7 @@ import PageableDto from 'src/shared/pageable.dto';
 import { MangaRepository } from './manga.repository';
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
+import FavoriteMangaDto from './dto/favorite-manga.dto';
 
 @Injectable()
 export class MangaService {
@@ -40,5 +41,9 @@ export class MangaService {
     }
 
     return mangaFavorite;
+  }
+
+  async getFavoriteMangas(userId: number): Promise<FavoriteMangaDto> {
+    return this.mangaRepository.getFavoriteMangas(userId);
   }
 }

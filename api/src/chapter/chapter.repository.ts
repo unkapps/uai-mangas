@@ -17,8 +17,7 @@ export class ChapterRepository extends Repository<Chapter> {
       .where('chapter.manga_id = :mangaId', {
         mangaId,
       })
-      .orderBy('chapter.number_int', 'DESC')
-      .addOrderBy('chapter.number', 'DESC')
+      .orderBy('chapter.numberValue', 'DESC')
       .limit(size)
       .offset(offset);
 
@@ -41,7 +40,7 @@ export class ChapterRepository extends Repository<Chapter> {
       .addSelect('manga.id', 'manga_id')
       .addSelect('chapter.number', 'number')
       .addSelect('chapter.number', 'number')
-      .addSelect('chapter.number_int', 'numberInt')
+      .addSelect('chapter.number_value', 'numberValue')
       .addSelect('page.image_url', 'page_imageUrl')
       .innerJoin('chapter.pages', 'page')
       .innerJoin('chapter.manga', 'manga')
@@ -81,9 +80,9 @@ export class ChapterRepository extends Repository<Chapter> {
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
       .where('chapter.manga_id = :manga_id', { manga_id: chapter.mangaId })
-      .andWhere('chapter.number_int <= :number_int', { number_int: results[0].numberInt })
+      .andWhere('chapter.number_value <= :number_value', { number_value: results[0].numberValue })
       .andWhere('chapter.number < :number', { number: results[0].number })
-      .orderBy('chapter.numberInt', 'DESC')
+      .orderBy('chapter.numberValue', 'DESC')
       .addOrderBy('chapter.number', 'DESC')
       .limit(1)
       .getRawOne();
@@ -96,9 +95,9 @@ export class ChapterRepository extends Repository<Chapter> {
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
       .where('chapter.manga_id = :manga_id', { manga_id: chapter.mangaId })
-      .andWhere('chapter.number_int >= :number_int', { number_int: results[0].numberInt })
+      .andWhere('chapter.number_value >= :number_value', { number_value: results[0].numberValue })
       .andWhere('chapter.number > :number', { number: results[0].number })
-      .orderBy('chapter.numberInt', 'ASC')
+      .orderBy('chapter.numberValue', 'ASC')
       .addOrderBy('chapter.number', 'ASC')
       .limit(1)
       .getRawOne();

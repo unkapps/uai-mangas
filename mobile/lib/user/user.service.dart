@@ -25,8 +25,7 @@ class UserService {
         final facebookAuthCred = FacebookAuthProvider.getCredential(
             accessToken: result.accessToken.token);
         try {
-          var authResult =
-              await _firebaseAuth.signInWithCredential(facebookAuthCred);
+          await _firebaseAuth.signInWithCredential(facebookAuthCred);
 
           await _sendTokenToBack();
         } catch (_) {

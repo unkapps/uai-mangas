@@ -1,21 +1,19 @@
 import 'package:flutter/foundation.dart';
+import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 
-class LastMangaWithUpdateDto {
-  final int id;
-  final String name;
+class LastMangaWithUpdateDto extends MangaListDto {
   final String chapterNumber;
   final int chapterId;
   final DateTime date;
-  final String coverUrl;
 
   LastMangaWithUpdateDto({
-    @required this.id,
-    @required this.name,
+    @required int id,
+    @required String name,
     @required this.chapterNumber,
     @required this.chapterId,
     @required this.date,
-    @required this.coverUrl,
-  });
+    @required String coverUrl,
+  }) : super(id: id, name: name, coverUrl: coverUrl);
 
   factory LastMangaWithUpdateDto.fromJson(Map<String, dynamic> json) {
     return LastMangaWithUpdateDto(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leitor_manga/home/home_drawer.dart';
+import 'package:leitor_manga/home/drawer_count.dart';
 
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dart';
 import 'package:leitor_manga/manga/list/manga_list.dart';
@@ -68,6 +69,11 @@ class _HomePageState extends State<HomePage> {
                       Tab(text: 'Todos'),
                     ],
                   ),
+            leading: Builder(
+              builder: (BuildContext context) {
+                return DrawerCount(count: 0);
+              },
+            ),
           ),
         ),
         drawer: HomeDrawer(),
