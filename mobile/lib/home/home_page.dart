@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                   ),
             leading: Builder(
               builder: (BuildContext context) {
-                return DrawerCount(count: 0);
+                return DrawerCount();
               },
             ),
           ),

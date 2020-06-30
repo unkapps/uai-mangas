@@ -7,6 +7,8 @@ import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
 import 'package:leitor_manga/user/login_dialog.dart';
 import 'package:leitor_manga/user/user_page.dart';
 import 'package:leitor_manga/feed/feed_page.dart';
+import 'package:leitor_manga/feed/bloc/feed_bloc.dart';
+import 'package:leitor_manga/feed/feed_count.dart';
 
 class HomeDrawer extends StatefulWidget {
   HomeDrawer({Key key}) : super(key: key);
@@ -79,9 +81,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.notifications),
+            leading: FeedCount(
+              fit: StackFit.loose,
+              child: Icon(Icons.notifications),
+            ),
             title: Text('Feed'),
             onTap: () {
+              context.bloc<FeedBloc>().add(LoadFeedEvent());
               unawaited(Navigator.push(
                 context,
                 CupertinoPageRoute(builder: (context) => FeedPage()),
