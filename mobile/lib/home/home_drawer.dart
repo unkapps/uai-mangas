@@ -86,6 +86,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
               width: 24,
               height: 24,
               child: FeedCount(
+                top: 0,
+                left: 0,
                 fit: StackFit.expand,
                 child: Icon(Icons.notifications),
               ),
