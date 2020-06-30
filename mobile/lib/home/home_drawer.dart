@@ -9,6 +9,7 @@ import 'package:leitor_manga/user/user_page.dart';
 import 'package:leitor_manga/feed/feed_page.dart';
 import 'package:leitor_manga/feed/bloc/feed_bloc.dart';
 import 'package:leitor_manga/feed/feed_count.dart';
+import 'package:leitor_manga/dmca/dmca.dart';
 
 class HomeDrawer extends StatefulWidget {
   HomeDrawer({Key key}) : super(key: key);
@@ -81,9 +82,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
             },
           ),
           ListTile(
-            leading: FeedCount(
-              fit: StackFit.loose,
-              child: Icon(Icons.notifications),
+            leading: Container(
+              width: 24,
+              height: 24,
+              child: FeedCount(
+                fit: StackFit.expand,
+                child: Icon(Icons.notifications),
+              ),
             ),
             title: Text('Feed'),
             onTap: () {
@@ -95,8 +100,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Configurações'),
+            leading: Icon(Icons.warning),
+            title: Text('DMCA'),
+            onTap: () {
+              unawaited(Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => DMCA()),
+              ));
+            },
           ),
         ],
       ),
