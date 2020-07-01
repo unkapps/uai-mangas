@@ -6,7 +6,7 @@ import Category from '../entity/category';
 import CategoryDto from '../dto/category.dto';
 
 import WaitBetween, { MINIMUM_HOURS_BETWEEN_CRAWLER_CATEGORY } from './wait-between';
-import { fileExists, readFile, writeFile } from '../util';
+import { fileExists, readFile, writeFile, unlink } from '../util';
 import { STATUS_CRAWLER_CATEGORIES_FILE_PATH, CURRENT_CATEGORY_FILE_PATH } from '../config/general-craweler.config';
 
 @singleton()
@@ -83,6 +83,12 @@ export default class CategoryService extends WaitBetween {
 
   public saveEndOfCrawler(): Promise<void> {
     return super.saveEndOfCrawler(STATUS_CRAWLER_CATEGORIES_FILE_PATH);
+  }
+
+  public async deleteIfExistisCurrentCategory(): Promise<void> {
+    if (await fileExists(CURRENT_CATEGORY_FILE_PATH)) {
+      await unlink(CURRENT_CATEGORY_FILE_PATH);
+    }
   }
 
   public async getIdFromCurrentCategoryOnCrawler(): Promise<CategoryIdPage> {

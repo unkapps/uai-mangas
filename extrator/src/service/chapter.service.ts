@@ -27,16 +27,22 @@ export default class ChapterService {
     const databaseEntity = await connection
       .getRepository(Chapter)
       .createQueryBuilder('chapter')
-      .where('chapter.leitorNetId = :leitorNetId', { leitorNetId: dto.id_chapter })
+      .innerJoin('chapter.manga', 'manga')
+      .where('manga.leitor_net_id = :leitorNetMangaId and chapter.number = :chapterNumber',
+        { leitorNetMangaId: dto.id_serie, chapterNumber: dto.number })
       .getOne();
 
     if (databaseEntity) {
       return databaseEntity;
     }
 
-    return connection.transaction(async (manager) => {
+    const chapter = await connection.transaction(async (manager) => {
       return manager.save(await this.dtoToEntity(dto, manager, manga));
     });
+
+    chapter.justGotSaved = true;
+
+    return chapter;
   }
 
   public async dtoToEntity(dto: ChapterDto, manager: EntityManager, manga: Manga): Promise<Chapter> {
@@ -46,7 +52,7 @@ export default class ChapterService {
 
     entity.number = this.standardizeNumber(dto);
     entity.numberValue = this.getNumberValue(entity.number);
-    entity.title = dto.name;
+    entity.title = dto.chapter_name;
     entity.manga = manga;
     entity.leitorNetId = dto.id_chapter;
     entity.leitorNetUrl = scan.link;

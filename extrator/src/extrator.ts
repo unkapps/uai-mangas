@@ -118,6 +118,7 @@ export default class Extrator {
         console.log(`/*/*/* Category '${category.name}' finished :)`);
       }
 
+      this.categoryService.deleteIfExistisCurrentCategory();
       return this.mangaService.saveEndOfCrawler();
     }
     console.info('Mangas skipped');
@@ -138,8 +139,10 @@ export default class Extrator {
       const chaptersDto = response.data.chapters;
 
       for (const chapterDto of chaptersDto) {
-        await this.chapterService.createOrGet(chapterDto as ChapterDto, manga);
-        console.log(`--- chapter ${chapterDto.number} of '${manga.name}' saved`);
+        const chapter = await this.chapterService.createOrGet(chapterDto as ChapterDto, manga);
+        if (chapter.justGotSaved) {
+          console.log(`--- chapter ${chapterDto.number} of '${manga.name}' saved`);
+        }
         // await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
       }
 

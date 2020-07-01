@@ -63,4 +63,6 @@ export default class Chapter {
     unique: true,
   })
   leitorNetUrl: string;
+
+  justGotSaved: boolean = false;
 }
