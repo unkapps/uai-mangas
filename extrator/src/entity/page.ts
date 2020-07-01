@@ -14,7 +14,7 @@ export default class Page {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column('tinyint')
+  @Column({ unsigned: true, type: 'smallint' })
   number: number;
 
   @Column({
