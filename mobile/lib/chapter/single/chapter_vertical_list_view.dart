@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:diagonal_scrollview/diagonal_scrollview.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:leitor_manga/chapter/single/page.dart' as manga_page;
 import 'package:pedantic/pedantic.dart';
 import 'package:quiver/collection.dart';
@@ -36,6 +39,9 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
   ProgressDialog progressDialog;
   double _olderScrollPosition;
   Timer timerScaleChanged;
+
+  final _adController = NativeAdmobController();
+  final _adHeight = 300.0;
 
   _ChapterVerticalListViewState(this.chapter, {ChapterController controller})
       : _controller = controller ?? ChapterController(),
@@ -178,7 +184,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
 
     return DiagonalScrollView(
       maxWidth: width,
-      maxHeight: _controller.height + 60,
+      maxHeight: _controller.height + 60 + _adHeight,
       minScale: 1,
       maxScale: 3,
       enableZoom: true,
@@ -260,7 +266,23 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
           }
 
           return Column(
-            children: widgets,
+            children: [
+              ...widgets,
+              Container(
+                height: _adHeight,
+                width: width,
+                child: NativeAdmob(
+                  adUnitID: 'ca-app-pub-4719589372008331/5300665318',
+                  loading: Center(child: CircularProgressIndicator()),
+                  error: Text('Failed to load the ad'),
+                  controller: _adController,
+                  type: NativeAdmobType.full,
+                  options: NativeAdmobOptions(
+                    ratingColor: Colors.red,
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -313,8 +335,8 @@ class ChapterController {
   }
 
   void _notifyPageChange(int page) {
-    pageChangeListeners
-        .forEach((pageChangeListener) => pageChangeListener(page, page +1 == chapter.pages.length));
+    pageChangeListeners.forEach((pageChangeListener) =>
+        pageChangeListener(page, page + 1 == chapter.pages.length));
   }
 
   void addPageChangeListener(PageChangeListener pageChangeListener) {

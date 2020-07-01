@@ -40,6 +40,8 @@ dependencies:
   flutter_signin_button: ^1.0.0
   google_sign_in: ^4.5.1
   get_it: ^4.0.2
+  flutter_native_admob: ^2.1.0
+
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -4,6 +4,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:leitor_manga/author/author.dto.dart';
@@ -204,6 +207,19 @@ class _MangaPageState extends State<MangaPage> {
           Categories(
             categories: manga.categories,
           ),
+          Container(
+            height: 140,
+            margin: EdgeInsets.all(10),
+            child: NativeAdmob(
+              adUnitID: 'ca-app-pub-4719589372008331/8547336252',
+              loading: Center(child: CircularProgressIndicator()),
+              error: Text('Failed to load the ad'),
+              type: NativeAdmobType.full,
+              options: NativeAdmobOptions(
+                ratingColor: Colors.red,
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Text('Capitulos'),
@@ -213,6 +229,21 @@ class _MangaPageState extends State<MangaPage> {
             key: _chapterListPageKey,
             mangaId: manga.id,
           ),
+          manga.qtyChapters > 9
+              ? Container(
+                  height: 140,
+                  margin: EdgeInsets.all(10),
+                  child: NativeAdmob(
+                    adUnitID: 'ca-app-pub-4719589372008331/8547336252',
+                    loading: Center(child: CircularProgressIndicator()),
+                    error: Text('Failed to load the ad'),
+                    type: NativeAdmobType.full,
+                    options: NativeAdmobOptions(
+                      ratingColor: Colors.red,
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
       onNotification: (ScrollNotification scrollInfo) {

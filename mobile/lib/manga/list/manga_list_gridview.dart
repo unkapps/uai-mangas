@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
+import 'package:extended_image/extended_image.dart';
+
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/single/manga.page.dart';
 
 class MangaListGridView extends StatelessWidget {
   final List<MangaListDto> mangas;
+
+  final adPosition = 5;
+  final _adController = NativeAdmobController();
 
   MangaListGridView({Key key, @required this.mangas}) : super(key: key);
 
@@ -18,7 +25,8 @@ class MangaListGridView extends StatelessWidget {
     return Container(
       child: GridView.builder(
         shrinkWrap: true,
-        itemCount: mangas.length,
+        itemCount:
+            mangas.length > adPosition + 2 ? mangas.length + 1 : mangas.length,
         physics: BouncingScrollPhysics(),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: columnWidth,
@@ -29,7 +37,24 @@ class MangaListGridView extends StatelessWidget {
               (MediaQuery.of(context).size.height / 0.85),
         ),
         itemBuilder: (BuildContext context, int index) {
-          var manga = mangas[index];
+          var realIndex = index >= adPosition ? index - 1 : index;
+
+          if (index == adPosition) {
+            return Container(
+              child: NativeAdmob(
+                adUnitID: 'ca-app-pub-4719589372008331/7599525599',
+                loading: Center(child: CircularProgressIndicator()),
+                error: Text('Failed to load the ad'),
+                controller: _adController,
+                type: NativeAdmobType.full,
+                options: NativeAdmobOptions(
+                  ratingColor: Colors.red,
+                ),
+              ),
+            );
+          }
+
+          var manga = mangas[realIndex];
 
           return InkWell(
             onTap: () {
