@@ -34,6 +34,7 @@ export default class MangaService extends WaitBetween {
       .getRepository(Manga)
       .createQueryBuilder('manga')
       .where('manga.name = :name', { name: dto.name })
+      .orWhere('manga.leitor_net_id = :leitorNetId', { leitorNetId: dto.id_serie })
       .getOne();
 
     if (mangaDatabase) {
