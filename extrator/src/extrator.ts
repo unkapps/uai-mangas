@@ -78,12 +78,12 @@ export default class Extrator {
       const categoryIdPageOnCrawlerBegin = await this.categoryService.getIdFromCurrentCategoryOnCrawler();
 
       const categoryIdOnCrawlerBegin = categoryIdPageOnCrawlerBegin ? categoryIdPageOnCrawlerBegin.categoryId : -1;
-      const pageOnCrawlerBegin = categoryIdPageOnCrawlerBegin ? categoryIdPageOnCrawlerBegin.page : 1;
 
       const categories = await this.categoryService.getAllStartingOnId(categoryIdOnCrawlerBegin);
 
       for (const category of categories) {
-        let page = pageOnCrawlerBegin;
+        let page = category.id === categoryIdOnCrawlerBegin ? categoryIdPageOnCrawlerBegin.page : 1;
+
         await this.categoryService.setIdFromCurrentCategoryOnCrawler({
           categoryId: category.id,
           page,
