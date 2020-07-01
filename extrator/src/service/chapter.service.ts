@@ -45,7 +45,7 @@ export default class ChapterService {
     const scan: ScanDto = dto.releases[Object.keys(dto.releases)[0]];
 
     entity.number = this.standardizeNumber(dto);
-    entity.numberInt = this.getNumberInt(entity.number);
+    entity.numberValue = this.getNumberValue(entity.number);
     entity.title = dto.name;
     entity.manga = manga;
     entity.leitorNetId = dto.id_chapter;
@@ -58,16 +58,22 @@ export default class ChapterService {
     return entity;
   }
 
-  getNumberInt(numberStr: string): number {
+  getNumberValue(numberStr: string): number {
     const regex = /(\d+).*/;
 
     const match = regex.exec(numberStr);
 
     if (match) {
-      return Number(match[1]);
+      return Number(`${match[1]}.${this._numberToAsciiCode(numberStr)}`);
     }
 
     return 0;
+  }
+
+  _numberToAsciiCode(numberStr: string): string {
+    return [...numberStr]
+      .map((char) => `${char.charCodeAt(0)}`)
+      .reduce((current, previous) => `${current}${previous}`);
   }
 
   standardizeNumber(dto: ChapterDto): string {
