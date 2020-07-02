@@ -8,8 +8,9 @@
   "scripts": {
     "ts-node": "node node_modules/ts-node/dist/bin.js",
     "start:dev": "npm run ts-node -- ./src/main.ts",
-    "build": "tsc",
+    "build": "npm run clear && tsc",
     "start": "node ./dist/main.js",
+    "clear": "del-cli ./dist",
     "migration:run": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:revert"
   },
@@ -23,7 +24,8 @@
     "eslint-config-airbnb-typescript": "^7.2.1",
     "eslint-plugin-import": "^2.20.2",
     "ts-node": "^8.10.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "del-cli": "^3.0.1"
   },
   "dependencies": {
     "@types/imagemin": "^7.0.0",
