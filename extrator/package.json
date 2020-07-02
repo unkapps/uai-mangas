@@ -2,13 +2,14 @@
   "name": "extrator",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
   "engines": {
     "node": ">=10.0.0"
   },
   "scripts": {
     "ts-node": "node node_modules/ts-node/dist/bin.js",
-    "start": "npm run ts-node -- ./src/main.ts",
+    "start:dev": "npm run ts-node -- ./src/main.ts",
+    "build": "tsc",
+    "start": "node ./dist/main.js",
     "migration:run": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "npm run ts-node -- ./node_modules/typeorm/cli.js migration:revert"
   },

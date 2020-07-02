@@ -5,12 +5,6 @@
   "username": "root",
   "password": "123456",
   "database": "manga",
-  "entities": [
-    "src/entity/**/*.ts"
-  ],
-  "migrations": [
-    "src/migration/*.ts"
-  ],
   "cli": {
     "entitiesDir": "src/entity",
     "migrationsDir": "src/migration",

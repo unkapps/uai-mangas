@@ -9,6 +9,12 @@ export default class DatabaseConfig {
 
     return createConnection(Object.assign(connectionOptions, {
       namingStrategy: new SnakeNamingStrategy(),
+      entities: [
+        `${__dirname}/../entity/**/*{.ts,.js}`,
+      ],
+      migrations: [
+        `${__dirname}/../migration/*{.ts,.js}`,
+      ],
     }));
   }
 }
