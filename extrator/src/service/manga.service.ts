@@ -1,16 +1,25 @@
 import { autoInjectable, singleton } from 'tsyringe';
 import { getConnection, EntityManager } from 'typeorm';
+import { parse } from 'node-html-parser';
 import slugify from 'slugify';
-
+import { AxiosResponse } from 'axios';
 
 import WaitBetween, { MINIMUM_HOURS_BETWEEN_CRAWLER_MANGA } from './wait-between';
+import {
+  fileExists,
+  readFile,
+  writeFile,
+  unlink,
+} from '../util';
+
 import MangaDto from '../dto/manga.dto';
 import Manga from '../entity/manga';
 import CategoryService from './category.service';
 import AuthorService from './author.service';
-import { STATUS_CRAWLER_MANGA_FILE_PATH } from '../config/general-craweler.config';
+import { STATUS_CRAWLER_MANGA_FILE_PATH, CURRENT_MANGA_FILE_PATH } from '../config/general-craweler.config';
 import generateUid from '../util/generator-id';
 import ChapterService from './chapter.service';
+import CategoryDto from '../dto/category.dto';
 
 @singleton()
 @autoInjectable()
@@ -53,7 +62,7 @@ export default class MangaService extends WaitBetween {
 
     entity.name = dto.name;
     entity.description = dto.description;
-    entity.leitorNetUrl = dto.link.replace(/\\\//g, '/');
+    entity.leitorNetUrl = dto.link != null ? dto.link.replace(/\\\//g, '/') : null;
     entity.leitorNetId = dto.id_serie;
     entity.slug = slugify(entity.name);
     entity.finished = dto.is_complete;
@@ -87,5 +96,72 @@ export default class MangaService extends WaitBetween {
     const quantityOfChapters: number = await this.chapterService.getCountByManga(entity);
 
     return quantityOfChapters < dto.chapters;
+  }
+
+  public fromResponse(leitorNetId: number, response: AxiosResponse<string>): MangaDto {
+    const mangaDto: Partial<MangaDto> = {};
+
+    const regexAuthorsRemove = /(completo|(\+\d+ mang.*))/gi;
+    const regexCategoryLinkId = /.*\/(\d+)/;
+    const regexQtyChaptersRemove = /\s+\d+/;
+
+    const root = parse(response.data);
+
+    const rootSerieData = root.querySelector('#series-data');
+
+    mangaDto.id_serie = leitorNetId;
+    mangaDto.cover = rootSerieData.querySelector('img.cover').getAttribute('src');
+
+    if (mangaDto.cover != null) {
+      mangaDto.cover = mangaDto.cover.replace('?quality=100', '');
+    }
+
+    mangaDto.name = rootSerieData.querySelector('.series-title h1').text;
+    mangaDto.chapters = Number(root.querySelector('#chapter-list h2 span').text.replace(regexQtyChaptersRemove, ''));
+    mangaDto.description = rootSerieData.querySelector('.series-desc').text.trim();
+    mangaDto.is_complete = rootSerieData.querySelector('.complete-series') != null;
+
+
+    mangaDto.categories = rootSerieData.querySelectorAll('.touchcarousel .touchcarousel-item a').map((category) => {
+      const link = category.getAttribute('href');
+      const categoryLinkIdMatch = regexCategoryLinkId.exec(link);
+
+      if (categoryLinkIdMatch && categoryLinkIdMatch.length >= 2 && categoryLinkIdMatch[1] != null) {
+        return {
+          name: category.text.trim(),
+          link,
+          id_category: Number(categoryLinkIdMatch[1]),
+        } as CategoryDto;
+      }
+
+      return null;
+    }).filter((category) => category != null);
+
+    const authors: string[] = rootSerieData.querySelector('.series-author').text
+      .replace(regexAuthorsRemove, '').split('&').map((author) => author.trim());
+
+    mangaDto.author = authors.filter((author) => !author.includes('(Arte)')).join(' & ');
+    mangaDto.artist = authors.filter((author) => author.includes('(Arte)')).join(' & ');
+
+    return mangaDto as MangaDto;
+  }
+
+  public async deleteIfExistisCurrentManga(): Promise<void> {
+    if (await fileExists(CURRENT_MANGA_FILE_PATH)) {
+      await unlink(CURRENT_MANGA_FILE_PATH);
+    }
+  }
+
+  public async getIdFromCurrentMangaOnCrawler(): Promise<number> {
+    if (await fileExists(CURRENT_MANGA_FILE_PATH)) {
+      const fileContent = await readFile(CURRENT_MANGA_FILE_PATH, 'utf-8');
+      return Number(fileContent);
+    }
+
+    return null;
+  }
+
+  public async setIdFromCurrentMangaOnCrawler(leitorNetId: number): Promise<void> {
+    return writeFile(CURRENT_MANGA_FILE_PATH, `${leitorNetId}`, 'utf-8');
   }
 }

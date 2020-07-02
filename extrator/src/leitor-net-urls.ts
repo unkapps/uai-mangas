@@ -26,6 +26,10 @@ export default class LeitorNetUrls {
     return `${LEITOR_NET_URL}/categories/series_list.json?page=${page}&id_category=${categoryId}`;
   }
 
+  public getMangaUrl(mangaId: number): string {
+    return `${LEITOR_NET_URL}/manga/a/${mangaId}`;
+  }
+
   public getChaptersListUrl(page: number, mangaId: number): string {
     return `${LEITOR_NET_URL}/series/chapters_list.json?page=${page}&id_serie=${mangaId}`;
   }

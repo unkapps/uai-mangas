@@ -6,6 +6,7 @@ export default interface ChapterDto {
   name: string;
   chapter_name: string;
   number: string;
+  numberValue: number;
   date: string;
   date_created: string;
   releases: any;

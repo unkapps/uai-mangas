@@ -28,8 +28,8 @@ export default class ChapterService {
       .getRepository(Chapter)
       .createQueryBuilder('chapter')
       .innerJoin('chapter.manga', 'manga')
-      .where('manga.leitor_net_id = :leitorNetMangaId and chapter.number = :chapterNumber',
-        { leitorNetMangaId: dto.id_serie, chapterNumber: dto.number })
+      .where('manga.leitor_net_id = :leitorNetMangaId and chapter.number_value = :chapterNumberValue',
+        { leitorNetMangaId: dto.id_serie, chapterNumberValue: dto.numberValue })
       .getOne();
 
     if (databaseEntity) {
@@ -51,7 +51,7 @@ export default class ChapterService {
     const scan: ScanDto = dto.releases[Object.keys(dto.releases)[0]];
 
     entity.number = this.standardizeNumber(dto);
-    entity.numberValue = this.getNumberValue(entity.number);
+    entity.numberValue = dto.numberValue;
     entity.title = dto.chapter_name;
     entity.manga = manga;
     entity.leitorNetId = dto.id_chapter;

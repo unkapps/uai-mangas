@@ -17,6 +17,6 @@ export default interface MangaDto {
   score: string;
   votes: string;
   categories: CategoryDto[];
-  link: string;
+  link?: string;
   is_complete: boolean;
 }
