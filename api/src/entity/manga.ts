@@ -21,7 +21,7 @@ export default class Manga {
   id: number;
 
   @Column({
-    length: 100,
+    length: 200,
     unique: true,
   })
   name: string;
