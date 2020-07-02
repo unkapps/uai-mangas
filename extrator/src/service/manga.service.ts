@@ -147,6 +147,10 @@ export default class MangaService extends WaitBetween {
     mangaDto.author = authors.filter((author) => !author.includes('(Arte)')).join(' & ');
     mangaDto.artist = authors.filter((author) => author.includes('(Arte)')).join(' & ');
 
+    if ((mangaDto.author != null && mangaDto.author.length > 100) || (mangaDto.artist != null && mangaDto.artist.length > 100)) {
+      return null;
+    }
+
     return mangaDto as MangaDto;
   }
 
