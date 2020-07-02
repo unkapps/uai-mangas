@@ -19,7 +19,7 @@ export default class Chapter {
 
   @Column(
     {
-      width: 10,
+      width: 15,
     },
   )
   number: string;
