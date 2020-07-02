@@ -107,6 +107,10 @@ export default class MangaService extends WaitBetween {
 
     const root = parse(response.data);
 
+    if (root.querySelector('.blocked-icon')) {
+      return null;
+    }
+
     const rootSerieData = root.querySelector('#series-data');
 
     mangaDto.id_serie = leitorNetId;

@@ -3,11 +3,15 @@ import { autoInjectable, singleton } from 'tsyringe';
 export const LEITOR_NET_URL = 'https://leitor.net';
 export const CATEGORIES_URL = `${LEITOR_NET_URL}/categories/categories_list.json`;
 
-export const LEITOR_NET_DEFAULT_HTTP_HEADERS = {
+export const LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT = {
   authority: 'leitor.net',
-  accept: 'application/json, text/javascript, */*; q=0.01',
+  accept: '*/*',
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
   'Accept-Encoding': 'gzip',
+};
+export const LEITOR_NET_DEFAULT_HTTP_HEADERS = {
+  ...LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT,
+  accept: 'application/json, text/javascript, */*; q=0.01',
 };
 
 export const LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ = {
