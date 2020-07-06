@@ -38,7 +38,7 @@ services:
     environment:
       NODE_ENV: prod
     ports:
-      - 4000:4000
+      - 3000:3000
     networks:
       - api
       - database
