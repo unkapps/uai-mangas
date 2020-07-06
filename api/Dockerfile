@@ -16,7 +16,7 @@ COPY .env ./
 COPY ormconfig.json ./
 
 RUN npm run build
-# RUN npm run migration:run
+RUN npm run migration:run
 
 # Bundle app source
 COPY . .

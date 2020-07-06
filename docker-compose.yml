@@ -23,6 +23,7 @@ services:
       - ./api/.env.prod
     volumes:
       - db-data:/var/lib/mysql
+      # - ../MangaDump20200706:/docker-entrypoint-initdb.d/:ro
     ports:
       - 3306:3306
     networks:
