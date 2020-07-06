@@ -37,6 +37,9 @@ services:
       - ./api/.env.prod
     environment:
       NODE_ENV: prod
+      GOOGLE_APPLICATION_CREDENTIALS: /home/firebase.json
+    volumes:
+      - ./uai-mangas-firebase-adminsdk-4xewi-819366107a.json:/home/firebase.json
     ports:
       - 3000:3000
     networks:
