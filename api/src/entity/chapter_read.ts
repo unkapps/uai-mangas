@@ -16,7 +16,7 @@ export default class ChapterRead {
     insert: false,
     unsigned: true,
     name: 'chapter_id',
-    type: 'number',
+    type: 'int',
   })
   @ManyToOne(() => Chapter)
   chapter: Chapter;
@@ -25,7 +25,7 @@ export default class ChapterRead {
     insert: false,
     unsigned: true,
     name: 'user_id',
-    type: 'number',
+    type: 'int',
   })
   @ManyToOne(() => User, (user) => user.chaptersRead)
   user: User;

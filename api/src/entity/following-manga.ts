@@ -16,7 +16,7 @@ export default class FollowingManga {
     insert: false,
     unsigned: true,
     name: 'manga_id',
-    type: 'number',
+    type: 'int',
   })
   @ManyToOne(() => Manga)
   manga: Manga;
@@ -25,7 +25,7 @@ export default class FollowingManga {
     insert: false,
     unsigned: true,
     name: 'user_id',
-    type: 'number',
+    type: 'int',
   })
   @ManyToOne(() => User, (user) => user.favoriteMangas)
   user: User;

@@ -1,0 +1,53 @@
+version: "3.5"
+
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    environment:
+      NGINX_PORT: 80
+    networks:
+      - api
+      - nginx
+    depends_on:
+      - api
+  db:
+    image: mysql
+    container_name: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - ./api/.env.prod
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - database
+  api:
+    container_name: manga-api
+    build:
+      context: ./api/
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./api/.env.prod
+    environment:
+      NODE_ENV: prod
+    ports:
+      - 4000:4000
+    networks:
+      - api
+      - database
+    depends_on:
+      - db
+
+networks:
+  api:
+  database:
+  nginx:
+
+volumes:
+  db-data:
