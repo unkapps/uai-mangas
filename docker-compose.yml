@@ -27,7 +27,8 @@ services:
     ports:
       - 3306:3306
     networks:
-      - database
+      - database_external
+      - database_internal
   api:
     container_name: manga-api
     build:
@@ -44,15 +45,17 @@ services:
       - 3000:3000
     networks:
       - api
-      - database
+      - database_internal
     depends_on:
       - db
 
 networks:
   api:
     driver: bridge
-  database:
+  database_internal:
+    driver: bridge
   nginx:
+  database_external:
 
 volumes:
   db-data:
