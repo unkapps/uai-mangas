@@ -51,10 +51,8 @@ services:
 
 networks:
   api:
-    driver: overlay
     internal: true
   database_internal:
-    driver: overlay
     internal: true
   nginx:
   database_external:
