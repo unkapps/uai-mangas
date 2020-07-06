@@ -5,10 +5,10 @@ services:
     image: nginx
     volumes:
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certs:/var/uaimangas/certs
     ports:
       - 80:80
-    environment:
-      NGINX_PORT: 80
+      - 443:443
     networks:
       - api
       - nginx
@@ -47,6 +47,7 @@ services:
 
 networks:
   api:
+    driver: bridge
   database:
   nginx:
 
