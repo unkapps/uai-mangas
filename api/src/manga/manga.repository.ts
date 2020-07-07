@@ -116,54 +116,63 @@ export class MangaRepository extends Repository<Manga> {
   async getFavoriteMangas(userId: number): Promise<FavoriteMangaDto> {
     const rawData = await this.manager.query(
       `
-        select
-          m.id,
-          m.name,
-          m.cover_url coverUrl,
-          next_chapter.id 'nextChapterId',
-          next_chapter.number 'nextChapterNumber',
-          next_chapter.date 'nextChapterDate',
-          (
-            select
-              case
-                when count(1) = 0 then true else false
-              end
-                from chapter_read cr
-                join chapter c
-              on c.id = cr.chapter_id
-                where
-              cr.user_id = u.id
-                    and c.manga_id = m.id
-          ) 'neverReaded'
-        from following_manga fm
-        join manga m on m.id = fm.manga_id
-        join user u on u.id = fm.user_id
-        left join (
-          select 
-            cr.user_id user_id,
-            c.manga_id manga_id,
-            max(c.number_value) max_chapter_readed
+        select result.manga_id id,
+        result.manga_name name,
+        result.manga_cover_url coverUrl,
+        next_chapter.id 'nextChapterId',
+        next_chapter.number 'nextChapterNumber',
+        next_chapter.date 'nextChapterDate',
+        (
+          select case
+              when count(1) = 0 then true
+              else false
+            end
           from chapter_read cr
-          join chapter c on c.id = cr.chapter_id
-          group by cr.user_id, c.manga_id
-        ) cr
-          on cr.manga_id = m.id
-          and cr.user_id = u.id
-        left join  (
-          select
-            smallest_chapter.id,
-            smallest_chapter.manga_id,
-            smallest_chapter.number,
-            smallest_chapter.number_value,
-            smallest_chapter.date
-          from chapter smallest_chapter
-            order by smallest_chapter.number desc
-        )   next_chapter 
-          on cr.manga_id = next_chapter.manga_id
-          and next_chapter.number_value > cr.max_chapter_readed
-        where u.id = ?
-        group by m.id, m.name, m.cover_url;
-    `, [userId],
+            join chapter c on c.id = cr.chapter_id
+          where cr.user_id = fm.user_id
+            and c.manga_id = result.manga_id
+        ) 'neverReaded'
+        from following_manga fm
+        join (
+          select m.id manga_id,
+            m.name manga_name,
+            m.cover_url manga_cover_url,
+            u.id user_id,
+            min(next_chapter.number_value) next_chapter_number_value
+          from following_manga fm
+            join manga m on m.id = fm.manga_id
+            join user u on u.id = fm.user_id
+            left join (
+              select cr.user_id user_id,
+                c.manga_id manga_id,
+                max(c.number_value) max_chapter_readed
+              from chapter_read cr
+                join chapter c on c.id = cr.chapter_id
+              group by cr.user_id,
+                c.manga_id
+            ) cr on cr.manga_id = m.id
+            and cr.user_id = u.id
+            left join (
+              select bigger_chapter.id,
+                bigger_chapter.manga_id,
+                bigger_chapter.number,
+                bigger_chapter.number_value,
+                bigger_chapter.date
+              from chapter bigger_chapter
+              order by bigger_chapter.number desc
+            ) next_chapter on cr.manga_id = next_chapter.manga_id
+            and next_chapter.number_value > cr.max_chapter_readed
+          where u.id = ?
+          group by m.id,
+            m.name,
+            m.cover_url,
+            u.id
+        ) result on result.user_id = fm.user_id
+        and result.manga_id = fm.manga_id
+        left join chapter next_chapter on next_chapter.manga_id = result.manga_id
+        and next_chapter.number_value = result.next_chapter_number_value
+        where fm.user_id = ?;
+      `, [userId, userId],
     );
 
     return rawData as FavoriteMangaDto;
