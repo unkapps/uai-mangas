@@ -2,7 +2,7 @@ FROM node:12 AS builder
 WORKDIR /manga/api
 COPY ./package*.json ./
 COPY ./.env ./
-COPY ./.ormconfig.json ./
+COPY ./ormconfig.json ./
 RUN npm install
 COPY . .
 RUN npm run build
