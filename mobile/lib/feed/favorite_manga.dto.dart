@@ -30,7 +30,7 @@ class FavoriteMangaDto extends LastMangaWithUpdateDto {
       coverUrl: json['coverUrl'] as String,
       nextChapterId: json['nextChapterId'] as int,
       nextChapterNumber: json['nextChapterNumber'] as String,
-      neverReaded: json['neverReaded'] as int == 1,
+      neverReaded: json['neverReaded'] as String == '1',
       nextChapterDate: json['nextChapterDate'] != null
           ? DateTime.tryParse(json['nextChapterDate'])
           : null,
