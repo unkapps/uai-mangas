@@ -61,7 +61,7 @@ class MangaService {
       var res = await dio.get(
         '/manga/last',
         queryParameters: {
-          'size': 4,
+          'size': 6,
         },
       );
 
