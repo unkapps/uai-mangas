@@ -1,24 +1,16 @@
-FROM node:12
-
-# Create app directory
+FROM node:12 AS builder
 WORKDIR /manga/api
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
+COPY ./package*.json ./
+COPY ./env ./
+COPY ./ormconfig.json ./
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-COPY .env ./
-COPY ormconfig.json ./
-
+COPY . .
 RUN npm run build
 
-# Bundle app source
-COPY . .
 
+# Second Stage : Setup command to run your app using lightweight node image
+FROM node:12-alpine
+WORKDIR /manga/api
+COPY --from=builder /manga/api ./
 EXPOSE 3000
-CMD [ "npm", "run", "start:prod" ]
+CMD ["npm", "run", "start:prod"]
