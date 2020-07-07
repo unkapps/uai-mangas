@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Uai Mangás</string>
 
-    <string name="facebook_app_id">727376688116933</string>
+    <string name="facebook_app_id">259074455534191</string>
 
-    <string name="fb_login_protocol_scheme">fb727376688116933</string>
+    <string name="fb_login_protocol_scheme">fb259074455534191</string>
 </resources>
