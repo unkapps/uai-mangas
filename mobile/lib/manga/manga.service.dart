@@ -25,15 +25,11 @@ class MangaService {
       '/manga/favorite/',
     );
 
-    try {
     if (res.statusCode == 200) {
       return res.data
           .map((dynamic json) => FavoriteMangaDto.fromJson(json))
           .toList()
           .cast<FavoriteMangaDto>();
-    }
-    }catch(err) {
-      debugPrint(err);
     }
 
     return null;
