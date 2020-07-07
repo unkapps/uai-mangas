@@ -20,7 +20,5 @@ RUN npm run build
 # Bundle app source
 COPY . .
 
-RUN npm run migration:run
-
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "start:prod" ]
