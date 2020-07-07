@@ -16,10 +16,11 @@ COPY .env ./
 COPY ormconfig.json ./
 
 RUN npm run build
-RUN npm run migration:run
 
 # Bundle app source
 COPY . .
+
+RUN npm run migration:run
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
