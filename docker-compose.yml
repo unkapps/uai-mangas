@@ -6,6 +6,7 @@ services:
     volumes:
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/certs:/var/uaimangas/certs
+      - ./nginx/html:/var/uaimangas/html
     ports:
       - 80:80
       - 443:443

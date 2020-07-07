@@ -97,7 +97,8 @@ class UserService {
       final dio = await DioConfig.withToken();
       await dio.post('/auth/firebase');
     } catch (err) {
-      debugPrint(err);
+      debugPrint(err.toString());
+      rethrow;
     }
   }
 }
