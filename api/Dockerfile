@@ -13,4 +13,5 @@ FROM node:12-alpine
 WORKDIR /manga/api
 COPY --from=builder /manga/api ./
 EXPOSE 3000
+RUN npm run migration:run
 CMD ["npm", "run", "start:prod"]
