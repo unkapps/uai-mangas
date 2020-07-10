@@ -75,7 +75,7 @@ export class MangaRepository extends Repository<Manga> {
       .createQueryBuilder('manga')
       .innerJoinAndSelect('manga.authors', 'author')
 
-      .innerJoinAndSelect('manga.artists', 'artist')
+      .leftJoinAndSelect('manga.artists', 'artist')
       .innerJoinAndSelect('manga.categories', 'category')
       .leftJoin('manga.chapters', 'chapter')
       .where('manga.id = :id', { id });
