@@ -1,0 +1,21 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:package_info/package_info.dart';
+
+part 'version_event.dart';
+part 'version_state.dart';
+
+class VersionBloc extends Bloc<VersionEvent, VersionState> {
+  @override
+  VersionState get initialState => VersionUnloaded();
+
+  @override
+  Stream<VersionState> mapEventToState(
+    VersionEvent event,
+  ) async* {
+    var packageInfo = await PackageInfo.fromPlatform();
+    yield VersionLoaded(packageInfo.version);
+  }
+}

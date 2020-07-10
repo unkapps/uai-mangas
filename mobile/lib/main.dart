@@ -9,6 +9,7 @@ import 'package:leitor_manga/splash_screen.dart';
 import 'package:leitor_manga/user/auth/bloc/auth_bloc.dart';
 import 'package:leitor_manga/feed/bloc/feed_bloc.dart';
 import 'package:leitor_manga/user/user.service.dart';
+import 'package:leitor_manga/version/bloc/version_bloc.dart';
 
 void main() {
   runApp(App());
@@ -22,6 +23,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   AuthBloc _authBloc;
   FeedBloc _feedBloc;
+  VersionBloc _versionBloc;
 
   @override
   void initState() {
@@ -29,7 +31,10 @@ class _AppState extends State<App> {
     _registerServices();
     _authBloc = AuthBloc();
     _feedBloc = FeedBloc();
+    _versionBloc = VersionBloc();
+
     _authBloc.add(AppStarted());
+    _versionBloc.add(LoadVersionEvent());
   }
 
   @override
@@ -44,6 +49,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider<FeedBloc>(
           create: (BuildContext context) => _feedBloc,
+        ),
+        BlocProvider<VersionBloc>(
+          create: (BuildContext context) => _versionBloc,
         ),
       ],
       child: MaterialApp(
