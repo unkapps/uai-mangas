@@ -39,13 +39,20 @@ class LastMangaWithUpdateListView extends StatelessWidget {
             child: Container(
               height: 130,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  ExtendedImage.network(
-                    manga.coverUrl,
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.topCenter,
-                    cache: true,
+                  Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: ExtendedImage.network(
+                          manga.coverUrl,
+                          width: 85,
+                          fit: BoxFit.fitHeight,
+                          alignment: Alignment.topCenter,
+                          cache: true,
+                        ),
+                      ),
+                    ],
                   ),
                   Expanded(
                     child: Padding(
