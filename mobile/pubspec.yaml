@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^4.5.1
   get_it: ^4.0.2
   flutter_native_admob: ^2.1.0
+  package_info: ^0.4.1
 
 
 
