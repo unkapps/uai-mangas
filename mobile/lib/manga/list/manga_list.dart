@@ -36,7 +36,9 @@ class _MangaListState extends State<MangaList> {
 
   @override
   void initState() {
-    _sortingChoice = MangaSortingChoice.NAME;
+    _sortingChoice = widget.mangaName != null
+        ? MangaSortingChoice.RELEVANCE
+        : MangaSortingChoice.NAME;
     _globalKey = GlobalKey();
     super.initState();
   }
@@ -79,6 +81,7 @@ class _MangaListState extends State<MangaList> {
                             padding: EdgeInsets.only(right: 5),
                             child: MangaSort(
                               initialSorting: _sortingChoice,
+                              onSearch: widget.mangaName != null,
                               onSortChanged:
                                   (MangaSortingChoice sortingChoice) {
                                 setState(() {

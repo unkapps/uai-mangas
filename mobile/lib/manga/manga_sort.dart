@@ -7,8 +7,13 @@ class MangaSort extends StatefulWidget {
   final SortChanged onSortChanged;
   final MangaSortingChoice initialSorting;
 
+  final bool onSearch;
+
   MangaSort(
-      {Key key, @required this.onSortChanged, @required this.initialSorting})
+      {Key key,
+      @required this.onSortChanged,
+      @required this.initialSorting,
+      this.onSearch = false})
       : super(key: key);
 
   @override
@@ -26,11 +31,15 @@ class _MangaSortState extends State<MangaSort> {
 
   @override
   Widget build(BuildContext context) {
+    var values = widget.onSearch
+        ? MangaSortingChoice.values
+        : [MangaSortingChoice.NAME, MangaSortingChoice.NEW];
+
     return PopupMenuButton(
       child: Icon(Icons.sort),
       initialValue: _sortingChoice,
       itemBuilder: (context) {
-        return MangaSortingChoice.values
+        return values
             .map<PopupMenuItem<MangaSortingChoice>>((MangaSortingChoice value) {
           return PopupMenuItem<MangaSortingChoice>(
             value: value,
@@ -64,6 +73,7 @@ class _MangaSortState extends State<MangaSort> {
 enum MangaSortingChoice {
   NAME,
   NEW,
+  RELEVANCE,
 }
 
 extension MangaSortingChoiceExtension on MangaSortingChoice {
@@ -73,6 +83,8 @@ extension MangaSortingChoiceExtension on MangaSortingChoice {
         return 'Nome';
       case MangaSortingChoice.NEW:
         return 'Novo';
+      case MangaSortingChoice.RELEVANCE:
+        return 'Relevancia';
       default:
         return null;
     }
