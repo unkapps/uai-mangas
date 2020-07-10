@@ -10,8 +10,7 @@ class DioConfig {
 
   static final BaseOptions options = BaseOptions(
     baseUrl: EnvironmentConfig.SITE_ADDRESS,
-    connectTimeout: 5000,
-    receiveTimeout: 3000,
+    connectTimeout: 20000,
   );
 
   static Future<Dio> withoutToken() async {
