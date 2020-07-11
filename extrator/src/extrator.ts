@@ -269,7 +269,11 @@ export default class Extrator {
     console.log('saving mangas of releases');
 
     for (const entry of mangaUrlByLeitorNetId) {
-      await this.readManga(entry[0], entry[1]);
+      try {
+        await this.readManga(entry[0], entry[1]);
+      } catch (_) {
+        console.error(`error release ${entry.toString()}`);
+      }
     }
 
     console.log('All releases readed');
