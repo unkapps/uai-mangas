@@ -116,7 +116,7 @@ export default class Extrator {
       console.clear();
       console.log(`${new Date().toISOString()} - '${manga.name}' saved :)`);
 
-      // await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
+      await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
     }
 
     return manga;
@@ -237,7 +237,7 @@ export default class Extrator {
         } else {
           return;
         }
-        // await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
+        await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
       }
 
       page += 1;
