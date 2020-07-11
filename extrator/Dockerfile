@@ -12,4 +12,4 @@ RUN npm run build
 FROM node:12-alpine
 WORKDIR /manga/extrator
 COPY --from=builder /manga/extrator ./
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
