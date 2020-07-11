@@ -1,7 +1,7 @@
 FROM node:12 AS builder
 WORKDIR /manga/extrator
 COPY ./package*.json ./
-COPY ./.env ./
+# COPY ./.env ./
 COPY ./ormconfig.json ./
 RUN npm install
 COPY . .
