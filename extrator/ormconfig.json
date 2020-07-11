@@ -6,8 +6,6 @@
   "password": "tesute9538",
   "database": "manga",
   "cli": {
-    "entitiesDir": "src/entity",
-    "migrationsDir": "src/migration",
-    "subscribersDir": "src/subscriber"
+    "entitiesDir": "src/entity"
   }
 }
