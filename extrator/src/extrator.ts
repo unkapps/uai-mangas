@@ -72,9 +72,8 @@ export default class Extrator {
         await this.readMangas();
       }
 
-      if (args.includes('releases')) {
-        await this.readReleases();
-      }
+      await this.readReleases();
+
     } finally {
       this.connection.close();
     }
