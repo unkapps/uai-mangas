@@ -30,7 +30,10 @@ export default class LeitorNetUrls {
     return `${LEITOR_NET_URL}/categories/series_list.json?page=${page}&id_category=${categoryId}`;
   }
 
-  public getMangaUrl(mangaId: number): string {
+  public getMangaUrl(mangaId: number, url?: string): string {
+    if (url != null) {
+      return `${LEITOR_NET_URL}${url}`;
+    }
     return `${LEITOR_NET_URL}/manga/a/${mangaId}`;
   }
 
