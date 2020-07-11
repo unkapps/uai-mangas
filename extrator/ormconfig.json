@@ -1,9 +1,9 @@
 {
   "type": "mysql",
-  "host": "db",
+  "host": "localhost",
   "port": 3306,
   "username": "root",
-  "password": "tesute9538",
+  "password": "123456",
   "database": "manga",
   "cli": {
     "entitiesDir": "src/entity"

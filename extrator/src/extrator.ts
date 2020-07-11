@@ -42,14 +42,14 @@ export default class Extrator {
     } else {
       console.log('cron mode');
 
-      const job = new CronJobExtended({
-        cronTime: '0/30 * * * * *',
+      // eslint-disable-next-line no-new
+      new CronJobExtended({
+        cronTime: '0 */10 * * * *',
+        runOnInit: true,
         onTick: null,
       }, async () => {
         await this.runTasks.call(this, args);
       });
-
-      job.start();
     }
   }
 
@@ -253,6 +253,8 @@ export default class Extrator {
     const mangaUrlByLeitorNetId = new Map<number, string>();
 
     for (let page = initialpage; page <= maxPage; page += 1) {
+      console.log(`reading releases of page ${page}`);
+
       const response = await this.doRequestForReleases(page);
       const newReleases = response.data.releases as MangaNewReleaseDto[];
 
@@ -261,11 +263,14 @@ export default class Extrator {
           mangaUrlByLeitorNetId.set(newRelease.id_serie, newRelease.link);
         }
       }
+
+      await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
     }
+
+    console.log('saving mangas of releases');
 
     for (const entry of mangaUrlByLeitorNetId) {
       await this.readManga(entry[0], entry[1]);
-      await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES);
     }
 
     console.log('All releases readed');
