@@ -1,20 +1,16 @@
-FROM node:12
-
-# Create app directory
+FROM node:12 AS builder
 WORKDIR /manga/extrator
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
+COPY ./package*.json ./
+COPY ./.env ./
+COPY ./ormconfig.json ./
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
+COPY . .
 RUN npm run build
 
-# Bundle app source
-COPY . .
 
-CMD [ "npm", "start" ]
+# Second Stage : Setup command to run your app using lightweight node image
+FROM node:12-alpine
+WORKDIR /manga/extrator
+COPY --from=builder /manga/extrator ./
+RUN npm run migration:run
+CMD ["npm", "run", "start:prod"]

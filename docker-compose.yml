@@ -48,6 +48,20 @@ services:
       - database
     depends_on:
       - db
+  extrator:
+    container_name: manga-extrator
+    build:
+      context: ./extrator/
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: prod
+      GOOGLE_APPLICATION_CREDENTIALS: /home/firebase.json
+    volumes:
+      - ./uai-mangas-firebase-adminsdk-4xewi-819366107a.json:/home/firebase.json
+    networks:
+      - database
+    depends_on:
+      - db
 
 networks:
   api:

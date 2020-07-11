@@ -17,20 +17,22 @@
   "author": "",
   "license": "private",
   "devDependencies": {
+    "@types/cron": "^1.7.2",
     "@types/node": "^13.13.5",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.31.0",
+    "del-cli": "^3.0.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^7.2.1",
     "eslint-plugin-import": "^2.20.2",
     "ts-node": "^8.10.1",
-    "typescript": "^3.8.3",
-    "del-cli": "^3.0.1"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@types/imagemin": "^7.0.0",
     "@types/imagemin-jpegtran": "^5.0.0",
     "axios": "^0.19.2",
+    "cron": "^1.8.2",
     "mysql": "^2.18.1",
     "node-html-parser": "^1.2.20",
     "reflect-metadata": "^0.1.13",
