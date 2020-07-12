@@ -47,6 +47,17 @@ export default class MangaService extends WaitBetween {
       .getOne();
 
     if (mangaDatabase) {
+      if (mangaDatabase.finished !== dto.is_complete) {
+        console.log(`Manga ${mangaDatabase.name} now will be complete`);
+        mangaDatabase.finished = dto.is_complete;
+
+        return connection.transaction(async (manager) => {
+          const manga = await manager.save(mangaDatabase);
+          manga.justGotSaved = true;
+          return manga;
+        });
+      }
+
       return mangaDatabase;
     }
 
@@ -75,7 +86,7 @@ export default class MangaService extends WaitBetween {
 
     entity.categories = await this.categoryService.createOrGetList(dto.categories, manager);
 
-    if (entity.categories && entity.categories.filter(category => category.adult).length > 0) {
+    if (entity.categories && entity.categories.filter((category) => category.adult).length > 0) {
       return null;
     }
 
