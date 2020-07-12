@@ -110,7 +110,7 @@ export default class Extrator {
   private async saveMangaDto(mangaDto: MangaDto) {
     const manga = await this.mangaService.createOrGet(mangaDto as MangaDto);
 
-    if (manga.justGotSaved || (await this.mangaService.areChaptersAvailable(manga, mangaDto))) {
+    if (manga && (manga.justGotSaved || (await this.mangaService.areChaptersAvailable(manga, mangaDto)))) {
       await this.readChapters(manga);
 
       console.clear();

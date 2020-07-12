@@ -51,9 +51,14 @@ export default class MangaService extends WaitBetween {
     }
 
     return connection.transaction(async (manager) => {
-      const manga = await manager.save(await this.dtoToEntity(dto, manager));
-      manga.justGotSaved = true;
-      return manga;
+      const mangaDto = await this.dtoToEntity(dto, manager);
+      if (mangaDto) {
+        const manga = await manager.save(mangaDto);
+        manga.justGotSaved = true;
+        return manga;
+      }
+
+      return null;
     });
   }
 
@@ -69,6 +74,10 @@ export default class MangaService extends WaitBetween {
     entity.coverUrl = dto.cover;
 
     entity.categories = await this.categoryService.createOrGetList(dto.categories, manager);
+
+    if (entity.categories && entity.categories.filter(category => category.adult).length > 0) {
+      return null;
+    }
 
     if (dto.author) {
       entity.authors = await this.authorService.createOrGetList(dto.author.split(' & '), manager);
