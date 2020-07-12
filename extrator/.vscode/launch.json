@@ -5,8 +5,7 @@
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceRoot}/src/main.ts",
-        "releases"
+        "${workspaceRoot}/src/main.ts"
       ],
       "runtimeArgs": [
         "--nolazy",
