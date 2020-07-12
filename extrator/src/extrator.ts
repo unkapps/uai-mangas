@@ -18,6 +18,7 @@ import Manga from './entity/manga';
 import Category from './entity/category';
 import MangaNewReleaseDto from './dto/new_release/manga_new_release.dto';
 import CronJobExtended from './cron_jon_extended';
+import NewMangaDto from './dto/new_manga/new_manga.dto';
 
 const setTimeoutPromise = util.promisify(setTimeout);
 
@@ -48,7 +49,16 @@ export default class Extrator {
         runOnInit: true,
         onTick: null,
       }, async () => {
-        await this.runTasks.call(this, args);
+        await this.runTasks.call(this, ['releases']);
+      });
+
+      // eslint-disable-next-line no-new
+      new CronJobExtended({
+        cronTime: '0 */59 * * * *',
+        runOnInit: true,
+        onTick: null,
+      }, async () => {
+        await this.runTasks.call(this, ['new-mangas']);
       });
     }
   }
@@ -72,8 +82,13 @@ export default class Extrator {
         await this.readMangas();
       }
 
-      await this.readReleases();
+      if (args.includes('releases')) {
+        await this.readReleases();
+      }
 
+      if (args.includes('new-mangas')) {
+        await this.readNewMangas();
+      }
     } finally {
       this.connection.close();
     }
@@ -276,11 +291,45 @@ export default class Extrator {
       }
     }
 
-    console.log('All releases readed');
+    console.log('All new releases saved');
   }
 
   private doRequestForReleases(page: number): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.newReleasesUrl(page), {
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
+    });
+  }
+
+  private async readNewMangas() {
+    const mangaUrlByLeitorNetId = new Map<number, string>();
+
+
+    console.log('reading new mangas');
+
+    const response = await this.doRequestForNewMangas();
+    const newSeries = response.data.new_series as NewMangaDto[];
+
+    for (const newSerie of newSeries) {
+      if (!mangaUrlByLeitorNetId.has[newSerie.id_serie]) {
+        mangaUrlByLeitorNetId.set(newSerie.id_serie, newSerie.link);
+      }
+    }
+
+    console.log('saving new mangas');
+
+    for (const entry of mangaUrlByLeitorNetId) {
+      try {
+        await this.readManga(entry[0], entry[1]);
+      } catch (_) {
+        console.error(`error release ${entry.toString()}`);
+      }
+    }
+
+    console.log('All new mangas saved');
+  }
+
+  private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
+    return axios.get(this.leitorNetUrls.newMangasUrl(), {
       headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
     });
   }

@@ -48,4 +48,8 @@ export default class LeitorNetUrls {
   public newReleasesUrl(page: number): string {
     return `${LEITOR_NET_URL}/home/releases?page=${page}`;
   }
+
+  public newMangasUrl(): string {
+    return `${LEITOR_NET_URL}/home/getNewSeries`;
+  }
 }
