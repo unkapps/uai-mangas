@@ -50,14 +50,6 @@ export default class Extrator {
         onTick: null,
       }, async () => {
         await this.runTasks.call(this, ['releases']);
-      });
-
-      // eslint-disable-next-line no-new
-      new CronJobExtended({
-        cronTime: '0 */59 * * * *',
-        runOnInit: true,
-        onTick: null,
-      }, async () => {
         await this.runTasks.call(this, ['new-mangas']);
       });
     }
