@@ -49,8 +49,7 @@ export default class Extrator {
         runOnInit: true,
         onTick: null,
       }, async () => {
-        await this.runTasks.call(this, ['releases']);
-        await this.runTasks.call(this, ['new-mangas']);
+        await this.runTasks.call(this, ['releases', 'new-mangas']);
       });
     }
   }
