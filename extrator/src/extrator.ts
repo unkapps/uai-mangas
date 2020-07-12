@@ -73,12 +73,22 @@ export default class Extrator {
         await this.readMangas();
       }
 
-      if (args.includes('releases')) {
-        await this.readReleases();
+      try {
+        if (args.includes('releases')) {
+          await this.readReleases();
+        }
+      } catch (err) {
+        console.error('Error on saving release');
+        console.error(err);
       }
 
-      if (args.includes('new-mangas')) {
-        await this.readNewMangas();
+      try {
+        if (args.includes('new-mangas')) {
+          await this.readNewMangas();
+        }
+      } catch (err) {
+        console.error('Error on new mangas');
+        console.error(err);
       }
     } finally {
       this.connection.close();
