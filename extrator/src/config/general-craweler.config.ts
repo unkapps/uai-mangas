@@ -1,4 +1,4 @@
-export const MS_WAIT_BETWEEN_PAGES = 15000;
+export const MS_WAIT_BETWEEN_PAGES = 10000;
 export const DATA_PATH = './data';
 
 export const STATUS_CRAWLER_MANGA_FILE_PATH = `${DATA_PATH}/manga`;

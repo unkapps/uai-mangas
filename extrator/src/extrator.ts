@@ -45,7 +45,7 @@ export default class Extrator {
 
       // eslint-disable-next-line no-new
       new CronJobExtended({
-        cronTime: '0 */30 * * * *',
+        cronTime: '0 */40 * * * *',
         runOnInit: true,
         onTick: null,
       }, async () => {
