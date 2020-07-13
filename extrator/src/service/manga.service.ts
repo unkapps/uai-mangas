@@ -47,7 +47,8 @@ export default class MangaService extends WaitBetween {
       .getOne();
 
     if (mangaDatabase) {
-      if (mangaDatabase.finished !== dto.is_complete) {
+      // eslint-disable-next-line eqeqeq
+      if (mangaDatabase.finished != dto.is_complete) {
         console.log(`Manga ${mangaDatabase.name} now will be complete`);
         mangaDatabase.finished = dto.is_complete;
 
