@@ -49,7 +49,7 @@ export default class MangaService extends WaitBetween {
     if (mangaDatabase) {
       // eslint-disable-next-line eqeqeq
       if (mangaDatabase.finished != dto.is_complete) {
-        console.log(`Manga ${mangaDatabase.name} now will be complete`);
+        console.log(`Manga ${mangaDatabase.name} finished changed`);
         mangaDatabase.finished = dto.is_complete;
 
         return connection.transaction(async (manager) => {
