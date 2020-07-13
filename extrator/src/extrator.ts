@@ -43,14 +43,16 @@ export default class Extrator {
     } else {
       console.log('cron mode');
 
-      // eslint-disable-next-line no-new
-      new CronJobExtended({
+      const job = new CronJobExtended({
         cronTime: '0 */40 * * * *',
-        runOnInit: true,
         onTick: null,
+        runOnInit: true,
       }, async () => {
         await this.runTasks.call(this, ['releases', 'new-mangas']);
+        console.log(`next job on ${job.nextDate.toISOString()}`);
       });
+
+      job.start();
     }
   }
 

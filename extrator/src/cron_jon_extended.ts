@@ -1,9 +1,14 @@
 import { CronJob, CronJobParameters } from 'cron';
+import { Moment } from 'moment';
 
 export default class CronJobExtended {
   private cronJob: CronJob;
 
   private taskInProgress: boolean;
+
+  get nextDate(): Moment {
+    return this.cronJob.nextDate();
+  }
 
   constructor(cronJobParameters: CronJobParameters, task: () => Promise<void>) {
     // eslint-disable-next-line no-param-reassign
