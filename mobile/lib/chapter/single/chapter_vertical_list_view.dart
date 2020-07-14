@@ -358,6 +358,25 @@ class ChapterController {
         false;
   }
 
+  void changeZoom(double zoom) {
+    scrollController.moveTo(
+      scale: zoom,
+      location: scrollController.getPosition(),
+    );
+  }
+
+  void zoomIn() {
+    changeZoom(scrollController.getScale() + 1);
+  }
+
+  void zoomOut() {
+    changeZoom(scrollController.getScale() - 1);
+  }
+
+  void resetZoom() {
+    changeZoom(1);
+  }
+
   Future<void> scrollToPage(int pageNumber, {updatePageNumber = true}) {
     var completer = Completer<void>();
     SchedulerBinding.instance.addPostFrameCallback((_) {
