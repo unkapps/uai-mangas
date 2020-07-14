@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import Manga from 'src/entity/manga';
 import SortingDto from 'src/shared/sorting.dto';
 import PageableDto from 'src/shared/pageable.dto';
+import FirebaseConfig from 'src/firebase/firebase_config';
 
 import { MangaRepository } from './manga.repository';
 import LastMangaDto from './dto/last-manga.dto';
@@ -13,6 +14,7 @@ import FavoriteMangaDto from './dto/favorite-manga.dto';
 export class MangaService {
   constructor(
     private mangaRepository: MangaRepository,
+    private firebaseConfig: FirebaseConfig,
   ) { }
 
   getLastMangasWithUpdates(size?: number): Promise<LastMangaDto[]> {
@@ -33,10 +35,12 @@ export class MangaService {
     return this.mangaRepository.findById(id, userId);
   }
 
-  async setMangaFavorite(userId: number, mangaId: number, mangaFavorite: boolean): Promise<boolean> {
+  async setMangaFavorite(userId: number, mangaId: number, mangaFavorite: boolean, fcmToken: string): Promise<boolean> {
     if (mangaFavorite) {
+      await this.firebaseConfig.adminApp.messaging().subscribeToTopic(fcmToken, `${mangaId}`);
       await this.mangaRepository.addMangaFavorite(userId, mangaId);
     } else {
+      await this.firebaseConfig.adminApp.messaging().unsubscribeFromTopic(fcmToken, `${mangaId}`);
       await this.mangaRepository.removeMangaFavorite(userId, mangaId);
     }
 

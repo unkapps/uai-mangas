@@ -67,7 +67,12 @@ export class MangaController {
 
   @Put('favorite/:id')
   @UseGuards(FirebaseAuthGuard)
-  setMangaFavorite(@Req() request: any, @Param('id') mangaId: number, @Query('mangaFavorite') mangaFavorite: string): Promise<boolean> {
-    return this.mangaService.setMangaFavorite(request.userId, mangaId, mangaFavorite === 'true');
+  setMangaFavorite(
+    @Req() request: any,
+    @Param('id') mangaId: number,
+    @Query('mangaFavorite') mangaFavorite: string,
+    @Query('fcmToken') fcmToken: string,
+  ): Promise<boolean> {
+    return this.mangaService.setMangaFavorite(request.userId, mangaId, mangaFavorite === 'true', fcmToken);
   }
 }

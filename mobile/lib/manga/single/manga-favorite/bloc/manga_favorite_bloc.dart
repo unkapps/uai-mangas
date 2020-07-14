@@ -12,12 +12,9 @@ class MangaFavoriteBloc extends Bloc<MangaFavoriteEvent, MangaFavoriteState> {
   static final getIt = GetIt.instance;
   final int mangaId;
 
-  MangaFavoriteBloc(this.mangaId);
+  MangaFavoriteBloc(this.mangaId) : super(MangaFavoriteLoading());
 
   final MangaService mangaService = getIt<MangaService>();
-
-  @override
-  MangaFavoriteState get initialState => MangaFavoriteLoading();
 
   @override
   Stream<MangaFavoriteState> mapEventToState(

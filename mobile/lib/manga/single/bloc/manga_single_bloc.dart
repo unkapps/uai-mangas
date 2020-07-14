@@ -16,10 +16,7 @@ class MangaSingleBloc extends Bloc<MangaSingleEvent, MangaSingleState> {
 
   final int mangaId;
 
-  MangaSingleBloc(this.mangaId);
-
-  @override
-  MangaSingleState get initialState => MangaSingleLoading();
+  MangaSingleBloc(this.mangaId) : super(MangaSingleLoading());
 
   @override
   Stream<MangaSingleState> mapEventToState(

@@ -1,10 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leitor_manga/config/dio_config.dart';
+import 'package:leitor_manga/firebase/notifications/firebase_notifications.service.dart';
 
 class UserService {
+  static final getIt = GetIt.instance;
+  final FirebaseNotifications firebaseNotifications =
+      getIt<FirebaseNotifications>();
+
   final FirebaseAuth _firebaseAuth;
   final FacebookLogin _facebookLogin;
   final GoogleSignIn _googleSignIn;
@@ -80,6 +86,7 @@ class UserService {
     return Future.wait([
       _firebaseAuth.signOut(),
       _facebookLogin.logOut(),
+      firebaseNotifications.firebaseMessaging.deleteInstanceID(),
     ]);
   }
 
@@ -94,8 +101,11 @@ class UserService {
 
   void _sendTokenToBack() async {
     try {
+      var fcmToken = await firebaseNotifications.firebaseMessaging.getToken();
       final dio = await DioConfig.withToken();
-      await dio.post('/auth/firebase');
+      await dio.post('/auth/firebase', queryParameters: {
+        'fcmToken': fcmToken,
+      });
     } catch (err) {
       debugPrint(err.toString());
       rethrow;
