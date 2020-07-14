@@ -73,7 +73,7 @@ export class MangaRepository extends Repository<Manga> {
   async findById(id: number, userId?: number): Promise<Manga> {
     const queryBuilder = this.manager.getRepository(Manga)
       .createQueryBuilder('manga')
-      .innerJoinAndSelect('manga.authors', 'author')
+      .leftJoinAndSelect('manga.authors', 'author')
 
       .leftJoinAndSelect('manga.artists', 'artist')
       .innerJoinAndSelect('manga.categories', 'category')
