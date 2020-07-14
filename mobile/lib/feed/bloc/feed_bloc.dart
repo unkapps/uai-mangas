@@ -16,8 +16,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   final MangaService mangaService = getIt<MangaService>();
   final UserService userService = getIt<UserService>();
 
-  @override
-  FeedState get initialState => FeedUninitialized();
+  FeedBloc() : super(FeedUninitialized());
 
   @override
   Stream<FeedState> mapEventToState(

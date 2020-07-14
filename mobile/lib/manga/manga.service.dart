@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/config/dio_config.dart';
+import 'package:leitor_manga/firebase/notifications/firebase_notifications.service.dart';
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dto.dart';
 import 'package:leitor_manga/manga/list/manga_list.dto.dart';
 import 'package:leitor_manga/manga/manga_sort.dart';
@@ -8,6 +10,10 @@ import 'package:leitor_manga/shared/pageable.dto.dart';
 import 'package:leitor_manga/feed/favorite_manga.dto.dart';
 
 class MangaService {
+  static final getIt = GetIt.instance;
+  final FirebaseNotifications firebaseNotifications =
+      getIt<FirebaseNotifications>();
+
   Future<MangaDto> getManga(int mangaId) async {
     final dio = await DioConfig.withToken();
     var res = await dio.get('/manga/$mangaId');
@@ -36,11 +42,13 @@ class MangaService {
   }
 
   Future<bool> setMangaFavorite(int mangaId, bool mangaFavorite) async {
+    var fcmToken = await firebaseNotifications.firebaseMessaging.getToken();
     final dio = await DioConfig.withToken();
     var res = await dio.put<String>(
       '/manga/favorite/$mangaId',
       queryParameters: {
         'mangaFavorite': mangaFavorite,
+        'fcmToken': fcmToken,
       },
     );
 

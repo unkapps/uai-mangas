@@ -8,8 +8,7 @@ part 'version_event.dart';
 part 'version_state.dart';
 
 class VersionBloc extends Bloc<VersionEvent, VersionState> {
-  @override
-  VersionState get initialState => VersionUnloaded();
+  VersionBloc() : super(VersionUnloaded());
 
   @override
   Stream<VersionState> mapEventToState(

@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/chapter/chapter.service.dart';
 import 'package:leitor_manga/chapter/chapter_readed/bloc/global_chapter_readed_bloc.dart';
+import 'package:leitor_manga/firebase/notifications/bloc/firebase_notifications_bloc.dart';
+import 'package:leitor_manga/firebase/notifications/firebase_notifications.service.dart';
+import 'package:leitor_manga/firebase/notifications/foreground_notification.dart';
 import 'package:leitor_manga/home/home_page.dart';
 import 'package:leitor_manga/manga/manga.service.dart';
 import 'package:leitor_manga/splash_screen.dart';
@@ -24,10 +28,13 @@ class _AppState extends State<App> {
   AuthBloc _authBloc;
   FeedBloc _feedBloc;
   VersionBloc _versionBloc;
+  FirebaseNotificationsBloc _firebaseNotificationsBloc;
 
   @override
   void initState() {
     super.initState();
+
+    _firebaseNotificationsBloc = FirebaseNotificationsBloc();
     _registerServices();
     _authBloc = AuthBloc();
     _feedBloc = FeedBloc();
@@ -53,6 +60,9 @@ class _AppState extends State<App> {
         BlocProvider<VersionBloc>(
           create: (BuildContext context) => _versionBloc,
         ),
+        BlocProvider<FirebaseNotificationsBloc>(
+          create: (BuildContext context) => _firebaseNotificationsBloc,
+        ),
       ],
       child: MaterialApp(
         title: 'Uai Mangás',
@@ -62,20 +72,31 @@ class _AppState extends State<App> {
           accentColor: Colors.red,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is Authenticated) {
-              _feedBloc.add(LoadFeedEvent());
-            } else if (state is Unauthenticated) {
-              _feedBloc.add(UnauthenticatedFeedEvent());
-            }
-          },
-          builder: (BuildContext context, AuthState state) {
-            if (state is Uninitialized) {
-              return SplashScreen();
-            }
-            return HomePage();
-          },
+        home: MultiBlocListener(
+          listeners: [
+            BlocListener<FirebaseNotificationsBloc, FirebaseNotificationsState>(
+              listener: (context, state) {
+                if (state is FirebaseNotificationsMessageNewChapterState) {
+                  ForegroundNotification.showNewChapter(state, context);
+                }
+              },
+            ),
+          ],
+          child: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is Authenticated) {
+                _feedBloc.add(LoadFeedEvent());
+              } else if (state is Unauthenticated) {
+                _feedBloc.add(UnauthenticatedFeedEvent());
+              }
+            },
+            builder: (BuildContext context, AuthState state) {
+              if (state is Uninitialized) {
+                return SplashScreen();
+              }
+              return HomePage();
+            },
+          ),
         ),
       ),
     );
@@ -83,6 +104,14 @@ class _AppState extends State<App> {
 
   void _registerServices() {
     final getIt = GetIt.instance;
+
+    var fireBaseNotifications =
+        FirebaseNotifications(_firebaseNotificationsBloc);
+
+    fireBaseNotifications.init();
+
+    getIt.registerSingleton<FirebaseNotifications>(fireBaseNotifications);
+
     getIt.registerSingleton<MangaService>(MangaService());
     getIt.registerSingleton<UserService>(UserService());
     getIt.registerSingleton<ChapterService>(ChapterService());

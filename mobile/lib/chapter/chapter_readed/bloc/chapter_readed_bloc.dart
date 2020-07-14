@@ -12,12 +12,9 @@ class ChapterReadedBloc extends Bloc<ChapterReadedEvent, ChapterReadedState> {
   static final getIt = GetIt.instance;
   final int chapterId;
 
-  ChapterReadedBloc(this.chapterId);
+  ChapterReadedBloc(this.chapterId) : super(ChapterReadedLoading());
 
   final ChapterService chapterService = getIt<ChapterService>();
-
-  @override
-  ChapterReadedState get initialState => ChapterReadedLoading();
 
   @override
   Stream<ChapterReadedState> mapEventToState(

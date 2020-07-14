@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/user/user.service.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pedantic/pedantic.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -15,8 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   static final getIt = GetIt.instance;
   final UserService userService = getIt<UserService>();
 
-  @override
-  AuthState get initialState => Uninitialized();
+  AuthBloc() : super(Uninitialized());
 
   @override
   Stream<AuthState> mapEventToState(
@@ -45,7 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield* _unauthenticated();
       }
     } catch (_) {
-        yield* _unauthenticated();
+      yield* _unauthenticated();
     }
   }
 
@@ -55,8 +53,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapLoggedOutToState() async* {
     yield Loading();
-    await unawaited(userService.signOut());
-        yield* _unauthenticated();
+    await userService.signOut();
+    yield* _unauthenticated();
   }
 
   Stream<AuthState> _mapLoginWithFacebookPressedToState() async* {

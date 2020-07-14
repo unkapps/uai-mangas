@@ -8,8 +8,7 @@ part 'global_chapter_readed_state.dart';
 
 class GlobalChapterReadedBloc
     extends Bloc<GlobalChapterReadedEvent, GlobalChapterReadedState> {
-  @override
-  GlobalChapterReadedState get initialState => GlobalChapterReadedInitial();
+  GlobalChapterReadedBloc() : super(GlobalChapterReadedInitial());
 
   @override
   Stream<GlobalChapterReadedState> mapEventToState(

@@ -24,4 +24,8 @@ export class UserService {
 
     return newUser.id;
   }
+
+  getFavoriteMangasId(userId: number): Promise<number[]> {
+    return this.userRepository.getFavoriteMangasId(userId);
+  }
 }
