@@ -13,6 +13,8 @@ import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
 
 const double _opacityChapterBar = 0.8;
 
+enum Actions { zoom_in, zoom_out, zoom_reset }
+
 class ChapterPage extends StatefulWidget {
   final int mangaId;
   final int chapterId;
@@ -105,6 +107,35 @@ class _ChapterPageState extends State<ChapterPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: <Widget>[
+          PopupMenuButton<Actions>(
+            onSelected: (Actions action) {
+              setState(() {
+                if (action == Actions.zoom_in) {
+                  _chapterController.zoomIn();
+                } else if (action == Actions.zoom_out) {
+                  _chapterController.zoomOut();
+                } else if (action == Actions.zoom_reset) {
+                  _chapterController.resetZoom();
+                }
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<Actions>>[
+              const PopupMenuItem<Actions>(
+                value: Actions.zoom_in,
+                child: Text('Aumentar zoom'),
+              ),
+              const PopupMenuItem<Actions>(
+                value: Actions.zoom_out,
+                child: Text('Diminuir zoom'),
+              ),
+              const PopupMenuItem<Actions>(
+                value: Actions.zoom_reset,
+                child: Text('Resetar zoom'),
+              ),
+            ],
+          )
+        ],
       ),
       body: ExtendedFutureBuilder<ChapterDto>(
         futureResponseBuilder: () => service.getChapter(widget.chapterId),
