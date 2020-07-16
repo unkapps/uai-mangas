@@ -23,14 +23,22 @@ class ChapterReadedBloc extends Bloc<ChapterReadedEvent, ChapterReadedState> {
     yield ChapterReadedLoading();
 
     if (event is ChangeChapterReadedEvent) {
-      try {
-        yield ChapterReadedLoaded(
-            await chapterService.setChapterReaded(chapterId, event.readed));
-      } catch (_) {
-        yield ChangeChapterReadedError(!event.readed);
+      if (event.alreadySaved) {
+        yield ChapterReadedLoaded(event.readed, savedOnThisBloc: false);
+      } else {
+        try {
+          yield ChapterReadedLoaded(
+            await chapterService.setChapterReaded(chapterId, event.readed),
+            savedOnThisBloc: true,
+          );
+        } catch (_) {
+          yield ChangeChapterReadedError(!event.readed);
+        }
       }
     } else if (event is ChapterReadedLoadedEvent) {
       yield ChapterReadedLoaded(event.readed);
+    } else if(event is ChangeChapterReadedEventFromLocal) {
+      yield ChapterReadedLoadedFromLocal(event.readed);
     }
   }
 }

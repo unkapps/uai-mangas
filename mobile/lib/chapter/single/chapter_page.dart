@@ -41,6 +41,17 @@ class _ChapterPageState extends State<ChapterPage> {
 
   _ChapterPageState();
 
+  void _markChapterAsReaded() {
+    if (!_chapterReaded) {
+      setState(() {
+        _chapterReaded = true;
+      });
+      context
+          .bloc<GlobalChapterReadedBloc>()
+          .add(GlobalChangeChapterReadedEvent(widget.chapterId, true));
+    }
+  }
+
   @override
   void initState() {
     title = 'Carregando...';
@@ -52,16 +63,11 @@ class _ChapterPageState extends State<ChapterPage> {
     _chapterController.addPageChangeListener((pageNumber, isPageEnd) {
       setState(() {
         currentPage = pageNumber + 1;
-      });
 
-      if (isPageEnd && !_chapterReaded) {
-        setState(() {
-          _chapterReaded = true;
-        });
-        context.bloc<GlobalChapterReadedBloc>().add(
-            GlobalChangeChapterReadedEvent(widget.chapterId, pageNumber,
-                isLast: isPageEnd));
-      }
+        if (isPageEnd) {
+          _markChapterAsReaded();
+        }
+      });
     });
     _chapterController.addScrollChangeListener((scroll) {
       var scrollYEnd =
@@ -168,7 +174,15 @@ class _ChapterPageState extends State<ChapterPage> {
               bottom: 0,
               child: Opacity(
                 opacity: _opacity,
-                child: ChapterBar(chapter, _chapterController),
+                child: ChapterBar(
+                  chapter,
+                  _chapterController,
+                  onChapterChange: (movedFoward) {
+                    if (movedFoward) {
+                      _markChapterAsReaded();
+                    }
+                  },
+                ),
               ),
             ),
           ]);

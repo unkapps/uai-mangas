@@ -8,11 +8,15 @@ import 'package:leitor_manga/chapter/single/chapter_page_dialog.dart';
 import 'package:leitor_manga/chapter/single/chapter_vertical_list_view.dart';
 import 'package:pedantic/pedantic.dart';
 
+typedef ChapterChangeListener = void Function(bool movedForward);
+
 class ChapterBar extends StatelessWidget {
   final ChapterDto _chapter;
   final ChapterController _chapterController;
+  final ChapterChangeListener onChapterChange;
 
-  const ChapterBar(this._chapter, this._chapterController, {Key key})
+  const ChapterBar(this._chapter, this._chapterController,
+      {Key key, this.onChapterChange})
       : super(key: key);
 
   @override
@@ -31,6 +35,9 @@ class ChapterBar extends StatelessWidget {
                   ),
                   tooltip: 'Capítulo anterior',
                   onPressed: () {
+                    if (onChapterChange != null) {
+                      onChapterChange(false);
+                    }
                     _goToChapter(context,
                         mangaId: _chapter.mangaId,
                         chapterId: _chapter.previousChapterId);
@@ -91,6 +98,9 @@ class ChapterBar extends StatelessWidget {
                   ),
                   tooltip: 'Próximo capítulo',
                   onPressed: () {
+                    if (onChapterChange != null) {
+                      onChapterChange(true);
+                    }
                     _goToChapter(context,
                         mangaId: _chapter.mangaId,
                         chapterId: _chapter.nextChapterId);

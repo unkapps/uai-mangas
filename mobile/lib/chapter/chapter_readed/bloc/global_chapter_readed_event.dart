@@ -5,13 +5,20 @@ abstract class GlobalChapterReadedEvent {}
 
 class GlobalChangeChapterReadedEvent extends GlobalChapterReadedEvent {
   final int chapterId;
-  final int page;
-  final bool isLast;
+  final bool readed;
 
-  GlobalChangeChapterReadedEvent(this.chapterId, this.page,
-      {bool isLast})
-      : isLast = isLast ?? false;
+  GlobalChangeChapterReadedEvent(this.chapterId, this.readed);
 
   @override
   String toString() => 'GlobalChangeChapterReadedEvent';
+}
+
+class GlobalChangeChapterReadedEventFromLocal extends GlobalChapterReadedEvent {
+  final int chapterId;
+  final bool readed;
+
+  GlobalChangeChapterReadedEventFromLocal(this.chapterId, this.readed);
+
+  @override
+  String toString() => 'GlobalChangeChapterReadedEventFromLocal';
 }
