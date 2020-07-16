@@ -33,8 +33,9 @@ export class ChapterController {
     @Query('mangaId') mangaId: number,
     @Query('offset') offset: number,
     @Query('size') size: number,
+    @Query('sort') sort: string,
   ): Promise<ChapterListDto[]> {
-    return this.chapterService.list(mangaId, offset, size, request.userId);
+    return this.chapterService.list(mangaId, offset, size, request.userId, sort);
   }
 
   @Put('readed/:id')

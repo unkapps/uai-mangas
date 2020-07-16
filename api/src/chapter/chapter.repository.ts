@@ -8,7 +8,7 @@ import ChapterListDto from './dto/chapter-list.dto';
 
 @EntityRepository(Chapter)
 export class ChapterRepository extends Repository<Chapter> {
-  async list(mangaId: number, offset = 0, size = 10, userId?: number): Promise<ChapterListDto[]> {
+  async list(mangaId: number, offset = 0, size = 10, userId?: number, sort = 'DESC'): Promise<ChapterListDto[]> {
     const queryBuilder = this
       .createQueryBuilder('chapter')
       .select('chapter.id', 'id')
@@ -17,7 +17,7 @@ export class ChapterRepository extends Repository<Chapter> {
       .where('chapter.manga_id = :mangaId', {
         mangaId,
       })
-      .orderBy('chapter.numberValue', 'DESC')
+      .orderBy('chapter.numberValue', sort.toUpperCase() === 'DESC' ? 'DESC' : 'ASC')
       .limit(size)
       .offset(offset);
 
