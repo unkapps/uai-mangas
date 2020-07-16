@@ -14,9 +14,18 @@ class ChapterReadedLoadedEvent extends ChapterReadedEvent {
 
 class ChangeChapterReadedEvent extends ChapterReadedEvent {
   final bool readed;
+  final bool alreadySaved;
 
-  ChangeChapterReadedEvent(this.readed);
+  ChangeChapterReadedEvent(this.readed, this.alreadySaved);
 
   @override
   String toString() => 'ChangeChapterReadedEvent';
+}
+class ChangeChapterReadedEventFromLocal extends ChapterReadedEvent {
+  final bool readed;
+
+  ChangeChapterReadedEventFromLocal(this.readed);
+
+  @override
+  String toString() => 'ChangeChapterReadedEventFromLocal';
 }

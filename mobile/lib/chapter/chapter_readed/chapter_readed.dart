@@ -8,8 +8,11 @@ class ChapterReaded extends StatelessWidget {
   final int chapterId;
   final bool initialReaded;
 
-  ChapterReaded({Key key, @required this.chapterId, @required this.initialReaded})
-      : super(key: key);
+  ChapterReaded({
+    Key key,
+    @required this.chapterId,
+    @required this.initialReaded,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +21,38 @@ class ChapterReaded extends StatelessWidget {
         return ChapterReadedBloc(chapterId)
           ..add(ChapterReadedLoadedEvent(initialReaded));
       },
-      child: BlocListener<GlobalChapterReadedBloc, GlobalChapterReadedState>(
-        listener: (context, state) {
-          if(state is GlobalChapterReadedChanged) {
-            if(state.chapterId == chapterId) {
-              context.bloc<ChapterReadedBloc>().add(ChangeChapterReadedEvent(true));
-            }
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<GlobalChapterReadedBloc, GlobalChapterReadedState>(
+            listener: (context, state) {
+              if (state is GlobalChapterReadedChanged) {
+                if (state.chapterId == chapterId && state.savedOnThisBloc) {
+                  context
+                      .bloc<ChapterReadedBloc>()
+                      .add(ChangeChapterReadedEvent(state.readed, true));
+                }
+              }
+              if (state is GlobalChapterReadedFromLocal) {
+                if (state.chapterId == chapterId) {
+                  context
+                      .bloc<ChapterReadedBloc>()
+                      .add(ChangeChapterReadedEventFromLocal(state.readed));
+                }
+              }
+            },
+          ),
+          BlocListener<ChapterReadedBloc, ChapterReadedState>(
+            listener: (context, state) {
+              if (state is ChapterReadedLoaded) {
+                if (state.savedOnThisBloc != null) {
+                  context.bloc<GlobalChapterReadedBloc>().add(
+                      GlobalChangeChapterReadedEventFromLocal(
+                          chapterId, state.readed));
+                }
+              }
+            },
+          ),
+        ],
         child: BlocBuilder<ChapterReadedBloc, ChapterReadedState>(
           builder: (BuildContext context, ChapterReadedState state) {
             if (state is ChapterReadedLoading) {
@@ -39,6 +66,10 @@ class ChapterReaded extends StatelessWidget {
             }
 
             if (state is ChapterReadedLoaded) {
+              return _buildReaded(context, readed: state.readed);
+            }
+
+            if (state is ChapterReadedLoadedFromLocal) {
               return _buildReaded(context, readed: state.readed);
             }
 
@@ -81,7 +112,7 @@ class ChapterReaded extends StatelessWidget {
           if (authenticated) {
             context
                 .bloc<ChapterReadedBloc>()
-                .add(ChangeChapterReadedEvent(!readed));
+                .add(ChangeChapterReadedEvent(!readed, false));
           } else {
             LoginDialog.createAndShowDialog(context);
           }

@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
+
 import 'package:leitor_manga/chapter/chapter.service.dart';
-import 'package:leitor_manga/chapter/chapter_readed/chapter_readed.dart';
 import 'package:leitor_manga/chapter/list/chapter-list.dto.dart';
-import 'package:leitor_manga/chapter/single/chapter_page.dart';
+import 'package:leitor_manga/chapter/list/chapter_item.dart';
 
 class ChapterList extends StatefulWidget {
   final int mangaId;
@@ -65,34 +64,12 @@ class ChapterListState extends State<ChapterList> {
         }
 
         var chapterDto = _list[index];
-
-        return ListTile(
-          title: Row(
-            children: <Widget>[
-              ChapterReaded(
-                chapterId: chapterDto.id,
-                initialReaded: chapterDto.readed,
-              ),
-              const Divider(
-                indent: 10,
-                endIndent: 0,
-              ),
-              Text('#${chapterDto.number}'),
-            ],
-          ),
-          subtitle: Container(
-            padding: EdgeInsets.only(left: 30),
-            child: Text(
-                '${chapterDto.date != null ? DateFormat('dd/MM/yyyy').format(chapterDto.date.toLocal()) : ''}'),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => ChapterPage(
-                      mangaId: widget.mangaId, chapterId: chapterDto.id)),
-            );
-          },
+        return ChapterItem(
+          chapterId: chapterDto.id,
+          mangaId: widget.mangaId,
+          number: chapterDto.number,
+          readed: chapterDto.readed,
+          date: chapterDto.date,
         );
       },
     );

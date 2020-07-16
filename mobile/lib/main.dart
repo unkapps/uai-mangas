@@ -81,6 +81,13 @@ class _AppState extends State<App> {
                 }
               },
             ),
+            BlocListener<GlobalChapterReadedBloc, GlobalChapterReadedState>(
+              listener: (context, state) {
+                if (state is GlobalChapterReadedFromLocal) {
+                  context.bloc<FeedBloc>().add(LoadFeedEvent());
+                }
+              },
+            ),
           ],
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
