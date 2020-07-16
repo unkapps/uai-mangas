@@ -246,25 +246,37 @@ class _MangaPageState extends State<MangaPage> {
               }
 
               if (state is FeedLoaded) {
-                final mangaDto = [...state.news, ...state.others].firstWhere(
-                    (m) => m.id == widget.mangaId && m.nextChapterId != null,
-                    orElse: () => null);
+                final mangaDto = [
+                  ...state.news,
+                  ...state.others
+                ].firstWhere((m) => m.id == widget.mangaId, orElse: () => null);
 
                 if (mangaDto != null) {
-                  return ChapterItem(
-                    chapterId: mangaDto.nextChapterId,
-                    mangaId: widget.mangaId,
-                    number: mangaDto.nextChapterNumber,
-                    readed: false,
-                    date: mangaDto.date,
-                  );
+                  if (mangaDto.nextChapterId != null) {
+                    return ChapterItem(
+                      chapterId: mangaDto.nextChapterId,
+                      mangaId: widget.mangaId,
+                      number: mangaDto.nextChapterNumber,
+                      readed: false,
+                      date: mangaDto.date,
+                    );
+                  } else {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 20,
+                      ),
+                      child: Text('Todos capitulos já foram lidos'),
+                    );
+                  }
                 } else {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 20,
-                    ),
-                    child: Text('Todos capitulos já foram lidos'),
+                  // TODO don't do a request for this
+                  return ChapterList(
+                    qtyChapters: manga.qtyChapters,
+                    mangaId: manga.id,
+                    allowFetchMore: false,
+                    initialFetch: 1,
+                    desc: false,
                   );
                 }
               }

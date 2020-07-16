@@ -14,8 +14,8 @@ export class ChapterService {
     return this.chapterRepository.getChapter(chapterId, userId);
   }
 
-  list(mangaId: number, offset?: number, size?: number, userId?: number): Promise<ChapterListDto[]> {
-    return this.chapterRepository.list(mangaId, offset, size, userId);
+  list(mangaId: number, offset?: number, size?: number, userId?: number, sort?: string): Promise<ChapterListDto[]> {
+    return this.chapterRepository.list(mangaId, offset, size, userId, sort);
   }
 
   async setChapterReaded(userId: number, chapterId: number, chapterReaded: boolean): Promise<boolean> {

@@ -9,9 +9,18 @@ import 'package:leitor_manga/chapter/list/chapter_item.dart';
 class ChapterList extends StatefulWidget {
   final int mangaId;
   final int qtyChapters;
+  final int initialFetch;
+  final bool allowFetchMore;
+  final bool desc;
 
-  ChapterList({Key key, @required this.mangaId, @required this.qtyChapters})
-      : super(key: key);
+  ChapterList({
+    Key key,
+    @required this.mangaId,
+    @required this.qtyChapters,
+    this.initialFetch = 20,
+    this.allowFetchMore = true,
+    this.desc = true,
+  }) : super(key: key);
 
   @override
   ChapterListState createState() => ChapterListState();
@@ -30,7 +39,7 @@ class ChapterListState extends State<ChapterList> {
   @override
   void initState() {
     _list = [];
-    _getMorePages(size: 20);
+    _getMorePages(size: widget.initialFetch, desc: widget.desc);
 
     super.initState();
   }
@@ -38,7 +47,7 @@ class ChapterListState extends State<ChapterList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: _list.length + 1,
+      itemCount: widget.allowFetchMore ? _list.length + 1 : _list.length,
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
@@ -75,11 +84,11 @@ class ChapterListState extends State<ChapterList> {
     );
   }
 
-  void _getMorePages({size = 100}) async {
+  void _getMorePages({size = 100, bool desc}) async {
     setState(() {
       _status = Status.LOADING;
     });
-    var list = await _service.getList(widget.mangaId, size, _list.length);
+    var list = await _service.getList(widget.mangaId, size, _list.length, desc);
 
     setState(() {
       if (list.isNotEmpty) {
@@ -91,11 +100,13 @@ class ChapterListState extends State<ChapterList> {
   }
 
   bool onNotification(ScrollNotification scrollInfo, maxScrollExtent) {
-    if (scrollInfo is ScrollEndNotification &&
-        !_endGettingChapters &&
-        _status != Status.LOADING) {
-      if (scrollInfo.metrics.pixels == maxScrollExtent) {
-        _getMorePages();
+    if (widget.allowFetchMore) {
+      if (scrollInfo is ScrollEndNotification &&
+          !_endGettingChapters &&
+          _status != Status.LOADING) {
+        if (scrollInfo.metrics.pixels == maxScrollExtent) {
+          _getMorePages(desc: widget.desc);
+        }
       }
     }
 

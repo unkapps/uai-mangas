@@ -4,12 +4,13 @@ import 'package:leitor_manga/config/dio_config.dart';
 
 class ChapterService {
   Future<List<ChapterListDto>> getList(
-      int mangaId, int size, int offset) async {
+      int mangaId, int size, int offset, bool desc) async {
     final dio = await DioConfig.withToken();
     var res = await dio.get('/chapter/', queryParameters: {
       'mangaId': '$mangaId',
       'size': '$size',
       'offset': offset,
+      'sort': desc ? 'DESC' : 'ASC',
     });
 
     if (res.statusCode == 200) {
