@@ -116,12 +116,12 @@ class ChapterBar extends StatelessWidget {
 
   void _goToChapter(BuildContext context,
       {@required int mangaId, @required int chapterId}) {
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushReplacement(
       context,
       CupertinoPageRoute(
-          builder: (context) =>
-              ChapterPage(mangaId: mangaId, chapterId: chapterId)),
-      (Route<dynamic> route) => false,
+        builder: (context) =>
+            ChapterPage(mangaId: mangaId, chapterId: chapterId),
+      ),
     );
   }
 
