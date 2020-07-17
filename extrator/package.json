@@ -33,6 +33,7 @@
     "@types/imagemin-jpegtran": "^5.0.0",
     "axios": "^0.19.2",
     "cron": "^1.8.2",
+    "firebase-admin": "^9.0.0",
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "node-html-parser": "^1.2.20",
