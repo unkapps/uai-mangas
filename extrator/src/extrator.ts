@@ -13,6 +13,7 @@ import MangaService from './service/manga.service';
 import { MS_WAIT_BETWEEN_PAGES, DATA_PATH } from './config/general-craweler.config';
 import { mkdir } from './util';
 import ChapterService from './service/chapter.service';
+import FirebaseService from './service/firebase.service';
 import ChapterDto from './dto/chapter.dto';
 import Manga from './entity/manga';
 import Category from './entity/category';
@@ -33,6 +34,7 @@ export default class Extrator {
     private mangaService: MangaService,
     private databaseConfig: DatabaseConfig,
     private chapterService: ChapterService,
+    private firebaseService: FirebaseService,
   ) {
   }
 
@@ -252,6 +254,13 @@ export default class Extrator {
         const chapter = await this.chapterService.createOrGet(chapterDto, manga);
         if (chapter.justGotSaved) {
           console.log(`--- chapter ${chapterDto.number} of '${manga.name}' saved`);
+
+          try {
+            this.firebaseService.newChapter(manga.id, manga.name, chapter.number);
+          } catch (err) {
+            console.error('Error on send notification to firebase');
+            console.error(err);
+          }
         } else {
           return;
         }
