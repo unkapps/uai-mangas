@@ -298,8 +298,9 @@ export default class Extrator {
     for (const entry of mangaUrlByLeitorNetId) {
       try {
         await this.readManga(entry[0], entry[1]);
-      } catch (_) {
+      } catch (err) {
         console.error(`error release ${entry.toString()}`);
+        console.error(err);
       }
     }
 
