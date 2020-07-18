@@ -99,7 +99,7 @@ export default class Extrator {
 
       try {
         if (args.includes('sitemap')) {
-          this.getNewMangasUrlFromSiteMap();
+          await this.getNewMangasUrlFromSiteMap();
         }
       } catch (err) {
         console.error('Error on reading sitemap');
