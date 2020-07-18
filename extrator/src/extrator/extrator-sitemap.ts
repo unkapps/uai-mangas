@@ -12,7 +12,7 @@ import { SitemapUrlDto } from './sitemap.dto';
 import { MS_WAIT_BETWEEN_PAGES } from '../config/general-craweler.config';
 
 const setTimeoutPromise = util.promisify(setTimeout);
-const MAXIMUM_NUMBER_OF_NEWS = 250;
+const MAXIMUM_NUMBER_OF_NEWS = 150;
 
 export interface NewMangaSitemap {
   leitorNetId: number;
