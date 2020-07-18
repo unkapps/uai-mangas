@@ -20,6 +20,7 @@ import Category from './entity/category';
 import MangaNewReleaseDto from './dto/new_release/manga_new_release.dto';
 import CronJobExtended from './cron_jon_extended';
 import NewMangaDto from './dto/new_manga/new_manga.dto';
+import ExtratorSitemap from './extrator/extrator-sitemap';
 
 const setTimeoutPromise = util.promisify(setTimeout);
 
@@ -35,6 +36,7 @@ export default class Extrator {
     private databaseConfig: DatabaseConfig,
     private chapterService: ChapterService,
     private firebaseService: FirebaseService,
+    private extratorSitemap: ExtratorSitemap,
   ) {
   }
 
@@ -50,7 +52,7 @@ export default class Extrator {
         onTick: null,
         runOnInit: true,
       }, async () => {
-        await this.runTasks.call(this, ['releases', 'new-mangas']);
+        await this.runTasks.call(this, ['sitemap']);
         console.log(`next job on ${job.nextDate.toISOString()}`);
       });
 
@@ -94,8 +96,26 @@ export default class Extrator {
         console.error('Error on new mangas');
         console.error(err);
       }
+
+      try {
+        if (args.includes('sitemap')) {
+          this.getNewMangasUrlFromSiteMap();
+        }
+      } catch (err) {
+        console.error('Error on reading sitemap');
+        console.error(err);
+      }
     } finally {
       this.connection.close();
+    }
+  }
+
+  private async getNewMangasUrlFromSiteMap() {
+    const newMangas = await this.extratorSitemap.getNewMangas();
+    if (newMangas) {
+      for (const newManga of newMangas) {
+        await this.readManga(newManga.leitorNetId, newManga.url);
+      }
     }
   }
 

@@ -5,7 +5,9 @@
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceRoot}/src/main.ts"
+        "${workspaceRoot}/src/main.ts",
+        "now",
+        "sitemap"
       ],
       "runtimeArgs": [
         "--nolazy",

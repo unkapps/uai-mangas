@@ -52,4 +52,8 @@ export default class LeitorNetUrls {
   public newMangasUrl(): string {
     return `${LEITOR_NET_URL}/home/getNewSeries`;
   }
+
+  public sitemapUrl(): string {
+    return `${LEITOR_NET_URL}/leitor/sitemap/1.xml`;
+  }
 }
