@@ -74,11 +74,20 @@ export class MangaRepository extends Repository<Manga> {
     const queryBuilder = this.manager.getRepository(Manga)
       .createQueryBuilder('manga')
       .leftJoinAndSelect('manga.authors', 'author')
-
       .leftJoinAndSelect('manga.artists', 'artist')
-      .innerJoinAndSelect('manga.categories', 'category')
+      .leftJoinAndSelect('manga.categories', 'category')
       .leftJoin('manga.chapters', 'chapter')
-      .where('manga.id = :id', { id });
+      .where('manga.id = :id', { id })
+      .groupBy('manga.id')
+      .addGroupBy('manga.name')
+      .addGroupBy('manga.finished')
+      .addGroupBy('manga.description')
+      .addGroupBy('manga.cover_url')
+      .addGroupBy('author.id')
+      .addGroupBy('author.name')
+      .addGroupBy('artist.id')
+      .addGroupBy('category.id')
+      .addGroupBy('category.name');
 
     if (userId != null) {
       queryBuilder.leftJoin('manga.favoriteMangas', 'favoriteMangas',
