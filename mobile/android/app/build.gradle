@@ -60,11 +60,20 @@ android {
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
         }
+        // debug {
+        //     keyAlias keystoreProperties['keyAlias']
+        //     keyPassword keystoreProperties['keyPassword']
+        //     storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+        //     storePassword keystoreProperties['storePassword']
+        // }
     }
     buildTypes {
         release {
             signingConfig signingConfigs.release
         }
+        // debug {
+        //     signingConfig signingConfigs.debug
+        // }
     }
 }
 
@@ -74,5 +83,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-messaging:19.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
 }
