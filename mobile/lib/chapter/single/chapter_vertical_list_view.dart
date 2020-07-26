@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:diagonal_scrollview/diagonal_scrollview.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:leitor_manga/chapter/single/page.dart' as manga_page;
+import 'package:leitor_manga/firebase/admob/admob_ads_id.dart';
+import 'package:leitor_manga/firebase/admob/admob_banner_wrapper.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:quiver/collection.dart';
 
@@ -40,8 +40,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
   double _olderScrollPosition;
   Timer timerScaleChanged;
 
-  final _adController = NativeAdmobController();
-  final _adHeight = 300.0;
+  final _adHeight = AdmobBannerSize.MEDIUM_RECTANGLE.height + 20.0;
 
   _ChapterVerticalListViewState(this.chapter, {ChapterController controller})
       : _controller = controller ?? ChapterController(),
@@ -50,7 +49,6 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
   @override
   void initState() {
     _olderScrollPosition = 0;
-
     gloalKeyByPageIndex = HashMap();
 
     for (var i = 0; i < chapter.pages.length; i++) {
@@ -184,7 +182,7 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
 
     return DiagonalScrollView(
       maxWidth: width,
-      maxHeight: _controller.height + 60 + _adHeight,
+      maxHeight: _controller.height + 60 + (_adHeight * 2),
       minScale: 1,
       maxScale: 3,
       enableZoom: true,
@@ -267,19 +265,25 @@ class _ChapterVerticalListViewState extends State<ChapterVerticalListView>
 
           return Column(
             children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: _adHeight,
+                  width: width,
+                  child: AdmobBannerWrapper(
+                      adUnitId: AdmobIdsId.CHAPTER_PAGE,
+                      adSize: AdmobBannerSize.MEDIUM_RECTANGLE),
+                ),
+              ),
               ...widgets,
-              Container(
-                height: _adHeight,
-                width: width,
-                child: NativeAdmob(
-                  adUnitID: 'ca-app-pub-4719589372008331/5300665318',
-                  loading: Center(child: CircularProgressIndicator()),
-                  error: Text('Failed to load the ad'),
-                  controller: _adController,
-                  type: NativeAdmobType.full,
-                  options: NativeAdmobOptions(
-                    ratingColor: Colors.red,
-                  ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: _adHeight,
+                  width: width,
+                  child: AdmobBannerWrapper(
+                      adUnitId: AdmobIdsId.CHAPTER_PAGE,
+                      adSize: AdmobBannerSize.MEDIUM_RECTANGLE),
                 ),
               ),
             ],

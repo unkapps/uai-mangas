@@ -1,11 +1,10 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:extended_image/extended_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:leitor_manga/author/author.dto.dart';
@@ -14,6 +13,8 @@ import 'package:leitor_manga/category/categories.dart';
 import 'package:leitor_manga/chapter/list/chapter_item.dart';
 import 'package:leitor_manga/chapter/list/chapter_list.dart';
 import 'package:leitor_manga/feed/bloc/feed_bloc.dart';
+import 'package:leitor_manga/firebase/admob/admob_ads_id.dart';
+import 'package:leitor_manga/firebase/admob/admob_banner_wrapper.dart';
 import 'package:leitor_manga/manga/single/bloc/manga_single_bloc.dart';
 import 'package:leitor_manga/manga/single/manga-favorite/manga_favorite.dart';
 import 'package:leitor_manga/manga/single/manga.dto.dart';
@@ -210,16 +211,11 @@ class _MangaPageState extends State<MangaPage> {
             categories: manga.categories,
           ),
           Container(
-            height: 140,
             margin: EdgeInsets.all(10),
-            child: NativeAdmob(
-              adUnitID: 'ca-app-pub-4719589372008331/8547336252',
-              loading: Center(child: CircularProgressIndicator()),
-              error: Text('Failed to load the ad'),
-              type: NativeAdmobType.full,
-              options: NativeAdmobOptions(
-                ratingColor: Colors.red,
-              ),
+            child: AdmobBannerWrapper(
+              adUnitId: AdmobIdsId.MANGA_SINGLE_PAGE,
+              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                  width: MediaQuery.of(context).size.width.toInt()),
             ),
           ),
           Padding(
@@ -308,21 +304,6 @@ class _MangaPageState extends State<MangaPage> {
             key: _chapterListPageKey,
             mangaId: manga.id,
           ),
-          manga.qtyChapters > 9
-              ? Container(
-                  height: 140,
-                  margin: EdgeInsets.all(10),
-                  child: NativeAdmob(
-                    adUnitID: 'ca-app-pub-4719589372008331/8547336252',
-                    loading: Center(child: CircularProgressIndicator()),
-                    error: Text('Failed to load the ad'),
-                    type: NativeAdmobType.full,
-                    options: NativeAdmobOptions(
-                      ratingColor: Colors.red,
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
       onNotification: (ScrollNotification scrollInfo) {

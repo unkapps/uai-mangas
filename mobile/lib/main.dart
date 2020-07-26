@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,9 @@ class _AppState extends State<App> {
 
     _authBloc.add(AppStarted());
     _versionBloc.add(LoadVersionEvent());
+
+    WidgetsFlutterBinding.ensureInitialized();
+    Admob.initialize();
   }
 
   @override
