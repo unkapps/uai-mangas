@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:leitor_manga/changelog/changelog_service.dart';
 import 'package:leitor_manga/home/home_drawer.dart';
 import 'package:leitor_manga/home/drawer_count.dart';
 
 import 'package:leitor_manga/manga/last-manga-with-update/last-manga-with-update.dart';
 import 'package:leitor_manga/manga/list/manga_list.dart';
 import 'package:leitor_manga/shared/search_app_bar.dart';
+import 'package:leitor_manga/version/bloc/version_bloc.dart';
+import 'package:pedantic/pedantic.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -81,6 +85,12 @@ class _HomePageState extends State<HomePage> {
           stream: _streamController.stream,
           builder: (context, snapshot) {
             if (!_searchMode) {
+              var versionState = context.bloc<VersionBloc>().state;
+              if (versionState is VersionLoaded) {
+                unawaited(ChangelogService.openDialogFirstTime(
+                    context, versionState.versionCode));
+              }
+
               return TabBarView(
                 children: [
                   Container(

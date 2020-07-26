@@ -15,6 +15,6 @@ class VersionBloc extends Bloc<VersionEvent, VersionState> {
     VersionEvent event,
   ) async* {
     var packageInfo = await PackageInfo.fromPlatform();
-    yield VersionLoaded(packageInfo.version);
+    yield VersionLoaded(packageInfo.version, int.parse(packageInfo.buildNumber));
   }
 }
