@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:leitor_manga/shared/facebook_page_button.dart';
 import 'package:leitor_manga/version/bloc/version.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -121,7 +122,20 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Spacer(),
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.only(top: 15, right: 5, left: 15, bottom: 5),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    FacebookPageButton(),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 5, right: 15, left: 15, bottom: 15),
             child: Column(
               children: <Widget>[
                 Row(
