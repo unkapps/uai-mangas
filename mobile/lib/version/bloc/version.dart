@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:leitor_manga/changelog/changelog_dialog.dart';
 
 import 'package:leitor_manga/version/bloc/version_bloc.dart';
 
@@ -26,7 +27,12 @@ class Version extends StatelessWidget {
         var version = state is VersionLoaded ? state.version : '';
         return Row(
           children: <Widget>[
-            Text('Versão: $version'),
+            InkWell(
+              child: Text('Versão: $version'),
+              onTap: () {
+                ChangelogDialog.open(context);
+              },
+            ),
             state is VersionUnloaded ? _buildProgressBar() : Container(),
           ],
         );

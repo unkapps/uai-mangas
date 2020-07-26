@@ -10,8 +10,9 @@ class VersionUnloaded extends VersionState {
 
 class VersionLoaded extends VersionState {
   final String version;
+  final int versionCode;
 
-  VersionLoaded(this.version);
+  VersionLoaded(this.version, this.versionCode);
 
   @override
   String toString() => 'VersionLoaded';
