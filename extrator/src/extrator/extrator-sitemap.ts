@@ -81,11 +81,12 @@ export default class ExtratorSitemap {
         console.error(`Error on getting url ${serieUrl} - Error on reading sitemap`);
         console.error(err);
       }
-
-      console.log('All new mangas url getted (sitemap)');
-
-      return newMangasReturn;
     }
+
+    console.log('All new mangas url getted (sitemap)');
+
+    return newMangasReturn;
+  }
 
   private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.sitemapUrl(), {
