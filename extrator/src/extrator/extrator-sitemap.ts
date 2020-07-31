@@ -62,26 +62,30 @@ export default class ExtratorSitemap {
     const newMangasReturn: NewMangaSitemap[] = [];
 
     for (const serieUrl of seriesUrl) {
-      const mangaUrl = await this.getMangaUrl(serieUrl);
+      try {
+        const mangaUrl = await this.getMangaUrl(serieUrl);
 
-      if (mangaUrl != null) {
-        const match = regexId.exec(mangaUrl);
+        if (mangaUrl != null) {
+          const match = regexId.exec(mangaUrl);
 
-        if (match != null && match.length > 1 && match[1] != null) {
-          newMangasReturn.push({
-            url: mangaUrl,
-            leitorNetId: Number(match[1]),
-          });
+          if (match != null && match.length > 1 && match[1] != null) {
+            newMangasReturn.push({
+              url: mangaUrl,
+              leitorNetId: Number(match[1]),
+            });
+          }
+
         }
+        await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES / 4);
+      } catch (err) {
+        console.error(`Error on getting url ${serieUrl} - Error on reading sitemap`);
+        console.error(err);
       }
 
-      await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES / 4);
+      console.log('All new mangas url getted (sitemap)');
+
+      return newMangasReturn;
     }
-
-    console.log('All new mangas url getted (sitemap)');
-
-    return newMangasReturn;
-  }
 
   private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.sitemapUrl(), {
