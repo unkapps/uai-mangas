@@ -1,3 +1,6 @@
+## 1.3.1 (04/08/2020)
+- Pequenas correções de bugs
+
 ## 1.3.0 (26/07/2020)
 
 - Trocar o formato de anúncios para remover **lag** ao trocar de página
