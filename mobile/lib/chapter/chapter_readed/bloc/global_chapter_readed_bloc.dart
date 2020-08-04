@@ -20,11 +20,13 @@ class GlobalChapterReadedBloc
     GlobalChapterReadedEvent event,
   ) async* {
     if (event is GlobalChangeChapterReadedEvent) {
-      yield GlobalChapterReadedChanged(
-        event.chapterId,
-        await chapterService.setChapterReaded(event.chapterId, event.readed),
-        true,
-      );
+      try {
+        yield GlobalChapterReadedChanged(
+          event.chapterId,
+          await chapterService.setChapterReaded(event.chapterId, event.readed),
+          true,
+        );
+      } catch (_) {}
     } else if (event is GlobalChangeChapterReadedEventFromLocal) {
       yield GlobalChapterReadedFromLocal(event.chapterId, event.readed);
     }

@@ -35,7 +35,7 @@ class ChapterService {
   }
 
   Future<bool> setChapterReaded(int chapterId, bool chapterReaded) async {
-    final dio = await DioConfig.withToken();
+    final dio = await DioConfig.withToken(tokenIsRequired: true);
     var res = await dio.put<String>(
       '/chapter/readed/$chapterId',
       queryParameters: {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:leitor_manga/config/environment_config.dart';
+import 'package:leitor_manga/exceptions/no_token_exception.dart';
 import 'package:leitor_manga/user/user.service.dart';
 
 class DioConfig {
@@ -17,9 +18,14 @@ class DioConfig {
     return Dio(options);
   }
 
-  static Future<Dio> withToken() async {
+  static Future<Dio> withToken({tokenIsRequired = false}) async {
     final userService = getIt<UserService>();
     final token = await userService.getToken();
+
+    if (tokenIsRequired && token == null) {
+      throw NoTokenException();
+    }
+
     return Dio(options.merge(headers: {TOKEN_NAME: token}));
   }
 }
