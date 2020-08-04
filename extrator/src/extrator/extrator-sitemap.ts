@@ -74,7 +74,6 @@ export default class ExtratorSitemap {
               leitorNetId: Number(match[1]),
             });
           }
-
         }
         await setTimeoutPromise(MS_WAIT_BETWEEN_PAGES / 4);
       } catch (err) {
