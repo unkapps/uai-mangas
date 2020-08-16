@@ -4,9 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MangaModule } from './manga/manga.module';
-import { ChapterModule } from './chapter/chapter.module';
-import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './v1/modules/core/core.module';
+import { AuthModule } from './v1/modules/auth/auth.module';
 import { defaultConnectionConfig } from './config/db.config';
 import { envFilePath } from './config/env.config';
 
@@ -22,8 +21,7 @@ import { envFilePath } from './config/env.config';
       },
     }),
     AuthModule,
-    MangaModule,
-    ChapterModule,
+    CoreModule,
   ],
   controllers: [
     AppController,

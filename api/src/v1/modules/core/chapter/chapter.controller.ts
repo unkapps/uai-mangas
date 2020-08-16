@@ -9,14 +9,14 @@ import {
   Req,
 } from '@nestjs/common';
 
-import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
-import { FirebaseAuthOptionalGuard } from 'src/auth/firebase-auth-optional.guard';
+import { FirebaseAuthGuard } from 'src/v1/modules/auth/firebase-auth.guard';
+import { FirebaseAuthOptionalGuard } from 'src/v1/modules/auth/firebase-auth-optional.guard';
 
 import { ChapterService } from './chapter.service';
 import ChapterDto from './dto/chapter.dto';
 import ChapterListDto from './dto/chapter-list.dto';
 
-@Controller('chapter')
+@Controller('api/v1/chapter')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) { }
 
