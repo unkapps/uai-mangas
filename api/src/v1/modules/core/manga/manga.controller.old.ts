@@ -13,16 +13,20 @@ import { UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import Manga from 'src/entity/manga';
 import SortingDto from 'src/shared/sorting.dto';
 import PageableDto from 'src/shared/pageable.dto';
-import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
+import { FirebaseAuthGuard } from 'src/v1/modules/auth/firebase-auth.guard';
 
-import { FirebaseAuthOptionalGuard } from 'src/auth/firebase-auth-optional.guard';
+import { FirebaseAuthOptionalGuard } from 'src/v1/modules/auth/firebase-auth-optional.guard';
 import { MangaService } from './manga.service';
 import LastMangaDto from './dto/last-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
 import FavoriteMangaDto from './dto/favorite-manga.dto';
 
+/**
+ * Old controller without /api/{version}
+ * @deprecated
+ */
 @Controller('manga')
-export class MangaController {
+export class MangaOldController {
   constructor(private readonly mangaService: MangaService) { }
 
   @Get('last')
@@ -38,7 +42,7 @@ export class MangaController {
     @Query('name') name?: string,
   ): Promise<PageableDto<AllMangaDto>> {
     const sortingDto = SortingDto.fromString(sortingStr);
-    return this.mangaService.getAllMangas(size, offset, sortingDto, name);
+    return this.mangaService.getAllMangas(size, offset, sortingDto, name, null);
   }
 
   @Get('loadMore')

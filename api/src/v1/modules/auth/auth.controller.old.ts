@@ -7,8 +7,12 @@ import {
 
 import { AuthService } from './auth.service';
 
+/**
+ * Old controller without /api/{version}
+ * @deprecated
+ */
 @Controller('auth')
-export class AuthController {
+export class AuthOldController {
   constructor(
     private authService: AuthService,
   ) { }

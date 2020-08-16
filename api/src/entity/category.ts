@@ -45,4 +45,7 @@ export default class Category {
   @ManyToMany(() => Manga, (manga) => manga.categories)
   @JoinTable({ name: 'manga_categories' })
   mangas: Manga[];
+
+  @Column('tinyint')
+  adult: boolean;
 }

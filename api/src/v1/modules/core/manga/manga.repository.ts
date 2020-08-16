@@ -32,6 +32,7 @@ export class MangaRepository extends Repository<Manga> {
     size = 10, offset?: number,
     sortingDto?: SortingDto,
     name?: string,
+    categoryId?: number,
   ): Promise<PageableDto<AllMangaDto>> {
     const query = this
       .createQueryBuilder('manga')
@@ -47,6 +48,11 @@ export class MangaRepository extends Repository<Manga> {
         query.where(`MATCH(manga.name)
           AGAINST(:name IN BOOLEAN MODE)`, { name: `*${nameForQuery}*` });
       }
+    }
+
+    if (categoryId != null) {
+      query.innerJoin('manga.categories', 'category');
+      query.andWhere('category.id = :categoryId', { categoryId });
     }
 
     if (sortingDto) {
