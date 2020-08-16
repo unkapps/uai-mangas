@@ -1,3 +1,6 @@
+## 1.4.0 (16/08/2020)
+- Adicionar página para visualizar categorias. Simmmm! **Categorias**. Vocês tanto pediram e nós escutamos :D
+
 ## 1.3.1 (04/08/2020)
 - Pequenas correções de bugs
 
