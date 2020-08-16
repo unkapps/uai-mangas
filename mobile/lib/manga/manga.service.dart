@@ -16,7 +16,7 @@ class MangaService {
 
   Future<MangaDto> getManga(int mangaId) async {
     final dio = await DioConfig.withToken();
-    var res = await dio.get('/manga/$mangaId');
+    var res = await dio.get('/api/v1/manga/$mangaId');
 
     if (res.statusCode == 200) {
       return MangaDto.fromJson(res.data);
@@ -28,7 +28,7 @@ class MangaService {
   Future<List<FavoriteMangaDto>> getFavoriteMangas() async {
     final dio = await DioConfig.withToken();
     var res = await dio.get(
-      '/manga/favorite/',
+      '/api/v1/manga/favorite/',
     );
 
     if (res.statusCode == 200) {
@@ -45,7 +45,7 @@ class MangaService {
     var fcmToken = await firebaseNotifications.firebaseMessaging.getToken();
     final dio = await DioConfig.withToken();
     var res = await dio.put<String>(
-      '/manga/favorite/$mangaId',
+      '/api/v1/manga/favorite/$mangaId',
       queryParameters: {
         'mangaFavorite': mangaFavorite,
         'fcmToken': fcmToken,
@@ -63,7 +63,7 @@ class MangaService {
     final dio = await DioConfig.withoutToken();
     try {
       var res = await dio.get(
-        '/manga/last',
+        '/api/v1/manga/last',
         queryParameters: {
           'size': 6,
         },
@@ -112,7 +112,7 @@ class MangaService {
   }) async {
     final dio = await DioConfig.withoutToken();
     var res = await dio.get(
-      '/manga',
+      '/api/v1/manga',
       queryParameters: _getQueryParamatersForAllManga(sortingChoice,
           name: name, offset: offset),
     );
@@ -136,7 +136,7 @@ class MangaService {
   }) async {
     final dio = await DioConfig.withToken();
     var res = await dio.get(
-      '/manga/loadMore',
+      '/api/v1/manga/loadMore',
       queryParameters: _getQueryParamatersForAllManga(sortingChoice,
           name: name, offset: offset),
     );

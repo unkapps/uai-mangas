@@ -103,7 +103,7 @@ class UserService {
     try {
       var fcmToken = await firebaseNotifications.firebaseMessaging.getToken();
       final dio = await DioConfig.withToken();
-      await dio.post('/auth/firebase', queryParameters: {
+      await dio.post('/api/v1/auth/firebase', queryParameters: {
         'fcmToken': fcmToken,
       });
     } catch (err) {
