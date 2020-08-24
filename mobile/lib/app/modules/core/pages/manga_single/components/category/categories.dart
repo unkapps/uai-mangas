@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/manga_single/components/category/category_model.dart';
+import 'package:leitor_manga/app/modules/core/routes.dart';
 
 class Categories extends StatelessWidget {
   final List<CategoryModel> categories;
@@ -24,10 +26,22 @@ class Categories extends StatelessWidget {
           );
         },
         itemBuilder: (BuildContext context, int index) {
+          var category = categories[index];
+
           return OutlineButton(
-            onPressed: () {},
+            onPressed: () {
+              Modular.link.pushNamed(Routes.CATEGORY_SINGLE
+                  .replaceAll(
+                    ':categoryId',
+                    category.id.toString(),
+                  )
+                  .replaceAll(
+                    ':categoryName',
+                    category.name,
+                  ));
+            },
             child: Text(
-              categories[index].name,
+              category.name,
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 12,

@@ -48,9 +48,10 @@ export class MangaController {
     @Query('offset') offset?: number,
     @Query('sorting') sortingStr?: string,
     @Query('name') name?: string,
+    @Query('categoryId') categoryId?: number,
   ): Promise<AllMangaDto[]> {
     const sortingDto = SortingDto.fromString(sortingStr);
-    return this.mangaService.loadMore(size, offset, sortingDto, name);
+    return this.mangaService.loadMore(size, offset, sortingDto, name, categoryId);
   }
 
   @Get('favorite')

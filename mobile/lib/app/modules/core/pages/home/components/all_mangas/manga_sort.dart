@@ -76,7 +76,7 @@ extension MangaSortingChoiceExtension on MangaSortingChoice {
       case MangaSortingChoice.NAME:
         return SortModel('name', Direction.ASC);
       case MangaSortingChoice.NEW:
-        return SortModel('leitor_net_id', Direction.DESC);
+        return SortModel('manga.leitor_net_id', Direction.DESC);
       default:
         return null;
     }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/all_mangas/all_mangas.dart';
+import 'package:leitor_manga/app/modules/core/pages/home/components/category_list/category_list.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/drawer_count.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/home_drawer.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/last_manga_with_update/last_manga_with_update.dart';
@@ -31,7 +32,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   PageStorageKey _lastMangaWithUpdateKey;
-  PageStorageKey _allMangaWithUpdateKey;
+  PageStorageKey _allMangaKey;
+  PageStorageKey _categoriesKey;
   GlobalKey _searchKey;
 
   String _lastQuery;
@@ -39,7 +41,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   void initState() {
     _lastMangaWithUpdateKey = PageStorageKey('l');
-    _allMangaWithUpdateKey = PageStorageKey('a');
+    _allMangaKey = PageStorageKey('a');
+    _categoriesKey = PageStorageKey('c');
     _searchKey = GlobalKey();
 
     SystemChrome.setPreferredOrientations([
@@ -53,7 +56,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: SearchAppBar(
           homeController: controller,
@@ -61,8 +64,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             title: Text(widget.title),
             bottom: TabBar(
               tabs: [
-                Tab(text: 'Últimas atualizações'),
+                Tab(text: 'Recente'),
                 Tab(text: 'Todos'),
+                Tab(text: 'Categorias'),
               ],
             ),
             leading: Builder(
@@ -93,8 +97,14 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   Container(
                     padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: AllMangas(
-                      key: _allMangaWithUpdateKey,
+                      key: _allMangaKey,
                       showCount: true,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: CategoryList(
+                      key: _categoriesKey,
                     ),
                   ),
                 ],
@@ -103,8 +113,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
             if (_lastQuery != controller.query) {
               _searchKey = GlobalKey();
-              _allMangaWithUpdateKey =
-                  PageStorageKey(_allMangaWithUpdateKey.value + '2');
+              _allMangaKey =
+                  PageStorageKey(_allMangaKey.value + '2');
             }
 
             _lastQuery = controller.query;

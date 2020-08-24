@@ -12,7 +12,7 @@ export default class SortingDto {
       return null;
     }
 
-    const regex = /^([\w\d\-]+)(, (ASC|DESC))?$/i;
+    const regex = /^([\.\w\d\-]+)(, (ASC|DESC))?$/i;
 
     const match = regex.exec(string);
 

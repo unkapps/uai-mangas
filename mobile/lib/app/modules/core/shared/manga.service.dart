@@ -50,6 +50,7 @@ class MangaService {
     MangaSortingChoice sortingChoice, {
     String name,
     int offset,
+    int categoryId,
   }) {
     var sort = sortingChoice.sort;
 
@@ -66,6 +67,10 @@ class MangaService {
       queryParameters['offset'] = offset;
     }
 
+    if (categoryId != null) {
+      queryParameters['categoryId'] = categoryId;
+    }
+
     return queryParameters;
   }
 
@@ -73,12 +78,17 @@ class MangaService {
     MangaSortingChoice sortingChoice, {
     String name,
     int offset,
+    int categoryId,
   }) async {
     final dio = await DioConfig.withoutToken();
     var res = await dio.get(
       '/api/v1/manga',
-      queryParameters: _getQueryParamatersForAllManga(sortingChoice,
-          name: name, offset: offset),
+      queryParameters: _getQueryParamatersForAllManga(
+        sortingChoice,
+        name: name,
+        offset: offset,
+        categoryId: categoryId,
+      ),
     );
 
     if (res.statusCode == 200) {
@@ -97,12 +107,17 @@ class MangaService {
     MangaSortingChoice sortingChoice, {
     String name,
     int offset,
+    int categoryId,
   }) async {
     final dio = await DioConfig.withToken();
     var res = await dio.get(
       '/api/v1/manga/loadMore',
-      queryParameters: _getQueryParamatersForAllManga(sortingChoice,
-          name: name, offset: offset),
+      queryParameters: _getQueryParamatersForAllManga(
+        sortingChoice,
+        name: name,
+        offset: offset,
+        categoryId: categoryId,
+      ),
     );
 
     if (res.statusCode == 200) {

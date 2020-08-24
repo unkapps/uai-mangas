@@ -29,6 +29,9 @@ abstract class _AllMangasStoreBase
   @override
   int qtyPages;
 
+  @observable
+  int categoryId;
+
   @override
   @observable
   Object error;
@@ -62,10 +65,12 @@ abstract class _AllMangasStoreBase
   }
 
   @action
-  void init(String mangaName) {
+  void init(String mangaName, {int categoryId}) {
     sortingChoice = mangaName != null
         ? MangaSortingChoice.RELEVANCE
         : MangaSortingChoice.NAME;
+
+    this.categoryId = categoryId;
   }
 
   @action
@@ -77,7 +82,11 @@ abstract class _AllMangasStoreBase
     errorOnGetMoreItems = null;
 
     try {
-      var page = await mangaService.getAllManga(sortingChoice, name: homeController.query);
+      var page = await mangaService.getAllManga(
+        sortingChoice,
+        name: homeController.query,
+        categoryId: categoryId,
+      );
 
       qtyPages = page.qtyPages;
       items = page.data.asObservable();
@@ -99,6 +108,7 @@ abstract class _AllMangasStoreBase
           sortingChoice,
           offset: items.length,
           name: homeController.query,
+          categoryId: categoryId,
         ),
       );
     } catch (err) {
@@ -112,5 +122,7 @@ abstract class _AllMangasStoreBase
   @override
   void changeSorting(MangaSortingChoice sortingChoice) {
     this.sortingChoice = sortingChoice;
+
+    loadItems();
   }
 }
