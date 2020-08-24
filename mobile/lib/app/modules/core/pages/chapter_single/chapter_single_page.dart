@@ -23,7 +23,8 @@ class ChapterSinglePage extends StatefulWidget {
 }
 
 class _ChapterSinglePageState
-    extends ModularState<ChapterSinglePage, ChapterSingleController> {
+    extends ModularState<ChapterSinglePage, ChapterSingleController>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     controller.loadChapter(widget.chapterId);
@@ -63,6 +64,11 @@ class _ChapterSinglePageState
         },
       ),
     );
+  }
+
+  @override
+  void didChangeMetrics() {
+    controller.didChangeMetrics();
   }
 
   Widget _buildSuccess(BuildContext context, ChapterSingleModel chapter) {

@@ -13,7 +13,8 @@ const double opacityChapterBar = 0.8;
 
 abstract class _ChapterSingleControllerBase with Store {
   final chapterService = Modular.get<ChapterService>();
-  final pageVerticalListviewController = Modular.get<PageVerticalListviewController>();
+  final pageVerticalListviewController =
+      Modular.get<PageVerticalListviewController>();
 
   @observable
   ObservableFuture<ChapterSingleModel> chapter;
@@ -30,10 +31,14 @@ abstract class _ChapterSingleControllerBase with Store {
   }
 
   @action
-  void nextPage() {}
+  void nextPage() {
+    pageVerticalListviewController.nextPage();
+  }
 
   @action
-  void previousPage() {}
+  void previousPage() {
+    pageVerticalListviewController.previousPage();
+  }
 
   @computed
   String get pageTitle {
@@ -76,8 +81,17 @@ abstract class _ChapterSingleControllerBase with Store {
     pageVerticalListviewController.informHeightAndInxOfPage(index);
   }
 
-
+  @action
+  Future<void> goToPage(int pageNumber, bool showDialog) async {
+    await pageVerticalListviewController.goToPage(pageNumber, showDialog);
+  }
 
   @action
-  Future<void> goToPage(int pageNumber, bool showDialog) async {}
+  void didChangeMetrics() {
+    pageVerticalListviewController.recalculateHeightOfPages();
+
+    pageVerticalListviewController.rebuildChaptersMap();
+    pageVerticalListviewController.goToPage(
+        pageVerticalListviewController.currentPage, false);
+  }
 }

@@ -143,6 +143,17 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
   }
 
   @override
+  void didChangeMetrics() {
+    final _$actionInfo = _$_ChapterSingleControllerBaseActionController
+        .startAction(name: '_ChapterSingleControllerBase.didChangeMetrics');
+    try {
+      return super.didChangeMetrics();
+    } finally {
+      _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 chapter: ${chapter},
