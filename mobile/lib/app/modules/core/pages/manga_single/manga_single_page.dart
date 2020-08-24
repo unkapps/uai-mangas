@@ -51,11 +51,6 @@ class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleCon
     _chapterListPageKey = GlobalKey();
     _scrollController = ScrollController();
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     authReactionDisposer = autorun((_) {
       if (_progressDialog != null) {
         _progressDialog.hide();

@@ -18,7 +18,15 @@ class MangaGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columnWidth = 150.0;
+    final orientation = MediaQuery.of(context).orientation;
+    final isPortrait = orientation == Orientation.portrait;
+
+    final columnWidth = isPortrait ? 150.0 : 220.0;
+    final childAspectRatio = isPortrait
+        ? MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 0.85)
+        : MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 0.7);
 
     final theme = Theme.of(context);
 
@@ -41,9 +49,7 @@ class MangaGridView extends StatelessWidget {
               maxCrossAxisExtent: columnWidth,
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
-              //childAspectRatio: 0.40,
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 0.85),
+              childAspectRatio: childAspectRatio,
             ),
             itemBuilder: (BuildContext context, int index) {
               var manga = mangas[index];
@@ -62,8 +68,6 @@ class MangaGridView extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Expanded(
-                        //  width: columnWidth,
-                        //   height: 200,
                         child: ExtendedImage.network(
                           manga.coverUrl,
                           fit: BoxFit.fitHeight,
@@ -86,8 +90,7 @@ class MangaGridView extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        //  fit: BoxFit.,
-                        height: 60.4,
+                        height: isPortrait ? 60.4 : 40.4,
                         child: Container(
                           padding: EdgeInsets.all(10),
                           child: Text(

@@ -28,11 +28,6 @@ class _FeedPageState extends State<FeedPage> {
     _unreadKey = PageStorageKey('feed_u');
     _othersKey = PageStorageKey('feed_o');
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     super.initState();
   }
 
