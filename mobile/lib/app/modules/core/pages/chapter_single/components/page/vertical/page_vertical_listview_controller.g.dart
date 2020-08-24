@@ -154,6 +154,22 @@ mixin _$PageVerticalListviewController
     });
   }
 
+  final _$showBarAtom =
+      Atom(name: '_PageVerticalListviewControllerBase.showBar');
+
+  @override
+  bool get showBar {
+    _$showBarAtom.reportRead();
+    return super.showBar;
+  }
+
+  @override
+  set showBar(bool value) {
+    _$showBarAtom.reportWrite(value, super.showBar, () {
+      super.showBar = value;
+    });
+  }
+
   final _$loadImageAsyncAction =
       AsyncAction('_PageVerticalListviewControllerBase.loadImage');
 
@@ -385,7 +401,8 @@ scrollController: ${scrollController},
 olderScrollPosition: ${olderScrollPosition},
 chapter: ${chapter},
 globalKeyByPageIndex: ${globalKeyByPageIndex},
-progressDialog: ${progressDialog}
+progressDialog: ${progressDialog},
+showBar: ${showBar}
     ''';
   }
 }

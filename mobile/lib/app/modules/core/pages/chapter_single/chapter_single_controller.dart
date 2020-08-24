@@ -25,14 +25,16 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
   ObservableFuture<ChapterSingleModel> chapter;
 
   @observable
-  bool showBar = true;
-
-  @observable
   bool chapterReaded;
 
   @computed
   int get currentPage {
     return pageVerticalListviewController.currentPage;
+  }
+
+  @computed
+  bool get showBar {
+    return pageVerticalListviewController.showBar;
   }
 
   _ChapterSingleControllerBase() {
@@ -91,8 +93,9 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
   @action
   Future<void> markChapterAsReaded() async {
     if (chapter.status == FutureStatus.fulfilled && !chapterReaded) {
-      var chapterReadedStore = chapterListReadedStore.chapterStoreById[chapter.value.id];
-      
+      var chapterReadedStore =
+          chapterListReadedStore.chapterStoreById[chapter.value.id];
+
       chapterReaded = await chapterReadedStore.setReaded(true);
     }
   }
