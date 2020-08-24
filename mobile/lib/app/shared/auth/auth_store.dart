@@ -110,9 +110,7 @@ abstract class _AuthStoreBase with Store {
   void _dealWithLogin() {
     if (user != null) {
       status = AuthStatus.authenticated;
-    }
-
-    if (error != null) {
+    } else {
       status = AuthStatus.unauthenticated;
     }
   }
