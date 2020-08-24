@@ -79,8 +79,14 @@ class _PageVerticalListViewState
         height: _adHeight,
         width: width,
         child: AdmobBannerWrapper(
-            adUnitId: AdmobIdsId.CHAPTER_PAGE,
-            adSize: AdmobBannerSize.MEDIUM_RECTANGLE),
+          adUnitId: AdmobIdsId.CHAPTER_PAGE,
+          adSize: AdmobBannerSize.MEDIUM_RECTANGLE,
+          listener: (event, _) {
+            if (event == AdmobAdEvent.loaded) {
+              controller.adLoaded();
+            }
+          },
+        ),
       ),
     );
   }

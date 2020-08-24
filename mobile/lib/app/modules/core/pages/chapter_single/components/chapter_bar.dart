@@ -47,52 +47,57 @@ class ChapterBar extends StatelessWidget {
               : Container(
                   width: 48,
                 ),
-          Row(
-            children: <Widget>[
-              chapterSingleController.currentPage > 0
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.keyboard_arrow_left,
-                      ),
-                      tooltip: 'Página anterior',
-                      onPressed: () {
-                        chapterSingleController.previousPage();
-                      },
-                    )
-                  : Container(
-                      width: 48,
+          Observer(
+            builder: (_) {
+              return Row(
+                children: <Widget>[
+                  chapterSingleController.currentPage > 0
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.keyboard_arrow_left,
+                          ),
+                          tooltip: 'Página anterior',
+                          onPressed: () {
+                            chapterSingleController.previousPage();
+                          },
+                        )
+                      : Container(
+                          width: 48,
+                        ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: 80.0,
                     ),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 80.0,
-                ),
-                child: InkWell(
-                  child: Observer(builder: (_) {
-                    return Text(
-                      '${chapterSingleController.currentPage + 1}/${_chapter.pages.length}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(),
-                    );
-                  }),
-                  onTap: () {
-                    _chapterDialog(context);
-                  },
-                ),
-              ),
-              chapterSingleController.currentPage + 1 < _chapter.pages.length
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.keyboard_arrow_right,
-                      ),
-                      tooltip: 'Próxima página',
-                      onPressed: () {
-                        chapterSingleController.nextPage();
+                    child: InkWell(
+                      child: Observer(builder: (_) {
+                        return Text(
+                          '${chapterSingleController.currentPage + 1}/${_chapter.pages.length}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(),
+                        );
+                      }),
+                      onTap: () {
+                        _chapterDialog(context);
                       },
-                    )
-                  : Container(
-                      width: 48,
                     ),
-            ],
+                  ),
+                  chapterSingleController.currentPage + 1 <
+                          _chapter.pages.length
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.keyboard_arrow_right,
+                          ),
+                          tooltip: 'Próxima página',
+                          onPressed: () {
+                            chapterSingleController.nextPage();
+                          },
+                        )
+                      : Container(
+                          width: 48,
+                        ),
+                ],
+              );
+            },
           ),
           _chapter.nextChapterId != null
               ? IconButton(

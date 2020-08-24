@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quiver/collection.dart';
 import 'package:diagonal_scrollview/diagonal_scrollview.dart';
+import 'package:leitor_manga/app/shared/material_builder.dart'
+    as material_builder;
 
 part 'page_vertical_listview_controller.g.dart';
 
@@ -42,6 +44,9 @@ abstract class _PageVerticalListviewControllerBase with Store {
   @observable
   Map<int, GlobalKey> globalKeyByPageIndex;
 
+  @observable
+  ProgressDialog progressDialog;
+
   AvlTreeSet<ChapterTree> _newAvl() {
     return AvlTreeSet<ChapterTree>(comparator: (a, b) => a.compareTo(b));
   }
@@ -74,28 +79,30 @@ abstract class _PageVerticalListviewControllerBase with Store {
     var dy = offset.dy * -1;
     var qtyPages = chapter.pages.length;
 
-    onScrollNotification(dy);
+    if (dy != olderScrollPosition) {
+      onScrollNotification(dy);
 
-    if (dy > olderScrollPosition &&
-        pagesStore[currentPage].status == PageLoadStatus.NOT_LOADED) {
-      pagesStore[currentPage].setStatus(PageLoadStatus.IN_PROGRESS);
-    } else if (dy > olderScrollPosition &&
-        currentPage + 1 < qtyPages &&
-        pagesStore[currentPage + 1].status == PageLoadStatus.NOT_LOADED) {
-      pagesStore[currentPage + 1].setStatus(PageLoadStatus.IN_PROGRESS);
-    } else if (dy < olderScrollPosition &&
-        currentPage - 1 > 0 &&
-        pagesStore[currentPage - 1].status == PageLoadStatus.NOT_LOADED) {
-      pagesStore[currentPage - 1].setStatus(PageLoadStatus.IN_PROGRESS);
+      if (dy > olderScrollPosition &&
+          pagesStore[currentPage].status == PageLoadStatus.NOT_LOADED) {
+        pagesStore[currentPage].setStatus(PageLoadStatus.IN_PROGRESS);
+      } else if (dy > olderScrollPosition &&
+          currentPage + 1 < qtyPages &&
+          pagesStore[currentPage + 1].status == PageLoadStatus.NOT_LOADED) {
+        pagesStore[currentPage + 1].setStatus(PageLoadStatus.IN_PROGRESS);
+      } else if (dy < olderScrollPosition &&
+          currentPage - 1 > 0 &&
+          pagesStore[currentPage - 1].status == PageLoadStatus.NOT_LOADED) {
+        pagesStore[currentPage - 1].setStatus(PageLoadStatus.IN_PROGRESS);
+      }
+
+      olderScrollPosition = dy;
     }
-
-    olderScrollPosition = dy;
   }
 
   @action
   void onScrollNotification(double dy) {
     var chapterTree = chaptersTree.nearest(ChapterTree(dy, -1),
-        nearestOption: TreeSearch.GREATER_THAN);
+        nearestOption: TreeSearch.NEAREST);
     if (chapterTree != null) {
       currentPage = chapterTree.listIndex;
     }
@@ -139,7 +146,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
-  void recalculateHeightOfPages(Map<int, GlobalKey> globalKeyByPageIndex) {
+  void recalculateHeightOfPages() {
     for (var i = 0; i < chapter.pages.length; i++) {
       var page = chapter.pages[i];
 
@@ -175,18 +182,96 @@ abstract class _PageVerticalListviewControllerBase with Store {
     return completer.future;
   }
 
+  @action
+  Future<void> loadImage(pageNumber) async {
+    var completer = Completer<void>();
+
+    if (pagesStore[pageNumber].status == PageLoadStatus.NOT_LOADED) {
+      pagesStore[pageNumber].status = PageLoadStatus.IN_PROGRESS;
+
+      var checkPageCompleter = Completer<void>();
+      final dispose = when(
+          (_) => pagesStore[pageNumber].status == PageLoadStatus.LOADED, () {
+        checkPageCompleter.complete();
+      });
+
+      await checkPageCompleter.future;
+
+      dispose();
+
+      completer.complete();
+    } else {
+      completer.complete();
+    }
+
+    return completer.future;
+  }
+
+  @action
+  Future<void> _createProgressBar() async {
+    progressDialog = ProgressDialog(material_builder.context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+
+    await progressDialog.show();
+  }
+
+  Future<void> _destroyProgressBar() async {
+    await progressDialog.hide();
+    progressDialog = null;
+  }
+
+  @action
+  Future<void> checkIfPageIsLoaded(int pageNumber, bool showDialog) async {
+    var completerPrincipalPage = Completer<void>();
+    var completer = Completer<void>();
+
+    var loadPreviousPage = pageNumber > 0 &&
+        pagesStore[pageNumber - 1].status == PageLoadStatus.NOT_LOADED;
+
+    var loadNextPage = pageNumber + 1 < chapter.pages.length &&
+        pagesStore[pageNumber + 1].status == PageLoadStatus.NOT_LOADED;
+
+    if (showDialog) {
+      await _createProgressBar();
+    }
+
+    if (loadPreviousPage) {
+      await loadImage(pageNumber - 1);
+    }
+
+    SchedulerBinding.instance.scheduleFrameCallback((_) async {
+      if (loadPreviousPage) {
+        await scrollToPage(pageNumber - 1, updatePageNumber: false);
+      }
+
+      await loadImage(pageNumber);
+      SchedulerBinding.instance.scheduleFrameCallback((_) async {
+        await scrollToPage(pageNumber, updatePageNumber: true);
+        completerPrincipalPage.complete();
+      });
+    });
+
+    unawaited(completerPrincipalPage.future.then((_) async {
+      if (loadNextPage) {
+        unawaited(loadImage(pageNumber + 1));
+      }
+
+      if (showDialog) {
+        await _destroyProgressBar();
+      }
+
+      completer.complete();
+    }));
+
+    return completer.future;
+  }
+
   Future<int> goToPage(int pageNumber, bool showDialog) async {
     var completer = Completer<int>();
 
     SchedulerBinding.instance.scheduleFrameCallback((_) {
       scrollToPage(pageNumber).then((_) async {
-        // if (checkIfPageIsLoaded != null) {
-        //   var checkPageCompleter = Completer<void>();
-        //   checkIfPageIsLoaded(pageNumber, showDialog, () {
-        //     checkPageCompleter.complete();
-        //   });
-        //   await checkPageCompleter.future;
-        // }
+        await checkIfPageIsLoaded(pageNumber, showDialog);
 
         SchedulerBinding.instance.scheduleFrameCallback((_) async {
           chaptersTree.clear();
@@ -211,6 +296,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
     return goToPage(currentPage - 1, true);
   }
 
+  @action
   void changeZoom(double zoom) {
     scrollController.moveTo(
       scale: zoom,
@@ -218,12 +304,20 @@ abstract class _PageVerticalListviewControllerBase with Store {
     );
   }
 
+  @action
   void zoomIn() {
     changeZoom(scrollController.getScale() + 1);
   }
 
+  @action
   void zoomOut() {
     changeZoom(scrollController.getScale() - 1);
+  }
+
+  @action
+  void adLoaded() {
+    recalculateHeightOfPages();
+    rebuildChaptersMap();
   }
 }
 

@@ -138,6 +138,48 @@ mixin _$PageVerticalListviewController
     });
   }
 
+  final _$progressDialogAtom =
+      Atom(name: '_PageVerticalListviewControllerBase.progressDialog');
+
+  @override
+  ProgressDialog get progressDialog {
+    _$progressDialogAtom.reportRead();
+    return super.progressDialog;
+  }
+
+  @override
+  set progressDialog(ProgressDialog value) {
+    _$progressDialogAtom.reportWrite(value, super.progressDialog, () {
+      super.progressDialog = value;
+    });
+  }
+
+  final _$loadImageAsyncAction =
+      AsyncAction('_PageVerticalListviewControllerBase.loadImage');
+
+  @override
+  Future<void> loadImage(dynamic pageNumber) {
+    return _$loadImageAsyncAction.run(() => super.loadImage(pageNumber));
+  }
+
+  final _$_createProgressBarAsyncAction =
+      AsyncAction('_PageVerticalListviewControllerBase._createProgressBar');
+
+  @override
+  Future<void> _createProgressBar() {
+    return _$_createProgressBarAsyncAction
+        .run(() => super._createProgressBar());
+  }
+
+  final _$checkIfPageIsLoadedAsyncAction =
+      AsyncAction('_PageVerticalListviewControllerBase.checkIfPageIsLoaded');
+
+  @override
+  Future<void> checkIfPageIsLoaded(int pageNumber, bool showDialog) {
+    return _$checkIfPageIsLoadedAsyncAction
+        .run(() => super.checkIfPageIsLoaded(pageNumber, showDialog));
+  }
+
   final _$nextPageAsyncAction =
       AsyncAction('_PageVerticalListviewControllerBase.nextPage');
 
@@ -259,14 +301,13 @@ mixin _$PageVerticalListviewController
   }
 
   @override
-  void recalculateHeightOfPages(
-      Map<int, GlobalKey<State<StatefulWidget>>> globalKeyByPageIndex) {
+  void recalculateHeightOfPages() {
     final _$actionInfo =
         _$_PageVerticalListviewControllerBaseActionController.startAction(
             name:
                 '_PageVerticalListviewControllerBase.recalculateHeightOfPages');
     try {
-      return super.recalculateHeightOfPages(globalKeyByPageIndex);
+      return super.recalculateHeightOfPages();
     } finally {
       _$_PageVerticalListviewControllerBaseActionController
           .endAction(_$actionInfo);
@@ -286,6 +327,54 @@ mixin _$PageVerticalListviewController
   }
 
   @override
+  void changeZoom(double zoom) {
+    final _$actionInfo = _$_PageVerticalListviewControllerBaseActionController
+        .startAction(name: '_PageVerticalListviewControllerBase.changeZoom');
+    try {
+      return super.changeZoom(zoom);
+    } finally {
+      _$_PageVerticalListviewControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomIn() {
+    final _$actionInfo = _$_PageVerticalListviewControllerBaseActionController
+        .startAction(name: '_PageVerticalListviewControllerBase.zoomIn');
+    try {
+      return super.zoomIn();
+    } finally {
+      _$_PageVerticalListviewControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomOut() {
+    final _$actionInfo = _$_PageVerticalListviewControllerBaseActionController
+        .startAction(name: '_PageVerticalListviewControllerBase.zoomOut');
+    try {
+      return super.zoomOut();
+    } finally {
+      _$_PageVerticalListviewControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void adLoaded() {
+    final _$actionInfo = _$_PageVerticalListviewControllerBaseActionController
+        .startAction(name: '_PageVerticalListviewControllerBase.adLoaded');
+    try {
+      return super.adLoaded();
+    } finally {
+      _$_PageVerticalListviewControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 height: ${height},
@@ -295,7 +384,8 @@ chaptersTree: ${chaptersTree},
 scrollController: ${scrollController},
 olderScrollPosition: ${olderScrollPosition},
 chapter: ${chapter},
-globalKeyByPageIndex: ${globalKeyByPageIndex}
+globalKeyByPageIndex: ${globalKeyByPageIndex},
+progressDialog: ${progressDialog}
     ''';
   }
 }
