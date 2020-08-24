@@ -42,7 +42,7 @@ class _PageVerticalListViewState
 
     return DiagonalScrollView(
       minScale: 1,
-      maxScale: 3,
+      maxScale: 5,
       enableZoom: true,
       onCreated: controller.setScrollController,
       onScroll: controller.scrollChanged,
