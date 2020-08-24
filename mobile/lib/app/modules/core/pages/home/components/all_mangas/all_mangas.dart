@@ -13,8 +13,6 @@ class AllMangas extends StatefulWidget {
   final String mangaName;
   final int categoryId;
 
-  final allMangasStore = Modular.get<AllMangasStore>();
-
   AllMangas({
     Key key,
     bool showCount,
@@ -28,10 +26,12 @@ class AllMangas extends StatefulWidget {
 }
 
 class _AllMangasState extends State<AllMangas> {
+  final allMangasStore = Modular.get<AllMangasStore>();
+
   @override
   void initState() {
-    widget.allMangasStore.init(widget.mangaName, categoryId: widget.categoryId);
-    widget.allMangasStore.loadItems();
+    allMangasStore.init(widget.mangaName, categoryId: widget.categoryId);
+    allMangasStore.loadItems();
     super.initState();
   }
 
@@ -41,18 +41,18 @@ class _AllMangasState extends State<AllMangas> {
 
     return Observer(
       builder: (_) {
-        if (widget.allMangasStore.hasError) {
+        if (allMangasStore.hasError) {
           return InkWell(
             child: Center(
               child: Text('Erro! Clique para tentar novamente.'),
             ),
             onTap: () {
-              widget.allMangasStore.loadItems();
+              allMangasStore.loadItems();
             },
           );
         }
 
-        if (widget.allMangasStore.loading) {
+        if (allMangasStore.loading) {
           return Center(child: CircularProgressIndicator());
         }
 
@@ -65,7 +65,7 @@ class _AllMangasState extends State<AllMangas> {
                   Expanded(
                     child: Visibility(
                       child: Text(
-                        '${widget.allMangasStore.qtyPages} mangás',
+                        '${allMangasStore.qtyPages} mangás',
                         style: theme.textTheme.subtitle1,
                       ),
                       visible: widget.showCount,
@@ -78,7 +78,7 @@ class _AllMangasState extends State<AllMangas> {
                         Padding(
                           padding: EdgeInsets.only(right: 5),
                           child: MangaSort(
-                            sortableStore: widget.allMangasStore,
+                            sortableStore: allMangasStore,
                             onSearch: widget.mangaName != null,
                           ),
                         ),
@@ -87,7 +87,7 @@ class _AllMangasState extends State<AllMangas> {
                           child: InkWell(
                             child: Icon(Icons.refresh),
                             onTap: () {
-                              widget.allMangasStore.loadItems();
+                              allMangasStore.loadItems();
                             },
                           ),
                         ),
@@ -100,10 +100,10 @@ class _AllMangasState extends State<AllMangas> {
             Expanded(
               child: InfiniteScroll<MangaGridViewModel>(
                 color: theme.accentColor,
-                length: widget.allMangasStore.items.length,
-                limit: widget.allMangasStore.qtyPages,
-                pageableStore: widget.allMangasStore,
-                child: MangaGridView(mangas: widget.allMangasStore.items),
+                length: allMangasStore.items.length,
+                limit: allMangasStore.qtyPages,
+                pageableStore: allMangasStore,
+                child: MangaGridView(mangas: allMangasStore.items),
               ),
             ),
           ],
