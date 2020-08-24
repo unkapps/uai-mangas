@@ -16,6 +16,12 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
       (_$currentPageComputed ??= Computed<int>(() => super.currentPage,
               name: '_ChapterSingleControllerBase.currentPage'))
           .value;
+  Computed<bool> _$showBarComputed;
+
+  @override
+  bool get showBar => (_$showBarComputed ??= Computed<bool>(() => super.showBar,
+          name: '_ChapterSingleControllerBase.showBar'))
+      .value;
   Computed<String> _$pageTitleComputed;
 
   @override
@@ -43,21 +49,6 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
   set chapter(ObservableFuture<ChapterSingleModel> value) {
     _$chapterAtom.reportWrite(value, super.chapter, () {
       super.chapter = value;
-    });
-  }
-
-  final _$showBarAtom = Atom(name: '_ChapterSingleControllerBase.showBar');
-
-  @override
-  bool get showBar {
-    _$showBarAtom.reportRead();
-    return super.showBar;
-  }
-
-  @override
-  set showBar(bool value) {
-    _$showBarAtom.reportWrite(value, super.showBar, () {
-      super.showBar = value;
     });
   }
 
@@ -155,9 +146,9 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
   String toString() {
     return '''
 chapter: ${chapter},
-showBar: ${showBar},
 chapterReaded: ${chapterReaded},
 currentPage: ${currentPage},
+showBar: ${showBar},
 pageTitle: ${pageTitle},
 barOpacity: ${barOpacity}
     ''';

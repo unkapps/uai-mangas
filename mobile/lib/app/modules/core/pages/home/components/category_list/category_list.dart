@@ -52,15 +52,6 @@ class CategoryList extends StatelessWidget {
                   ),
                   highlightedBorderColor: theme.accentColor,
                   onPressed: () {
-                    var t = Routes.CATEGORY_SINGLE
-                        .replaceAll(
-                          ':categoryId',
-                          category.id.toString(),
-                        )
-                        .replaceAll(
-                          ':categoryName',
-                          category.name,
-                        );
                     Modular.link.pushNamed(Routes.CATEGORY_SINGLE
                         .replaceAll(
                           ':categoryId',

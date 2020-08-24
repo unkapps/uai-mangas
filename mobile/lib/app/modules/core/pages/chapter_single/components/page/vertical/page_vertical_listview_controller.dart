@@ -47,6 +47,9 @@ abstract class _PageVerticalListviewControllerBase with Store {
   @observable
   ProgressDialog progressDialog;
 
+  @observable
+  bool showBar = true;
+
   AvlTreeSet<ChapterTree> _newAvl() {
     return AvlTreeSet<ChapterTree>(comparator: (a, b) => a.compareTo(b));
   }
@@ -94,6 +97,8 @@ abstract class _PageVerticalListviewControllerBase with Store {
           pagesStore[currentPage - 1].status == PageLoadStatus.NOT_LOADED) {
         pagesStore[currentPage - 1].setStatus(PageLoadStatus.IN_PROGRESS);
       }
+
+      showBar = olderScrollPosition > dy;
 
       olderScrollPosition = dy;
     }
