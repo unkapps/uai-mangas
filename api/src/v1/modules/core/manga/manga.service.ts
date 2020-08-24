@@ -21,12 +21,19 @@ export class MangaService {
     return this.mangaRepository.getLastMangasWithUpdates(size);
   }
 
-  getAllMangas(size?: number, offset?: number, sortingDto?: SortingDto, name?: string, categoryId?: number): Promise<PageableDto<AllMangaDto>> {
+  getAllMangas(
+    size?: number,
+    offset?: number,
+    sortingDto?: SortingDto,
+    name?: string,
+    categoryId?: number,
+  ): Promise<PageableDto<AllMangaDto>> {
     return this.mangaRepository.getAllMangas(true, size, offset, sortingDto, name, categoryId);
   }
 
   async loadMore(size?: number, offset?: number, sortingDto?: SortingDto, name?: string, categoryId?: number): Promise<AllMangaDto[]> {
-    const pageableDto: PageableDto<AllMangaDto> = await this.mangaRepository.getAllMangas(false, size, offset, sortingDto, name, categoryId);
+    const pageableDto: PageableDto<AllMangaDto> = await this.mangaRepository.getAllMangas(false, size, offset,
+      sortingDto, name, categoryId);
 
     return pageableDto.data;
   }

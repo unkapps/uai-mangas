@@ -26,6 +26,9 @@ module.exports = {
     "no-empty": "off",
     "max-len": ["error", { "code": 140 }],
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/1824
+    "no-useless-escape": "off",
   },
 };
