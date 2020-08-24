@@ -83,6 +83,14 @@ mixin _$ChapterReadedStore on _ChapterReadedStoreBase, Store {
     });
   }
 
+  final _$setReadedAsyncAction =
+      AsyncAction('_ChapterReadedStoreBase.setReaded');
+
+  @override
+  Future<bool> setReaded(dynamic newReaded) {
+    return _$setReadedAsyncAction.run(() => super.setReaded(newReaded));
+  }
+
   final _$toggleReadedAsyncAction =
       AsyncAction('_ChapterReadedStoreBase.toggleReaded');
 
