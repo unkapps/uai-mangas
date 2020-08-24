@@ -10,9 +10,15 @@ import LastMangaDto from './dto/last-manga.dto';
 import FavoriteMangaDto from './dto/favorite-manga.dto';
 import AllMangaDto from './dto/all-manga.dto';
 
+export const MAX_SIZE_LAST_MANGA_WIH_UPDATE = 60;
+
 @EntityRepository(Manga)
 export class MangaRepository extends Repository<Manga> {
-  getLastMangasWithUpdates(size = 10): Promise<LastMangaDto[]> {
+  async getLastMangasWithUpdates(size = 10, offset = 0): Promise<LastMangaDto[]> {
+    if (offset > MAX_SIZE_LAST_MANGA_WIH_UPDATE) {
+      return [];
+    }
+
     return this.manager.getRepository(Chapter)
       .createQueryBuilder('chapter')
       .select('manga.id', 'id')
@@ -24,6 +30,7 @@ export class MangaRepository extends Repository<Manga> {
       .innerJoin('chapter.manga', 'manga')
       .orderBy('chapter.date', 'DESC')
       .limit(size)
+      .offset(offset)
       .getRawMany();
   }
 

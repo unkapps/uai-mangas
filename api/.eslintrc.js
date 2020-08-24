@@ -30,5 +30,6 @@ module.exports = {
     "indent": "off",
     "@typescript-eslint/indent": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/1824
     "no-useless-escape": "off",
+    "no-param-reassign": "off",
   },
 };

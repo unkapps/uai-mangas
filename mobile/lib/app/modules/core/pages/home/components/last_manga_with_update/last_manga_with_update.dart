@@ -5,6 +5,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/last_manga_with_update/last_manga_with_update_store.dart';
 import 'package:leitor_manga/app/modules/core/shared/manga_listview/manga_listview.dart';
+import 'package:leitor_manga/app/modules/core/shared/manga_listview/manga_listview_model.dart';
+import 'package:leitor_manga/app/shared/pageable/infinite_scroll.dart';
 
 class LastMangaWithUpdate extends StatefulWidget {
   LastMangaWithUpdate({Key key}) : super(key: key);
@@ -19,11 +21,13 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
   @override
   void initState() {
     super.initState();
-    lastMangaWithUpdateStore.loadMangas();
+    lastMangaWithUpdateStore.loadItems();
   }
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     return Observer(
       builder: (_) {
         if (lastMangaWithUpdateStore.hasError) {
@@ -32,7 +36,7 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
               child: Text('Erro! Clique para tentar novamente.'),
             ),
             onTap: () {
-              lastMangaWithUpdateStore.loadMangas();
+              lastMangaWithUpdateStore.loadItems();
             },
           );
         }
@@ -41,7 +45,13 @@ class _LastMangaWithUpdateState extends State<LastMangaWithUpdate> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return MangaListView(mangas: lastMangaWithUpdateStore.mangas);
+        return InfiniteScroll<MangaListViewModel>(
+          color: theme.accentColor,
+          length: lastMangaWithUpdateStore.items.length,
+          limit: 60,
+          pageableStore: lastMangaWithUpdateStore,
+          child: MangaListView(mangas: lastMangaWithUpdateStore.items),
+        );
       },
     );
   }

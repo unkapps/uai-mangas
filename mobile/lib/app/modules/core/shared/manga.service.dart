@@ -23,14 +23,20 @@ class MangaService {
     return null;
   }
 
-  Future<List<MangaListViewModel>> getLastMangaWithUpdate() async {
+  Future<List<MangaListViewModel>> getLastMangaWithUpdate({int offset}) async {
     final dio = await DioConfig.withoutToken();
     try {
+      var queryParameters = {
+        'size': 8,
+      };
+
+      if (offset != null) {
+        queryParameters['offset'] = offset;
+      }
+
       var res = await dio.get(
         '/api/v1/manga/last',
-        queryParameters: {
-          'size': 6,
-        },
+        queryParameters: queryParameters,
       );
 
       if (res.statusCode == 200) {
