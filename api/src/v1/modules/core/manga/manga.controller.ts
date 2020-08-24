@@ -25,8 +25,11 @@ export class MangaController {
   constructor(private readonly mangaService: MangaService) { }
 
   @Get('last')
-  findLast(@Query('size') size?: number): Promise<LastMangaDto[]> {
-    return this.mangaService.getLastMangasWithUpdates(size);
+  findLast(
+    @Query('size') size?: number,
+    @Query('offset') offset?: number,
+    ): Promise<LastMangaDto[]> {
+    return this.mangaService.getLastMangasWithUpdates(size, offset);
   }
 
   @Get('')

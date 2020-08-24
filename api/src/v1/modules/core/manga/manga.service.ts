@@ -17,8 +17,11 @@ export class MangaService {
     private firebaseConfig: FirebaseConfig,
   ) { }
 
-  getLastMangasWithUpdates(size?: number): Promise<LastMangaDto[]> {
-    return this.mangaRepository.getLastMangasWithUpdates(size);
+  getLastMangasWithUpdates(
+    size?: number,
+    offset?: number,
+  ): Promise<LastMangaDto[]> {
+    return this.mangaRepository.getLastMangasWithUpdates(size, offset);
   }
 
   getAllMangas(

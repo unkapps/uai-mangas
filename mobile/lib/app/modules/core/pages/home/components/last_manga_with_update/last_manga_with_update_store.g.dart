@@ -16,19 +16,26 @@ mixin _$LastMangaWithUpdateStore on _LastMangaWithUpdateStoreBase, Store {
       (_$hasErrorComputed ??= Computed<bool>(() => super.hasError,
               name: '_LastMangaWithUpdateStoreBase.hasError'))
           .value;
-
-  final _$mangasAtom = Atom(name: '_LastMangaWithUpdateStoreBase.mangas');
+  Computed<bool> _$hasErrorOnGetMoreItemsComputed;
 
   @override
-  ObservableList<MangaListViewModel> get mangas {
-    _$mangasAtom.reportRead();
-    return super.mangas;
+  bool get hasErrorOnGetMoreItems => (_$hasErrorOnGetMoreItemsComputed ??=
+          Computed<bool>(() => super.hasErrorOnGetMoreItems,
+              name: '_LastMangaWithUpdateStoreBase.hasErrorOnGetMoreItems'))
+      .value;
+
+  final _$itemsAtom = Atom(name: '_LastMangaWithUpdateStoreBase.items');
+
+  @override
+  ObservableList<MangaListViewModel> get items {
+    _$itemsAtom.reportRead();
+    return super.items;
   }
 
   @override
-  set mangas(ObservableList<MangaListViewModel> value) {
-    _$mangasAtom.reportWrite(value, super.mangas, () {
-      super.mangas = value;
+  set items(ObservableList<MangaListViewModel> value) {
+    _$itemsAtom.reportWrite(value, super.items, () {
+      super.items = value;
     });
   }
 
@@ -62,21 +69,64 @@ mixin _$LastMangaWithUpdateStore on _LastMangaWithUpdateStoreBase, Store {
     });
   }
 
-  final _$loadMangasAsyncAction =
-      AsyncAction('_LastMangaWithUpdateStoreBase.loadMangas');
+  final _$errorOnGetMoreItemsAtom =
+      Atom(name: '_LastMangaWithUpdateStoreBase.errorOnGetMoreItems');
 
   @override
-  Future<void> loadMangas() {
-    return _$loadMangasAsyncAction.run(() => super.loadMangas());
+  Object get errorOnGetMoreItems {
+    _$errorOnGetMoreItemsAtom.reportRead();
+    return super.errorOnGetMoreItems;
+  }
+
+  @override
+  set errorOnGetMoreItems(Object value) {
+    _$errorOnGetMoreItemsAtom.reportWrite(value, super.errorOnGetMoreItems, () {
+      super.errorOnGetMoreItems = value;
+    });
+  }
+
+  final _$loadingMoreItemsAtom =
+      Atom(name: '_LastMangaWithUpdateStoreBase.loadingMoreItems');
+
+  @override
+  bool get loadingMoreItems {
+    _$loadingMoreItemsAtom.reportRead();
+    return super.loadingMoreItems;
+  }
+
+  @override
+  set loadingMoreItems(bool value) {
+    _$loadingMoreItemsAtom.reportWrite(value, super.loadingMoreItems, () {
+      super.loadingMoreItems = value;
+    });
+  }
+
+  final _$loadItemsAsyncAction =
+      AsyncAction('_LastMangaWithUpdateStoreBase.loadItems');
+
+  @override
+  Future<void> loadItems() {
+    return _$loadItemsAsyncAction.run(() => super.loadItems());
+  }
+
+  final _$loadMoreItemsAsyncAction =
+      AsyncAction('_LastMangaWithUpdateStoreBase.loadMoreItems');
+
+  @override
+  Future<void> loadMoreItems() {
+    return _$loadMoreItemsAsyncAction.run(() => super.loadMoreItems());
   }
 
   @override
   String toString() {
     return '''
-mangas: ${mangas},
+items: ${items},
 error: ${error},
 loading: ${loading},
-hasError: ${hasError}
+errorOnGetMoreItems: ${errorOnGetMoreItems},
+loadingMoreItems: ${loadingMoreItems},
+hasError: ${hasError},
+hasErrorOnGetMoreItems: ${hasErrorOnGetMoreItems}
     ''';
   }
 }

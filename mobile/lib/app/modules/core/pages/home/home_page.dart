@@ -91,7 +91,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return TabBarView(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: LastMangaWithUpdate(key: _lastMangaWithUpdateKey),
                   ),
                   Container(
@@ -113,8 +113,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
             if (_lastQuery != controller.query) {
               _searchKey = GlobalKey();
-              _allMangaKey =
-                  PageStorageKey(_allMangaKey.value + '2');
+              _allMangaKey = PageStorageKey(_allMangaKey.value + '2');
             }
 
             _lastQuery = controller.query;
