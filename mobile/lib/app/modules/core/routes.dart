@@ -6,4 +6,5 @@ class Routes {
   static const FEED = '/feed';
   static const MANGA_SINGLE = '/manga/:mangaId';
   static const CHAPTER_SINGLE = '/manga/:mangaId/c/:chapterId';
+  static const CATEGORY_SINGLE = '/category/:categoryName/:categoryId';
 }

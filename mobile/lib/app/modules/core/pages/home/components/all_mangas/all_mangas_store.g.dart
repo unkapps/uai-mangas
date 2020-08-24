@@ -54,6 +54,21 @@ mixin _$AllMangasStore on _AllMangasStoreBase, Store {
     });
   }
 
+  final _$categoryIdAtom = Atom(name: '_AllMangasStoreBase.categoryId');
+
+  @override
+  int get categoryId {
+    _$categoryIdAtom.reportRead();
+    return super.categoryId;
+  }
+
+  @override
+  set categoryId(int value) {
+    _$categoryIdAtom.reportWrite(value, super.categoryId, () {
+      super.categoryId = value;
+    });
+  }
+
   final _$errorAtom = Atom(name: '_AllMangasStoreBase.error');
 
   @override
@@ -142,11 +157,11 @@ mixin _$AllMangasStore on _AllMangasStoreBase, Store {
       ActionController(name: '_AllMangasStoreBase');
 
   @override
-  void init(String mangaName) {
+  void init(String mangaName, {int categoryId}) {
     final _$actionInfo = _$_AllMangasStoreBaseActionController.startAction(
         name: '_AllMangasStoreBase.init');
     try {
-      return super.init(mangaName);
+      return super.init(mangaName, categoryId: categoryId);
     } finally {
       _$_AllMangasStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -168,6 +183,7 @@ mixin _$AllMangasStore on _AllMangasStoreBase, Store {
     return '''
 items: ${items},
 qtyPages: ${qtyPages},
+categoryId: ${categoryId},
 error: ${error},
 loading: ${loading},
 errorOnGetMoreItems: ${errorOnGetMoreItems},

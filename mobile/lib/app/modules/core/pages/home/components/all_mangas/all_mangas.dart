@@ -11,6 +11,7 @@ import 'package:leitor_manga/app/shared/pageable/infinite_scroll.dart';
 class AllMangas extends StatefulWidget {
   final bool showCount;
   final String mangaName;
+  final int categoryId;
 
   final allMangasStore = Modular.get<AllMangasStore>();
 
@@ -18,6 +19,7 @@ class AllMangas extends StatefulWidget {
     Key key,
     bool showCount,
     this.mangaName,
+    this.categoryId,
   })  : showCount = showCount ?? false,
         super(key: key);
 
@@ -28,7 +30,7 @@ class AllMangas extends StatefulWidget {
 class _AllMangasState extends State<AllMangas> {
   @override
   void initState() {
-    widget.allMangasStore.init(widget.mangaName);
+    widget.allMangasStore.init(widget.mangaName, categoryId: widget.categoryId);
     widget.allMangasStore.loadItems();
     super.initState();
   }

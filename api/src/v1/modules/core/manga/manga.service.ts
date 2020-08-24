@@ -25,8 +25,8 @@ export class MangaService {
     return this.mangaRepository.getAllMangas(true, size, offset, sortingDto, name, categoryId);
   }
 
-  async loadMore(size?: number, offset?: number, sortingDto?: SortingDto, name?: string): Promise<AllMangaDto[]> {
-    const pageableDto: PageableDto<AllMangaDto> = await this.mangaRepository.getAllMangas(false, size, offset, sortingDto, name);
+  async loadMore(size?: number, offset?: number, sortingDto?: SortingDto, name?: string, categoryId?: number): Promise<AllMangaDto[]> {
+    const pageableDto: PageableDto<AllMangaDto> = await this.mangaRepository.getAllMangas(false, size, offset, sortingDto, name, categoryId);
 
     return pageableDto.data;
   }
