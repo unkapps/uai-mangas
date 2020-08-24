@@ -37,17 +37,24 @@ abstract class _ChapterReadedStoreBase with Store {
   }
 
   @action
-  Future<void> toggleReaded() async {
+  Future<bool> setReaded(newReaded) async {
     error = null;
     loading = true;
 
     try {
-      readed = await chapterService.setChapterReaded(chapterId, !readed);
+      readed = await chapterService.setChapterReaded(chapterId, newReaded);
       unawaited(feedStore.load());
     } catch (error) {
       this.error = error;
     }
 
     loading = false;
+
+    return readed;
+  }
+
+  @action
+  Future<void> toggleReaded() async {
+    return setReaded(!readed);
   }
 }

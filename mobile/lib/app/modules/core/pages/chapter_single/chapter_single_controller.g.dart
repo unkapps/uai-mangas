@@ -85,6 +85,15 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
     return _$loadChapterAsyncAction.run(() => super.loadChapter(chapterId));
   }
 
+  final _$markChapterAsReadedAsyncAction =
+      AsyncAction('_ChapterSingleControllerBase.markChapterAsReaded');
+
+  @override
+  Future<void> markChapterAsReaded() {
+    return _$markChapterAsReadedAsyncAction
+        .run(() => super.markChapterAsReaded());
+  }
+
   final _$goToPageAsyncAction =
       AsyncAction('_ChapterSingleControllerBase.goToPage');
 
@@ -114,17 +123,6 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
         .startAction(name: '_ChapterSingleControllerBase.previousPage');
     try {
       return super.previousPage();
-    } finally {
-      _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void markChapterAsReaded() {
-    final _$actionInfo = _$_ChapterSingleControllerBaseActionController
-        .startAction(name: '_ChapterSingleControllerBase.markChapterAsReaded');
-    try {
-      return super.markChapterAsReaded();
     } finally {
       _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
     }
