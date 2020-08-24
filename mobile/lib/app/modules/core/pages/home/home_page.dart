@@ -45,11 +45,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     _categoriesKey = PageStorageKey('c');
     _searchKey = GlobalKey();
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     super.initState();
   }
 
