@@ -1,4 +1,4 @@
-## 2.0.0 (24/08/2020)
+## 2.0.0 (25/08/2020)
 - Adicionar página para visualizar categorias. Simmmm! **Categorias**. Vocês tanto pediram e nós escutamos :D
 - Adicionar modo de leitura horizontal
 - Exibir até 60 mangás na aba "recente" da página inicial
