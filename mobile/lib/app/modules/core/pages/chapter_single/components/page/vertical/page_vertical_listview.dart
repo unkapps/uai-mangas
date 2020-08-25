@@ -11,6 +11,7 @@ import 'package:leitor_manga/app/shared/admob/admob_ads_id.dart';
 import 'package:leitor_manga/app/shared/admob/admob_banner_wrapper.dart';
 
 class PageVerticalListView extends StatefulWidget implements IPageListView {
+  @override
   final ChapterSingleModel chapter;
 
   PageVerticalListView({Key key, @required this.chapter}) : super(key: key);

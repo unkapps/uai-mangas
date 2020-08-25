@@ -4,8 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/chapter_bar.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_interface.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/vertical/page_vertical_listview.dart';
+import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_controller_interface.dart';
 import 'package:mobx/mobx.dart';
 
 class ChapterSinglePage extends StatefulWidget {
@@ -38,6 +37,19 @@ class _ChapterSinglePageState
         title: Observer(builder: (_) {
           return Text(controller.pageTitle);
         }),
+        actions: [
+          Observer(
+            builder: (_) {
+              return IconButton(
+                icon: ImageIcon(
+                  AssetImage(controller.readingMode.assetUrl),
+                ),
+                tooltip: controller.readingMode.name,
+                onPressed: controller.toggleReadingMode,
+              );
+            },
+          ),
+        ],
       ),
       body: Observer(
         builder: (_) {
@@ -72,7 +84,8 @@ class _ChapterSinglePageState
   }
 
   Widget _buildSuccess(BuildContext context, ChapterSingleModel chapter) {
-    IPageListView pageListView = PageVerticalListView(
+    var pageListView = PageListViewUtils.getListViewInstance(
+      controller.readingMode,
       chapter: chapter,
     );
 

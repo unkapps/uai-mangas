@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
+import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_controller_interface.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pedantic/pedantic.dart';
@@ -19,14 +20,18 @@ class PageVerticalListviewController = _PageVerticalListviewControllerBase
 
 const double opacityChapterBar = 0.8;
 
-abstract class _PageVerticalListviewControllerBase with Store {
+abstract class _PageVerticalListviewControllerBase
+    with Store
+    implements IPageListViewController {
   @observable
   double height;
 
   @observable
+  @override
   int currentPage = 0;
 
   @observable
+  @override
   List<PageStore> pagesStore;
 
   @observable
@@ -39,6 +44,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   double olderScrollPosition;
 
   @observable
+  @override
   ChapterSingleModel chapter;
 
   @observable
@@ -48,6 +54,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   ProgressDialog progressDialog;
 
   @observable
+  @override
   bool showBar = true;
 
   AvlTreeSet<ChapterTree> _newAvl() {
@@ -55,6 +62,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   void init(ChapterSingleModel chapter) {
     height = 0;
     olderScrollPosition = 0;
@@ -73,6 +81,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   void setPagesStore(List<PageStore> pagesStore) {
     this.pagesStore = pagesStore;
   }
@@ -165,6 +174,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   Future<void> scrollToPage(int pageNumber, {updatePageNumber = true}) {
     var completer = Completer<void>();
     SchedulerBinding.instance.scheduleFrameCallback((_) {
@@ -188,6 +198,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   Future<void> loadImage(pageNumber) async {
     var completer = Completer<void>();
 
@@ -271,6 +282,7 @@ abstract class _PageVerticalListviewControllerBase with Store {
     return completer.future;
   }
 
+  @override
   Future<int> goToPage(int pageNumber, bool showDialog) async {
     var completer = Completer<int>();
 
@@ -292,16 +304,19 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   Future<int> nextPage() async {
     return goToPage(currentPage + 1, true);
   }
 
   @action
+  @override
   Future<int> previousPage() async {
     return goToPage(currentPage - 1, true);
   }
 
   @action
+  @override
   void changeZoom(double zoom) {
     scrollController.moveTo(
       scale: zoom,
@@ -310,11 +325,13 @@ abstract class _PageVerticalListviewControllerBase with Store {
   }
 
   @action
+  @override
   void zoomIn() {
     changeZoom(scrollController.getScale() + 1);
   }
 
   @action
+  @override
   void zoomOut() {
     changeZoom(scrollController.getScale() - 1);
   }
