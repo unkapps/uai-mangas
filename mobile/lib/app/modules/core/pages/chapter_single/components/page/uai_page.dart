@@ -7,8 +7,16 @@ import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/pa
 class UaiPage extends StatelessWidget {
   final PageStore pageStore;
   final int index;
+  final bool allowZoom;
+  final double initialZoom;
 
-  const UaiPage({Key key, @required this.pageStore, @required this.index}) : super(key: key);
+  const UaiPage({
+    Key key,
+    @required this.pageStore,
+    @required this.index,
+    this.allowZoom = false,
+    this.initialZoom = 1.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +38,46 @@ class UaiPage extends StatelessWidget {
       pageStore.page.imageUrl,
       fit: BoxFit.fitWidth,
       width: width,
-      mode: ExtendedImageMode.none,
+      mode: allowZoom ? ExtendedImageMode.gesture : ExtendedImageMode.none,
+      initGestureConfigHandler: allowZoom
+          ? (state) {
+              return GestureConfig(
+                minScale: 1,
+                animationMinScale: 0.7,
+                maxScale: 5.0,
+                animationMaxScale: 5.5,
+                speed: 1.0,
+                inertialSpeed: 100.0,
+                initialScale: initialZoom,
+                inPageView: allowZoom,
+                initialAlignment: InitialAlignment.center,
+                cacheGesture: false,
+              );
+            }
+          : null,
       cache: false,
+      
       clearMemoryCacheIfFailed: true,
       retries: 0,
       timeLimit: Duration(seconds: 5),
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.completed:
-          SchedulerBinding.instance.scheduleFrameCallback((_) {
-            pageStore.setStatus(PageLoadStatus.LOADED, index: index);
-          });
+            SchedulerBinding.instance.scheduleFrameCallback((_) {
+              pageStore.setStatus(PageLoadStatus.LOADED, index: index);
+            });
+
+            if (allowZoom) {
+              return null;
+            }
+
             return ExtendedRawImage(
               image: state.extendedImageInfo?.image,
             );
           case LoadState.failed:
-           SchedulerBinding.instance.scheduleFrameCallback((_) {
-             pageStore.setStatus(PageLoadStatus.LOADED, index: index);
-           });
+            SchedulerBinding.instance.scheduleFrameCallback((_) {
+              pageStore.setStatus(PageLoadStatus.LOADED, index: index);
+            });
             return GestureDetector(
               child: Column(
                 children: <Widget>[
@@ -68,9 +98,9 @@ class UaiPage extends StatelessWidget {
               },
             );
           case LoadState.loading:
-           SchedulerBinding.instance.scheduleFrameCallback((_) {
-            pageStore.setStatus(PageLoadStatus.IN_PROGRESS, index: index);
-           });
+            SchedulerBinding.instance.scheduleFrameCallback((_) {
+              pageStore.setStatus(PageLoadStatus.IN_PROGRESS, index: index);
+            });
             return _getProgressBar(pageStore.page.height);
           default:
             return null;

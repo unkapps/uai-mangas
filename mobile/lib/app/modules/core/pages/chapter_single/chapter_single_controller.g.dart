@@ -37,6 +37,23 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
               name: '_ChapterSingleControllerBase.barOpacity'))
           .value;
 
+  final _$pageListViewControllerAtom =
+      Atom(name: '_ChapterSingleControllerBase.pageListViewController');
+
+  @override
+  IPageListViewController get pageListViewController {
+    _$pageListViewControllerAtom.reportRead();
+    return super.pageListViewController;
+  }
+
+  @override
+  set pageListViewController(IPageListViewController value) {
+    _$pageListViewControllerAtom
+        .reportWrite(value, super.pageListViewController, () {
+      super.pageListViewController = value;
+    });
+  }
+
   final _$chapterAtom = Atom(name: '_ChapterSingleControllerBase.chapter');
 
   @override
@@ -68,12 +85,36 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
     });
   }
 
+  final _$readingModeAtom =
+      Atom(name: '_ChapterSingleControllerBase.readingMode');
+
+  @override
+  ReadingMode get readingMode {
+    _$readingModeAtom.reportRead();
+    return super.readingMode;
+  }
+
+  @override
+  set readingMode(ReadingMode value) {
+    _$readingModeAtom.reportWrite(value, super.readingMode, () {
+      super.readingMode = value;
+    });
+  }
+
   final _$loadChapterAsyncAction =
       AsyncAction('_ChapterSingleControllerBase.loadChapter');
 
   @override
   Future<void> loadChapter(int chapterId) {
     return _$loadChapterAsyncAction.run(() => super.loadChapter(chapterId));
+  }
+
+  final _$initChapterAsyncAction =
+      AsyncAction('_ChapterSingleControllerBase.initChapter');
+
+  @override
+  Future<void> initChapter() {
+    return _$initChapterAsyncAction.run(() => super.initChapter());
   }
 
   final _$markChapterAsReadedAsyncAction =
@@ -143,10 +184,34 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
   }
 
   @override
+  void toggleReadingMode() {
+    final _$actionInfo = _$_ChapterSingleControllerBaseActionController
+        .startAction(name: '_ChapterSingleControllerBase.toggleReadingMode');
+    try {
+      return super.toggleReadingMode();
+    } finally {
+      _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setReadingMode(ReadingMode readingMode, {dynamic saveOnShared = true}) {
+    final _$actionInfo = _$_ChapterSingleControllerBaseActionController
+        .startAction(name: '_ChapterSingleControllerBase.setReadingMode');
+    try {
+      return super.setReadingMode(readingMode, saveOnShared: saveOnShared);
+    } finally {
+      _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+pageListViewController: ${pageListViewController},
 chapter: ${chapter},
 chapterReaded: ${chapterReaded},
+readingMode: ${readingMode},
 currentPage: ${currentPage},
 showBar: ${showBar},
 pageTitle: ${pageTitle},
