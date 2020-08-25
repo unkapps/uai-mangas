@@ -1,4 +1,4 @@
-#Uai Mangás
+# Uai Mangás
 
 Uma solução completa para visualizar mangás do Mangas Project(leitor.net)
 
