@@ -40,6 +40,11 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
   }
 
   @computed
+  int get totalPages {
+    return pageListViewController.totalPages;
+  }
+
+  @computed
   bool get showBar {
     return pageListViewController.showBar;
   }
@@ -47,17 +52,8 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
   _ChapterSingleControllerBase() {
     reactionDisposer = autorun((_) {
       if (chapter.status == FutureStatus.fulfilled &&
-          currentPage + 1 == chapter.value.pages.length) {
+          currentPage + 1 == totalPages) {
         markChapterAsReaded();
-      }
-    });
-
-    SharedPreferences.getInstance().then((instance) {
-      sharedPreferences = instance;
-      if (sharedPreferences.containsKey(reading_mode_key)) {
-        setReadingMode(
-            ReadingMode.values[sharedPreferences.getInt(reading_mode_key)],
-            saveOnShared: false);
       }
     });
   }
@@ -107,6 +103,14 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
 
   @action
   Future<void> initChapter() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    if (sharedPreferences.containsKey(reading_mode_key)) {
+      setReadingMode(
+          ReadingMode.values[sharedPreferences.getInt(reading_mode_key)],
+          saveOnShared: false);
+    }
+
     pageListViewController =
         PageListViewUtils.getListViewControllerInstance(readingMode);
 
@@ -148,9 +152,10 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
       pageVerticalListviewController.recalculateHeightOfPages();
 
       pageVerticalListviewController.rebuildChaptersMap();
-    }
 
-    pageListViewController.goToPage(pageListViewController.currentPage, false);
+      pageListViewController.goToPage(
+          pageListViewController.currentPage, false);
+    }
   }
 
   @action

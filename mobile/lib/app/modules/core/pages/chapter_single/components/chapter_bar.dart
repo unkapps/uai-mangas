@@ -71,7 +71,7 @@ class ChapterBar extends StatelessWidget {
                     child: InkWell(
                       child: Observer(builder: (_) {
                         return Text(
-                          '${chapterSingleController.currentPage + 1}/${_chapter.pages.length}',
+                          '${chapterSingleController.currentPage + 1}/${chapterSingleController.totalPages}',
                           textAlign: TextAlign.center,
                           style: TextStyle(),
                         );
@@ -82,7 +82,7 @@ class ChapterBar extends StatelessWidget {
                     ),
                   ),
                   chapterSingleController.currentPage + 1 <
-                          _chapter.pages.length
+                          chapterSingleController.totalPages
                       ? IconButton(
                           icon: Icon(
                             Icons.keyboard_arrow_right,

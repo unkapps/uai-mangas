@@ -10,6 +10,14 @@ part of 'page_horizontal_listview_controller.dart';
 
 mixin _$PageHorizontalListviewController
     on _PageHorizontalListviewControllerBase, Store {
+  Computed<int> _$totalPagesComputed;
+
+  @override
+  int get totalPages =>
+      (_$totalPagesComputed ??= Computed<int>(() => super.totalPages,
+              name: '_PageHorizontalListviewControllerBase.totalPages'))
+          .value;
+
   final _$currentPageAtom =
       Atom(name: '_PageHorizontalListviewControllerBase.currentPage');
 
@@ -102,6 +110,22 @@ mixin _$PageHorizontalListviewController
   set showBar(bool value) {
     _$showBarAtom.reportWrite(value, super.showBar, () {
       super.showBar = value;
+    });
+  }
+
+  final _$adEventAtom =
+      Atom(name: '_PageHorizontalListviewControllerBase.adEvent');
+
+  @override
+  AdmobAdEvent get adEvent {
+    _$adEventAtom.reportRead();
+    return super.adEvent;
+  }
+
+  @override
+  set adEvent(AdmobAdEvent value) {
+    _$adEventAtom.reportWrite(value, super.adEvent, () {
+      super.adEvent = value;
     });
   }
 
@@ -224,6 +248,19 @@ mixin _$PageHorizontalListviewController
   }
 
   @override
+  void adEventChanged(AdmobAdEvent adEvent) {
+    final _$actionInfo =
+        _$_PageHorizontalListviewControllerBaseActionController.startAction(
+            name: '_PageHorizontalListviewControllerBase.adEventChanged');
+    try {
+      return super.adEventChanged(adEvent);
+    } finally {
+      _$_PageHorizontalListviewControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 currentPage: ${currentPage},
@@ -231,7 +268,9 @@ zoom: ${zoom},
 pagesStore: ${pagesStore},
 pageController: ${pageController},
 chapter: ${chapter},
-showBar: ${showBar}
+showBar: ${showBar},
+adEvent: ${adEvent},
+totalPages: ${totalPages}
     ''';
   }
 }
