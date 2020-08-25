@@ -16,6 +16,13 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
       (_$currentPageComputed ??= Computed<int>(() => super.currentPage,
               name: '_ChapterSingleControllerBase.currentPage'))
           .value;
+  Computed<int> _$totalPagesComputed;
+
+  @override
+  int get totalPages =>
+      (_$totalPagesComputed ??= Computed<int>(() => super.totalPages,
+              name: '_ChapterSingleControllerBase.totalPages'))
+          .value;
   Computed<bool> _$showBarComputed;
 
   @override
@@ -213,6 +220,7 @@ chapter: ${chapter},
 chapterReaded: ${chapterReaded},
 readingMode: ${readingMode},
 currentPage: ${currentPage},
+totalPages: ${totalPages},
 showBar: ${showBar},
 pageTitle: ${pageTitle},
 barOpacity: ${barOpacity}

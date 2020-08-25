@@ -61,6 +61,12 @@ abstract class _PageVerticalListviewControllerBase
     return AvlTreeSet<ChapterTree>(comparator: (a, b) => a.compareTo(b));
   }
 
+  @computed
+  @override
+  int get totalPages {
+    return chapter.pages.length;
+  }
+
   @action
   @override
   void init(ChapterSingleModel chapter) {

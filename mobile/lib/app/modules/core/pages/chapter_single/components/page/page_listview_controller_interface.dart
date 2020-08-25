@@ -12,6 +12,8 @@ import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/pa
 abstract class IPageListViewController {
   int currentPage;
 
+  int get totalPages;
+
   List<PageStore> pagesStore;
 
   ChapterSingleModel chapter;

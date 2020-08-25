@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_controller_interface.dart';
@@ -10,6 +11,9 @@ class PageHorizontalListviewController = _PageHorizontalListviewControllerBase
     with _$PageHorizontalListviewController;
 
 const double opacityChapterBar = 0.8;
+
+const PAGE_FIRST_AD = 1;
+const PAGE_SECOND_AD = 6;
 
 abstract class _PageHorizontalListviewControllerBase
     with Store
@@ -36,12 +40,31 @@ abstract class _PageHorizontalListviewControllerBase
   @observable
   bool showBar = true;
 
+  @observable
+  AdmobAdEvent adEvent;
+
+  @computed
+  @override
+  int get totalPages {
+    if (chapter.pages.length > PAGE_SECOND_AD) {
+      return chapter.pages.length + 2;
+    }
+
+    return chapter.pages.length + 1;
+  }
+
   @override
   @action
   void init(ChapterSingleModel chapter) {
+    this.chapter = chapter;
+
     pageController = PageController();
     pageController.addListener(() {
       currentPage = pageController.page.round();
+
+      if (currentPage > pagesStore.length - 1) {
+        return;
+      }
 
       if (pagesStore[currentPage].status == PageLoadStatus.NOT_LOADED) {
         pagesStore[currentPage].setStatus(PageLoadStatus.IN_PROGRESS);
@@ -104,5 +127,10 @@ abstract class _PageHorizontalListviewControllerBase
   @action
   void zoomOut() {
     zoom -= 1;
+  }
+
+  @action
+  void adEventChanged(AdmobAdEvent adEvent) {
+    this.adEvent = adEvent;
   }
 }

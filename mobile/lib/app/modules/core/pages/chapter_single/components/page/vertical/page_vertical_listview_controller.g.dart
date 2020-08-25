@@ -10,6 +10,14 @@ part of 'page_vertical_listview_controller.dart';
 
 mixin _$PageVerticalListviewController
     on _PageVerticalListviewControllerBase, Store {
+  Computed<int> _$totalPagesComputed;
+
+  @override
+  int get totalPages =>
+      (_$totalPagesComputed ??= Computed<int>(() => super.totalPages,
+              name: '_PageVerticalListviewControllerBase.totalPages'))
+          .value;
+
   final _$heightAtom = Atom(name: '_PageVerticalListviewControllerBase.height');
 
   @override
@@ -402,7 +410,8 @@ olderScrollPosition: ${olderScrollPosition},
 chapter: ${chapter},
 globalKeyByPageIndex: ${globalKeyByPageIndex},
 progressDialog: ${progressDialog},
-showBar: ${showBar}
+showBar: ${showBar},
+totalPages: ${totalPages}
     ''';
   }
 }
