@@ -30,7 +30,8 @@ class MangaSinglePage extends StatefulWidget {
   _MangaSinglePageState createState() => _MangaSinglePageState();
 }
 
-class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleController> {
+class _MangaSinglePageState
+    extends ModularState<MangaSinglePage, MangaSingleController> {
   final authStore = Modular.get<AuthStore>();
   final feedStore = Modular.get<FeedStore>();
   final mangaFavoriteStore = Modular.get<MangaFavoriteStore>();
@@ -143,19 +144,16 @@ class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleCon
             },
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Authors(
-              authors: authors,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Row(
-              children: <Widget>[
-                MangaFavorite(),
-              ],
-            ),
-          ),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Row(
+                children: [
+                  Authors(
+                    authors: authors,
+                  ),
+                  MangaFavorite(),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              )),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: ExpandablePanel(
@@ -283,11 +281,16 @@ class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleCon
                     horizontal: 20,
                   ),
                   child: InkWell(
-                    onTap: () {
-                      LoginDialog.createAndShowDialog(context);
-                    },
-                    child: Text('Entre para ter aceso a essa funcionalidade'),
-                  ),
+                      onTap: () {
+                        LoginDialog.createAndShowDialog(context);
+                      },
+                      child: Column(children: <Widget>[
+                        Icon(
+                          Icons.warning,
+                          size: 24,
+                        ),
+                        Text('Entre para ter aceso a essa funcionalidade'),
+                      ])),
                 );
               }
             },

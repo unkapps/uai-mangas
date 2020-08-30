@@ -21,29 +21,34 @@ class ChapterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: <Widget>[
-          ChapterReaded(
-            chapterId: chapterId,
+    var theme = Theme.of(context);
+
+    return Container(
+        child: ListTile(
+          title: Row(
+            children: <Widget>[
+              ChapterReaded(
+                chapterId: chapterId,
+              ),
+              const Divider(
+                indent: 10,
+                endIndent: 0,
+              ),
+              Text('#$number'),
+            ],
           ),
-          const Divider(
-            indent: 10,
-            endIndent: 0,
+          subtitle: Container(
+            padding: EdgeInsets.only(left: 30),
+            child: Text(
+                '${date != null ? DateFormat('dd/MM/yyyy').format(date.toLocal()) : ''}'),
           ),
-          Text('#$number'),
-        ],
-      ),
-      subtitle: Container(
-        padding: EdgeInsets.only(left: 30),
-        child: Text(
-            '${date != null ? DateFormat('dd/MM/yyyy').format(date.toLocal()) : ''}'),
-      ),
-      onTap: () {
-        Modular.link.pushNamed(Routes.CHAPTER_SINGLE
-            .replaceAll(':mangaId', mangaId.toString())
-            .replaceAll(':chapterId', chapterId.toString()));
-      },
-    );
+          onTap: () {
+            Modular.link.pushNamed(Routes.CHAPTER_SINGLE
+                .replaceAll(':mangaId', mangaId.toString())
+                .replaceAll(':chapterId', chapterId.toString()));
+          },
+        ),
+        decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: theme.cardColor))));
   }
 }
