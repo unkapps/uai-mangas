@@ -35,22 +35,22 @@ class _AllMangasState extends State<AllMangas> {
     super.initState();
   }
 
-  String textoQuantidade() {
-    var texto = '${allMangasStore.qtyPages} mangá';
+  String getTextQuantity() {
+    var text = '${allMangasStore.qtyPages} mangá';
     if (allMangasStore.qtyPages > 1) {
-      texto += 's';
+      text += 's';
     }
-    return texto;
+    return text;
   }
 
-  String textoListaVazia() {
-    var texto = 'Nenhum mangá ';
+  String getTextEmptyList() {
+    var text = 'Nenhum mangá ';
     if (widget.categoryId != null) {
-      texto += 'nessa categoria';
+      text += 'nessa categoria';
     } else {
-      texto += 'retornado pela busca';
+      text += 'retornado pela busca';
     }
-    return texto;
+    return text;
   }
 
   @override
@@ -83,7 +83,7 @@ class _AllMangasState extends State<AllMangas> {
                   Expanded(
                     child: Visibility(
                       child: Text(
-                        textoQuantidade(),
+                        getTextQuantity(),
                         style: theme.textTheme.subtitle1,
                       ),
                       visible: widget.showCount && allMangasStore.qtyPages != 0,
@@ -122,7 +122,7 @@ class _AllMangasState extends State<AllMangas> {
                   size: 48,
                 ),
                 Text(
-                  textoListaVazia(),
+                  getTextEmptyList(),
                   style: theme.textTheme.subtitle1,
                 ),
               ]),
