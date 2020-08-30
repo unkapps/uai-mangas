@@ -35,34 +35,30 @@ class CategoryList extends StatelessWidget {
           if (categoriesStore.categories.status == FutureStatus.fulfilled) {
             var categories = categoriesStore.categories.value;
 
-            return GridView.builder(
-              shrinkWrap: true,
+            return ListView.builder(
               itemCount: categories.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                var category = categories[index];
-                return OutlineButton(
-                  child: Text(
-                    '${category.name}',
-                    textAlign: TextAlign.center,
-                  ),
-                  highlightedBorderColor: theme.accentColor,
-                  onPressed: () {
-                    Modular.link.pushNamed(Routes.CATEGORY_SINGLE
-                        .replaceAll(
-                          ':categoryId',
-                          category.id.toString(),
-                        )
-                        .replaceAll(
-                          ':categoryName',
-                          category.name,
-                        ));
-                  },
-                );
+              itemBuilder: (context, index) {
+                final category = categories[index];
+
+                return Container(
+                    child: ListTile(
+                      title: Text(category.name),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Modular.link.pushNamed(Routes.CATEGORY_SINGLE
+                            .replaceAll(
+                              ':categoryId',
+                              category.id.toString(),
+                            )
+                            .replaceAll(
+                              ':categoryName',
+                              category.name,
+                            ));
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(color: theme.cardColor))));
               },
             );
           }

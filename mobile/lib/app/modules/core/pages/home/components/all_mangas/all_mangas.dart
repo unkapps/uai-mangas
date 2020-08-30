@@ -35,6 +35,24 @@ class _AllMangasState extends State<AllMangas> {
     super.initState();
   }
 
+  String textoQuantidade() {
+    var texto = '${allMangasStore.qtyPages} mangá';
+    if (allMangasStore.qtyPages > 1) {
+      texto += 's';
+    }
+    return texto;
+  }
+
+  String textoListaVazia() {
+    var texto = 'Nenhum mangá ';
+    if (widget.categoryId != null) {
+      texto += 'nessa categoria';
+    } else {
+      texto += 'retornado pela busca';
+    }
+    return texto;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -65,10 +83,10 @@ class _AllMangasState extends State<AllMangas> {
                   Expanded(
                     child: Visibility(
                       child: Text(
-                        '${allMangasStore.qtyPages} mangás',
+                        textoQuantidade(),
                         style: theme.textTheme.subtitle1,
                       ),
-                      visible: widget.showCount,
+                      visible: widget.showCount && allMangasStore.qtyPages != 0,
                     ),
                   ),
                   Expanded(
@@ -96,6 +114,19 @@ class _AllMangasState extends State<AllMangas> {
                   ),
                 ],
               ),
+            ),
+            Visibility(
+              child: Column(children: <Widget>[
+                Icon(
+                  Icons.warning,
+                  size: 48,
+                ),
+                Text(
+                  textoListaVazia(),
+                  style: theme.textTheme.subtitle1,
+                ),
+              ]),
+              visible: allMangasStore.qtyPages == 0,
             ),
             Expanded(
               child: InfiniteScroll<MangaGridViewModel>(

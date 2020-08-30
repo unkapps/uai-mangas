@@ -25,7 +25,9 @@ class MangaFavorite extends StatelessWidget {
           );
         }
 
-        return _buildFavorite(context, favorited: mangaFavoriteStore.favorite);
+        var favorite = mangaFavoriteStore.favorite;
+        favorite ??= false;
+        return _buildFavorite(context, favorited: favorite);
       },
     );
   }
