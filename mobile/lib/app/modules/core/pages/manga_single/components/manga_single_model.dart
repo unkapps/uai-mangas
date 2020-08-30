@@ -32,7 +32,7 @@ class MangaSingleModel {
       id: json['id'] as int,
       name: json['name'] as String,
       finished: json['finished'] != null && json['finished'] as int == 1,
-      description: json['description'] as String,
+      description: (json['description'] as String).replaceAll('\n', ''),
       coverUrl: json['coverUrl'] as String,
       qtyChapters: json['qtyChapters'] as int,
       favorite: json['favorite'] as bool,
