@@ -5,20 +5,14 @@ import Chapter from '../entity/chapter';
 import { ScanDto } from '../dto/chapter.dto';
 import generateUid from '../util/generator-id';
 import Page from '../entity/page';
-import LeitorNetUrls, {
-  LEITOR_NET_URL,
-  LEITOR_NET_DEFAULT_HTTP_HEADERS,
-  LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
-} from '../leitor-net-urls';
+import LeitorNetUrls from '../leitor-net-urls';
 
 export const STATUS_FILE_PATH = './data/categories';
 
 @singleton()
 @autoInjectable()
 export default class PageService {
-  constructor(
-    private leitorNetUrls: LeitorNetUrls,
-  ) { }
+  constructor(private leitorNetUrls: LeitorNetUrls) {}
 
   public async createFromChapter(chapter: Chapter, scan: ScanDto): Promise<Page[]> {
     const token: string = await this.getTokenFromChapterPage(scan);
@@ -44,9 +38,9 @@ export default class PageService {
   }
 
   private async getTokenFromChapterPage(scan: ScanDto): Promise<string> {
-    const url: string = `${LEITOR_NET_URL}${scan.link}`;
+    const url: string = `${this.leitorNetUrls.url}${scan.link}`;
 
-    const headers = Object.assign(LEITOR_NET_DEFAULT_HTTP_HEADERS);
+    const headers = Object.assign(this.leitorNetUrls.defaultHttpHeaders);
     delete headers.accept;
 
     const response = await axios.get(url, {
@@ -62,7 +56,7 @@ export default class PageService {
   private async getImagesUrl(token: string, scan: ScanDto): Promise<string[]> {
     const url = this.leitorNetUrls.getImagesUrl(scan.id_release, token);
     const response = await axios.get(url, {
-      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
+      headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
     });
 
     return response.data.images as string[];
