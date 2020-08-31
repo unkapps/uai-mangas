@@ -156,7 +156,6 @@ export default class Extrator {
   private doRequestForMangas(page: number, category: Category): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getSeriesUrl(page, category.id), {
       headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
-      proxy: this.leitorNetUrls.proxy,
     });
   }
 
@@ -266,14 +265,12 @@ export default class Extrator {
   private doRequestForMangaPage(leitorNetMangaId: number, url?: string): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getMangaUrl(leitorNetMangaId, url), {
       headers: this.leitorNetUrls.defaultHttpHeadersAllAccept,
-      proxy: this.leitorNetUrls.proxy,
     });
   }
 
   private doRequestForChapters(page: number, manga: Manga): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getChaptersListUrl(page, manga.leitorNetId), {
       headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
-      proxy: this.leitorNetUrls.proxy,
     });
   }
 
@@ -345,7 +342,6 @@ export default class Extrator {
   private doRequestForReleases(page: number): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.newReleasesUrl(page), {
       headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
-      proxy: this.leitorNetUrls.proxy,
     });
   }
 
@@ -379,7 +375,6 @@ export default class Extrator {
   private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.newMangasUrl(), {
       headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
-      proxy: this.leitorNetUrls.proxy,
     });
   }
 }
