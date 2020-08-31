@@ -7,7 +7,7 @@ import * as parser from 'fast-xml-parser';
 import { parse } from 'node-html-parser';
 
 
-import LeitorNetUrls, { LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT } from '../leitor-net-urls';
+import LeitorNetUrls from '../leitor-net-urls';
 import { SitemapUrlDto } from './sitemap.dto';
 import { MS_WAIT_BETWEEN_PAGES } from '../config/general-craweler.config';
 
@@ -89,14 +89,14 @@ export default class ExtratorSitemap {
 
   private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.sitemapUrl(), {
-      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT,
+      headers: this.leitorNetUrls.defaultHttpHeadersAllAccept,
       timeout: 10000,
     });
   }
 
   private async getMangaUrl(serieUrl: string): Promise<string> {
     const response = await axios.get(serieUrl, {
-      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT,
+      headers: this.leitorNetUrls.defaultHttpHeadersAllAccept,
     });
 
     const root = parse(response.data);
