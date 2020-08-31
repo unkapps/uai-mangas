@@ -1,4 +1,5 @@
 import { autoInjectable, singleton } from 'tsyringe';
+import { AxiosProxyConfig } from 'axios';
 
 export const LEITOR_NET_URL = 'https://leitor.net';
 export const MANGA_LIVRE_NET_URL = 'https://mangalivre.net';
@@ -50,6 +51,18 @@ export default class LeitorNetUrls {
 
   get defaultHttpHeadersAllAccept() {
     return this.useLeitorNet ? LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT : MANGA_LIVRE_DEFAULT_HTTP_HEADERS_ALL_ACCEPT;
+  }
+
+  get proxy(): AxiosProxyConfig | false {
+    if (this.useLeitorNet) {
+      return false;
+    }
+
+    return {
+      host: '167.250.65.246',
+      port: 8080,
+      protocol: 'http',
+    } as AxiosProxyConfig;
   }
 
   get defaultHttpHeaders() {
