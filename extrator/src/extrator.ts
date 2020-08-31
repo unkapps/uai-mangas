@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 import { setTimeout } from 'timers';
 import util from 'util';
 
-import LeitorNetUrls from './leitor-net-urls';
+import LeitorNetUrls, { LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ, LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT } from './leitor-net-urls';
 import CategoryService from './service/category.service';
 import CategoryDto from './dto/category.dto';
 import DatabaseConfig from './config/database.config';
@@ -37,7 +37,8 @@ export default class Extrator {
     private chapterService: ChapterService,
     private firebaseService: FirebaseService,
     private extratorSitemap: ExtratorSitemap,
-  ) {}
+  ) {
+  }
 
   public async run(args: string[]): Promise<void> {
     if (args.includes('now')) {
@@ -46,30 +47,24 @@ export default class Extrator {
     } else {
       console.log('cron mode');
 
-      const job = new CronJobExtended(
-        {
-          cronTime: '0 */40 * * * *',
-          onTick: null,
-          runOnInit: true,
-        },
-        async () => {
-          await this.runTasks.call(this, ['sitemap']);
-          console.log(`next job on ${job.nextDate.toISOString()}`);
-        },
-      );
+      const job = new CronJobExtended({
+        cronTime: '0 */40 * * * *',
+        onTick: null,
+        runOnInit: true,
+      }, async () => {
+        await this.runTasks.call(this, ['sitemap']);
+        console.log(`next job on ${job.nextDate.toISOString()}`);
+      });
 
       job.start();
     }
   }
 
-  private async runTasks(args: string[], useLeitorNet = true): Promise<void> {
+  private async runTasks(args: string[]): Promise<void> {
     console.log('run task started');
-    if (!this.connection || !this.connection.isConnected) {
-      this.connection = await this.databaseConfig.createConnection();
-    }
+    this.connection = await this.databaseConfig.createConnection();
 
     try {
-      this.leitorNetUrls.useLeitorNet = useLeitorNet;
       await this.createNecessaryFolders();
 
       if (args.includes('categories')) {
@@ -107,18 +102,11 @@ export default class Extrator {
           await this.getNewMangasUrlFromSiteMap();
         }
       } catch (err) {
-        if (err != null && err.code === 'ECONNABORTED') {
-          console.log('Now using mangalivre');
-          await this.runTasks(['releases', 'new-mangas'], false);
-        } else {
-          console.error('Error on reading sitemap');
-          console.error(err);
-        }
+        console.error('Error on reading sitemap');
+        console.error(err);
       }
     } finally {
-      if (this.connection && !this.connection.isConnected) {
-        this.connection.close();
-      }
+      this.connection.close();
     }
   }
 
@@ -138,7 +126,7 @@ export default class Extrator {
   private async readCategories(): Promise<void> {
     if (await this.categoryService.isTimeToCralwer()) {
       const response = await axios.get(this.leitorNetUrls.getCategoriesUrl(), {
-        headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
+        headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
       });
       const categories = response.data.categories_list;
 
@@ -155,7 +143,7 @@ export default class Extrator {
 
   private doRequestForMangas(page: number, category: Category): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getSeriesUrl(page, category.id), {
-      headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
     });
   }
 
@@ -264,13 +252,13 @@ export default class Extrator {
 
   private doRequestForMangaPage(leitorNetMangaId: number, url?: string): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getMangaUrl(leitorNetMangaId, url), {
-      headers: this.leitorNetUrls.defaultHttpHeadersAllAccept,
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_ALL_ACCEPT,
     });
   }
 
   private doRequestForChapters(page: number, manga: Manga): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.getChaptersListUrl(page, manga.leitorNetId), {
-      headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
     });
   }
 
@@ -341,12 +329,13 @@ export default class Extrator {
 
   private doRequestForReleases(page: number): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.newReleasesUrl(page), {
-      headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
     });
   }
 
   private async readNewMangas() {
     const mangaUrlByLeitorNetId = new Map<number, string>();
+
 
     console.log('reading new mangas');
 
@@ -374,7 +363,7 @@ export default class Extrator {
 
   private doRequestForNewMangas(): Promise<AxiosResponse<any>> {
     return axios.get(this.leitorNetUrls.newMangasUrl(), {
-      headers: this.leitorNetUrls.defaultHttpHeadersWithXReq,
+      headers: LEITOR_NET_DEFAULT_HTTP_HEADERS_WITH_X_REQ,
     });
   }
 }
