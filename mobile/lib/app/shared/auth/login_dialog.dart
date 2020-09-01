@@ -7,7 +7,8 @@ import 'package:leitor_manga/app/shared/auth/auth_store.dart';
 import 'package:pedantic/pedantic.dart';
 
 class LoginDialog {
-  static void createAndShowDialog(BuildContext context) async {
+  static void createAndShowDialog(BuildContext context,
+      {fromFeature = false}) async {
     final authStore = Modular.get<AuthStore>();
 
     switch (await showDialog<LoginType>(
@@ -15,6 +16,12 @@ class LoginDialog {
         builder: (BuildContext context) {
           return SimpleDialog(
             children: <Widget>[
+              Visibility(
+                child: Center(
+                  child: Text('Entre para usar essa funcionalidade'),
+                ),
+                visible: fromFeature,
+              ),
               SimpleDialogOption(
                 child: SignInButton(
                   Buttons.Facebook,

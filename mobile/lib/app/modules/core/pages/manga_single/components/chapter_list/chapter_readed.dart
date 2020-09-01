@@ -73,7 +73,7 @@ class ChapterReaded extends StatelessWidget {
           if (authStore.isAuthenticated) {
             chapterListReadedStore.chapterStoreById[chapterId].toggleReaded();
           } else {
-            LoginDialog.createAndShowDialog(context);
+            LoginDialog.createAndShowDialog(context, fromFeature: true);
           }
         },
       ),

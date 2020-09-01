@@ -59,7 +59,7 @@ class MangaFavorite extends StatelessWidget {
           if (authStore.isAuthenticated) {
             mangaFavoriteStore.toggleFavorite();
           } else {
-            LoginDialog.createAndShowDialog(context);
+            LoginDialog.createAndShowDialog(context, fromFeature: true);
           }
         },
       ),
