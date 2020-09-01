@@ -30,7 +30,8 @@ class MangaSinglePage extends StatefulWidget {
   _MangaSinglePageState createState() => _MangaSinglePageState();
 }
 
-class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleController> {
+class _MangaSinglePageState
+    extends ModularState<MangaSinglePage, MangaSingleController> {
   final authStore = Modular.get<AuthStore>();
   final feedStore = Modular.get<FeedStore>();
   final mangaFavoriteStore = Modular.get<MangaFavoriteStore>();
@@ -284,7 +285,8 @@ class _MangaSinglePageState extends ModularState<MangaSinglePage, MangaSingleCon
                   ),
                   child: InkWell(
                     onTap: () {
-                      LoginDialog.createAndShowDialog(context);
+                      LoginDialog.createAndShowDialog(context,
+                          fromFeature: true);
                     },
                     child: Text('Entre para ter aceso a essa funcionalidade'),
                   ),

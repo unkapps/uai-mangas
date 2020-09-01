@@ -104,8 +104,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 ),
                 title: Text('Feed'),
                 onTap: () {
-                  widget.feedStore.load();
-                  unawaited(Modular.link.pushNamed(Routes.FEED));
+                  if (widget.authStore.isAuthenticated) {
+                    widget.feedStore.load();
+                    unawaited(Modular.link.pushNamed(Routes.FEED));
+                  } else {
+                    LoginDialog.createAndShowDialog(context, fromFeature: true);
+                  }
                 },
               ),
               ListTile(
