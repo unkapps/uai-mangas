@@ -39,13 +39,23 @@ class MangaListView extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Expanded(
-                        child: ExtendedImage.network(
-                          manga.coverUrl,
-                          width: 85,
-                          fit: BoxFit.fitHeight,
-                          alignment: Alignment.topCenter,
-                          cache: true,
-                        ),
+                        child: ExtendedImage.network(manga.coverUrl,
+                            width: 85,
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.topCenter,
+                            cache: true,
+                            loadStateChanged: (ExtendedImageState state) {
+                          switch (state.extendedImageLoadState) {
+                            case LoadState.failed:
+                              return Icon(
+                                Icons.broken_image,
+                                color: Colors.grey,
+                                size: 85,
+                              );
+                            default:
+                              return null;
+                          }
+                        }),
                       ),
                     ],
                   ),
