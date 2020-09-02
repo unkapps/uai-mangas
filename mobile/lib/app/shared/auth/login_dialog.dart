@@ -10,6 +10,7 @@ class LoginDialog {
   static void createAndShowDialog(BuildContext context,
       {fromFeature = false}) async {
     final authStore = Modular.get<AuthStore>();
+    var theme = Theme.of(context);
 
     switch (await showDialog<LoginType>(
         context: context,
@@ -17,9 +18,12 @@ class LoginDialog {
           return SimpleDialog(
             children: <Widget>[
               Visibility(
-                child: Center(
-                  child: Text('Entre para usar essa funcionalidade'),
-                ),
+                child: Column(children: <Widget>[
+                  Center(
+                    child: Text('Entre para usar essa funcionalidade'),
+                  ),
+                  Divider(color: theme.hintColor)
+                ]),
                 visible: fromFeature,
               ),
               SimpleDialogOption(
