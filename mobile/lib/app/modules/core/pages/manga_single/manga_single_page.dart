@@ -144,19 +144,16 @@ class _MangaSinglePageState
             },
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Authors(
-              authors: authors,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Row(
-              children: <Widget>[
-                MangaFavorite(),
-              ],
-            ),
-          ),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Row(
+                children: [
+                  Authors(
+                    authors: authors,
+                  ),
+                  MangaFavorite(),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              )),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: ExpandablePanel(
@@ -284,12 +281,17 @@ class _MangaSinglePageState
                     horizontal: 20,
                   ),
                   child: InkWell(
-                    onTap: () {
-                      LoginDialog.createAndShowDialog(context,
-                          fromFeature: true);
-                    },
-                    child: Text('Entre para ter aceso a essa funcionalidade'),
-                  ),
+                      onTap: () {
+                        LoginDialog.createAndShowDialog(context,
+                            fromFeature: true);
+                      },
+                      child: Column(children: <Widget>[
+                        Icon(
+                          Icons.warning,
+                          size: 24,
+                        ),
+                        Text('Entre para ter aceso a essa funcionalidade'),
+                      ])),
                 );
               }
             },
