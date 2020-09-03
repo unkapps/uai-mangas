@@ -97,6 +97,22 @@ mixin _$PageHorizontalListviewController
     });
   }
 
+  final _$shouldShowTwoAdAtom =
+      Atom(name: '_PageHorizontalListviewControllerBase.shouldShowTwoAd');
+
+  @override
+  bool get shouldShowTwoAd {
+    _$shouldShowTwoAdAtom.reportRead();
+    return super.shouldShowTwoAd;
+  }
+
+  @override
+  set shouldShowTwoAd(bool value) {
+    _$shouldShowTwoAdAtom.reportWrite(value, super.shouldShowTwoAd, () {
+      super.shouldShowTwoAd = value;
+    });
+  }
+
   final _$showBarAtom =
       Atom(name: '_PageHorizontalListviewControllerBase.showBar');
 
@@ -162,12 +178,12 @@ mixin _$PageHorizontalListviewController
   }
 
   @override
-  void setPagesStore(List<PageStore> pagesStore) {
+  void loadPageStore(ChapterSingleModel chapter) {
     final _$actionInfo =
         _$_PageHorizontalListviewControllerBaseActionController.startAction(
-            name: '_PageHorizontalListviewControllerBase.setPagesStore');
+            name: '_PageHorizontalListviewControllerBase.loadPageStore');
     try {
-      return super.setPagesStore(pagesStore);
+      return super.loadPageStore(chapter);
     } finally {
       _$_PageHorizontalListviewControllerBaseActionController
           .endAction(_$actionInfo);
@@ -268,6 +284,7 @@ zoom: ${zoom},
 pagesStore: ${pagesStore},
 pageController: ${pageController},
 chapter: ${chapter},
+shouldShowTwoAd: ${shouldShowTwoAd},
 showBar: ${showBar},
 adEvent: ${adEvent},
 totalPages: ${totalPages}

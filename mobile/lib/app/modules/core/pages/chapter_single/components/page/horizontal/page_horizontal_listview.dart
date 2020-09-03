@@ -5,7 +5,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/horizontal/page_horizontal_listview_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_interface.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_store.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/uai_page.dart';
 import 'package:leitor_manga/app/shared/admob/admob_ads_id.dart';
 import 'package:leitor_manga/app/shared/admob/admob_banner_wrapper.dart';
@@ -40,19 +39,7 @@ class _PageHorizontalListViewState extends State<PageHorizontalListView> {
 
   @override
   void initState() {
-    _initPagesStore();
     super.initState();
-  }
-
-  void _initPagesStore() {
-    var i = 0;
-    controller.setPagesStore(widget.chapter.pages
-        .map((page) => PageStore(
-              page,
-              (i++ < 3),
-              widget.chapterSingleController,
-            ))
-        .toList());
   }
 
   @override
@@ -61,31 +48,19 @@ class _PageHorizontalListViewState extends State<PageHorizontalListView> {
 
     return Observer(
       builder: (_) {
-        final shouldShowTwoAd = widget.chapter.pages.length > PAGE_SECOND_AD;
-
         return ExtendedImageGesturePageView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: widget.chapter.pages.length + 2,
           controller: controller.pageController,
           itemBuilder: (BuildContext context, int index) {
-            if (index == 1 || (index == PAGE_SECOND_AD && shouldShowTwoAd)) {
+            var pageStore = controller.pagesStore[index];
+
+            if (pageStore.adPage) {
               return _getAd(width);
             }
 
-            var realIndex = index;
-
-            if (index > PAGE_FIRST_AD) {
-              if (index < PAGE_SECOND_AD) {
-                realIndex -= 1;
-              } else if (shouldShowTwoAd) {
-                realIndex -= 2;
-              }
-            }
-
-            var pageStore = controller.pagesStore[realIndex];
-
             return UaiPage(
-              index: realIndex,
+              index: index,
               pageStore: pageStore,
               allowZoom: true,
               initialZoom: controller.zoom,

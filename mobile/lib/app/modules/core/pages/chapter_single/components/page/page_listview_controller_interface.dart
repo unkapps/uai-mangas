@@ -21,8 +21,6 @@ abstract class IPageListViewController {
 
   void init(ChapterSingleModel chapter);
 
-  void setPagesStore(List<PageStore> pagesStore);
-
   Future<void> scrollToPage(int pageNumber, {updatePageNumber = true});
 
   Future<void> loadImage(pageNumber);
