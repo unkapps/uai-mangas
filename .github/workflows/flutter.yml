@@ -16,10 +16,11 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-    - uses: subosito/flutter-action@v1
+    - uses: subosito/flutter-action@v1.3.2
       with:
-        flutter-version: '1.7.8+hotfix.4'
+        flutter-version: '1.9.1+hotfix.6'
     - run: flutter pub get
       working-directory: ./mobile
     - run: flutter analyze
+      name: Analyze code
       working-directory: ./mobile
