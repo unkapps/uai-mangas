@@ -1,4 +1,3 @@
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_model.dart';
 import 'package:mobx/mobx.dart';
@@ -10,14 +9,14 @@ class PageStore = _PageStoreBase with _$PageStore;
 const double opacityChapterBar = 0.8;
 
 abstract class _PageStoreBase with Store {
-  final chapterSingleController = Modular.get<ChapterSingleController>();
+  final ChapterSingleController chapterSingleController;
 
   final PageModel page;
 
   @observable
   PageLoadStatus status;
 
-  _PageStoreBase(this.page, bool askForLoad)
+  _PageStoreBase(this.page, bool askForLoad, this.chapterSingleController)
       : status =
             askForLoad ? PageLoadStatus.IN_PROGRESS : PageLoadStatus.NOT_LOADED;
 

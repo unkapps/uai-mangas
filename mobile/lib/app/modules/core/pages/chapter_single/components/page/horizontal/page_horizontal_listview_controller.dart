@@ -43,9 +43,17 @@ abstract class _PageHorizontalListviewControllerBase
   @observable
   AdmobAdEvent adEvent;
 
+  _PageHorizontalListviewControllerBase(ChapterSingleModel chapter) {
+    init(chapter);
+  }
+
   @computed
   @override
   int get totalPages {
+    if (chapter == null) {
+      return 0;
+    }
+
     if (chapter.pages.length > PAGE_SECOND_AD) {
       return chapter.pages.length + 2;
     }
