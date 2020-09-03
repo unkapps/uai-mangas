@@ -57,6 +57,10 @@ abstract class _PageVerticalListviewControllerBase
   @override
   bool showBar = true;
 
+  _PageVerticalListviewControllerBase(ChapterSingleModel chapter) {
+    init(chapter);
+  }
+
   AvlTreeSet<ChapterTree> _newAvl() {
     return AvlTreeSet<ChapterTree>(comparator: (a, b) => a.compareTo(b));
   }
