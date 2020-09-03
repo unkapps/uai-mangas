@@ -282,7 +282,8 @@ class _MangaSinglePageState
                   ),
                   child: InkWell(
                       onTap: () {
-                        LoginDialog.createAndShowDialog(context);
+                        LoginDialog.createAndShowDialog(context,
+                            fromFeature: true);
                       },
                       child: Column(children: <Widget>[
                         Icon(
