@@ -18,7 +18,7 @@ abstract class _AppBase extends Disposable with Store {
     @required this.notificationsStore,
   }) {
     notificationsDisposer = autorun((_) {
-      if (notificationsStore.notification.mangaId != null) {
+      if (notificationsStore.notification != null && notificationsStore.notification.mangaId != null) {
         ForegroundNotification.showNewChapter(
             notificationsStore.notification, material_builder.context);
       }
