@@ -57,6 +57,10 @@ abstract class _PageVerticalListviewControllerBase
   @override
   bool showBar = true;
 
+  _PageVerticalListviewControllerBase(ChapterSingleModel chapter) {
+    init(chapter);
+  }
+
   AvlTreeSet<ChapterTree> _newAvl() {
     return AvlTreeSet<ChapterTree>(comparator: (a, b) => a.compareTo(b));
   }
@@ -70,6 +74,15 @@ abstract class _PageVerticalListviewControllerBase
   @action
   @override
   void init(ChapterSingleModel chapter) {
+    var i = 0;
+    setPagesStore(chapter.pages
+        .map((page) => PageStore(
+              (i++ < 3),
+              pageVerticalListviewController: this,
+              page: page,
+            ))
+        .toList());
+
     height = 0;
     olderScrollPosition = 0;
     chaptersTree = null;
@@ -87,7 +100,6 @@ abstract class _PageVerticalListviewControllerBase
   }
 
   @action
-  @override
   void setPagesStore(List<PageStore> pagesStore) {
     this.pagesStore = pagesStore;
   }

@@ -51,7 +51,8 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
 
   _ChapterSingleControllerBase() {
     reactionDisposer = autorun((_) {
-      if (chapter.status == FutureStatus.fulfilled &&
+      if (chapter != null &&
+          chapter.status == FutureStatus.fulfilled &&
           currentPage + 1 == totalPages) {
         markChapterAsReaded();
       }
@@ -93,9 +94,6 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
 
   @action
   Future<void> loadChapter(int chapterId) async {
-    pageListViewController =
-        PageListViewUtils.getListViewControllerInstance(readingMode);
-
     chapter = chapterService.getChapter(chapterId).asObservable();
 
     await initChapter();
@@ -111,12 +109,10 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
           saveOnShared: false);
     }
 
-    pageListViewController =
-        PageListViewUtils.getListViewControllerInstance(readingMode);
-
     var chapter = await this.chapter;
 
-    pageListViewController.init(chapter);
+    pageListViewController =
+        PageListViewUtils.getListViewControllerInstance(readingMode, chapter);
 
     chapterReaded = chapter.readed;
   }
@@ -128,14 +124,6 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
           chapterListReadedStore.chapterStoreById[chapter.value.id];
 
       chapterReaded = await chapterReadedStore.setReaded(true);
-    }
-  }
-
-  @action
-  void informHeightAndInxOfPage(int index) {
-    if (pageListViewController is PageVerticalListviewController) {
-      (pageListViewController as PageVerticalListviewController)
-          .informHeightAndInxOfPage(index);
     }
   }
 

@@ -2,8 +2,6 @@ import 'package:leitor_manga/app/modules/core/pages/category_single/category_sin
 import 'package:leitor_manga/app/modules/core/pages/category_single/category_single_page.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_page.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/horizontal/page_horizontal_listview_controller.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/vertical/page_vertical_listview_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/feed/feed_page.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/all_mangas/all_mangas_store.dart';
 import 'package:leitor_manga/app/modules/core/pages/home/components/category_list/category_list_store.dart';
@@ -41,12 +39,10 @@ class CoreModule extends ChildModule {
             )),
         Bind((i) => ChapterService()),
         Bind((i) => ChapterListReadedStore()),
-        Bind((i) => ChapterSingleController()),
-        Bind((i) => PageVerticalListviewController()),
+        Bind((i) => ChapterSingleController(), singleton: false),
         Bind((i) => CategoryService()),
         Bind((i) => CategoriesStore()),
         Bind((i) => CategorySingleController()),
-        Bind((i) => PageHorizontalListviewController()),
       ];
 
   @override

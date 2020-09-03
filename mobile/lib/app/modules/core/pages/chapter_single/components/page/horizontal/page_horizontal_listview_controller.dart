@@ -36,6 +36,9 @@ abstract class _PageHorizontalListviewControllerBase
   @observable
   ChapterSingleModel chapter;
 
+  @observable
+  bool shouldShowTwoAd;
+
   @override
   @observable
   bool showBar = true;
@@ -43,9 +46,17 @@ abstract class _PageHorizontalListviewControllerBase
   @observable
   AdmobAdEvent adEvent;
 
+  _PageHorizontalListviewControllerBase(ChapterSingleModel chapter) {
+    init(chapter);
+  }
+
   @computed
   @override
   int get totalPages {
+    if (chapter == null) {
+      return 0;
+    }
+
     if (chapter.pages.length > PAGE_SECOND_AD) {
       return chapter.pages.length + 2;
     }
@@ -57,6 +68,7 @@ abstract class _PageHorizontalListviewControllerBase
   @action
   void init(ChapterSingleModel chapter) {
     this.chapter = chapter;
+    loadPageStore(chapter);
 
     pageController = PageController();
     pageController.addListener(() {
@@ -78,9 +90,33 @@ abstract class _PageHorizontalListviewControllerBase
     });
   }
 
-  @override
   @action
-  void setPagesStore(List<PageStore> pagesStore) {
+  void loadPageStore(ChapterSingleModel chapter) {
+    shouldShowTwoAd = chapter.pages.length > PAGE_SECOND_AD;
+    var iEnd = chapter.pages.length + (shouldShowTwoAd ? 2 : 1);
+
+    var pagesStore = <PageStore>[];
+    for (var i = 0; i < iEnd; i++) {
+      var realIndex = i;
+      var adPage = false;
+
+      if (i > 0 && i < PAGE_SECOND_AD) {
+        realIndex -= 1;
+      } else if (i >= PAGE_SECOND_AD && shouldShowTwoAd) {
+        realIndex -= 2;
+      }
+
+      if (i == 1 || i == PAGE_SECOND_AD) {
+        adPage = true;
+      }
+
+      pagesStore.add(PageStore(
+        (i < 3),
+        page: adPage ? null : chapter.pages[realIndex],
+        adPage: adPage,
+      ));
+    }
+
     this.pagesStore = pagesStore;
   }
 
