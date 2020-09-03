@@ -87,6 +87,8 @@ class _ChapterSinglePageState
     var pageListView = PageListViewUtils.getListViewInstance(
       controller.readingMode,
       chapter: chapter,
+      pageListviewController: controller.pageListViewController,
+      chapterSingleController: controller,
     );
 
     return Stack(children: <Widget>[
@@ -102,6 +104,7 @@ class _ChapterSinglePageState
                 controller.markChapterAsReaded();
               }
             },
+            chapterSingleController: controller,
           ),
         ),
       ),

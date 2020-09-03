@@ -13,12 +13,17 @@ import 'package:pedantic/pedantic.dart';
 typedef ChapterChangeListener = void Function(bool movedForward);
 
 class ChapterBar extends StatelessWidget {
-  final chapterSingleController = Modular.get<ChapterSingleController>();
+  final ChapterSingleController chapterSingleController;
 
   final ChapterSingleModel _chapter;
   final ChapterChangeListener onChapterChange;
 
-  ChapterBar(this._chapter, {Key key, this.onChapterChange}) : super(key: key);
+  ChapterBar(
+    this._chapter, {
+    @required this.chapterSingleController,
+    Key key,
+    this.onChapterChange,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

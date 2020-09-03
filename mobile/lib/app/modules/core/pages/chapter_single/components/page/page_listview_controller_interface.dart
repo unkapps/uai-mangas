@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_controller.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/horizontal/page_horizontal_listview.dart';
@@ -22,8 +21,6 @@ abstract class IPageListViewController {
 
   void init(ChapterSingleModel chapter);
 
-  void setPagesStore(List<PageStore> pagesStore);
-
   Future<void> scrollToPage(int pageNumber, {updatePageNumber = true});
 
   Future<void> loadImage(pageNumber);
@@ -43,25 +40,30 @@ abstract class IPageListViewController {
 
 class PageListViewUtils {
   static IPageListViewController getListViewControllerInstance(
-      ReadingMode readingMode) {
-    final pageVerticalListviewController =
-        Modular.get<PageVerticalListviewController>();
-    final pageHorizontalListviewController =
-        Modular.get<PageHorizontalListviewController>();
-
+      ReadingMode readingMode, ChapterSingleModel chapter) {
     return readingMode == ReadingMode.VERTICAL
-        ? pageVerticalListviewController
-        : pageHorizontalListviewController;
+        ? PageVerticalListviewController(chapter)
+        : PageHorizontalListviewController(chapter);
   }
 
-  static IPageListView getListViewInstance(ReadingMode readingMode,
-      {@required ChapterSingleModel chapter}) {
+  static IPageListView getListViewInstance(
+    ReadingMode readingMode, {
+    @required ChapterSingleModel chapter,
+    @required IPageListViewController pageListviewController,
+    @required ChapterSingleController chapterSingleController,
+  }) {
     return readingMode == ReadingMode.VERTICAL
         ? PageVerticalListView(
             chapter: chapter,
+            chapterSingleController: chapterSingleController,
+            pageVerticalListviewController:
+                pageListviewController as PageVerticalListviewController,
           )
         : PageHorizontalListView(
             chapter: chapter,
+            pageHorizontalListviewController:
+                pageListviewController as PageHorizontalListviewController,
+            chapterSingleController: chapterSingleController,
           );
   }
 }
