@@ -3,7 +3,6 @@ import 'package:diagonal_scrollview/diagonal_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/chapter_single_model.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_listview_interface.dart';
-import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/page_store.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/uai_page.dart';
 import 'package:leitor_manga/app/modules/core/pages/chapter_single/components/page/vertical/page_vertical_listview_controller.dart';
 import 'package:leitor_manga/app/shared/admob/admob_ads_id.dart';
@@ -40,24 +39,12 @@ class _PageVerticalListViewState extends State<PageVerticalListView> {
 
   @override
   void initState() {
-    _initPagesStore();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void _initPagesStore() {
-    var i = 0;
-    controller.setPagesStore(widget.chapter.pages
-        .map((page) => PageStore(
-              page,
-              (i++ < 3),
-              widget.chapterSingleController,
-            ))
-        .toList());
   }
 
   @override

@@ -128,14 +128,6 @@ abstract class _ChapterSingleControllerBase extends Disposable with Store {
   }
 
   @action
-  void informHeightAndInxOfPage(int index) {
-    if (pageListViewController is PageVerticalListviewController) {
-      (pageListViewController as PageVerticalListviewController)
-          .informHeightAndInxOfPage(index);
-    }
-  }
-
-  @action
   Future<void> goToPage(int pageNumber, bool showDialog) async {
     await pageListViewController.goToPage(pageNumber, showDialog);
   }

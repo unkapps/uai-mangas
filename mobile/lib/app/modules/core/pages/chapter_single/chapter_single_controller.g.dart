@@ -168,18 +168,6 @@ mixin _$ChapterSingleController on _ChapterSingleControllerBase, Store {
   }
 
   @override
-  void informHeightAndInxOfPage(int index) {
-    final _$actionInfo =
-        _$_ChapterSingleControllerBaseActionController.startAction(
-            name: '_ChapterSingleControllerBase.informHeightAndInxOfPage');
-    try {
-      return super.informHeightAndInxOfPage(index);
-    } finally {
-      _$_ChapterSingleControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void didChangeMetrics() {
     final _$actionInfo = _$_ChapterSingleControllerBaseActionController
         .startAction(name: '_ChapterSingleControllerBase.didChangeMetrics');
