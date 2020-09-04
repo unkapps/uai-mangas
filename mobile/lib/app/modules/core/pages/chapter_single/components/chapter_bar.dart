@@ -129,7 +129,7 @@ class ChapterBar extends StatelessWidget {
 
   void _goToChapter(BuildContext context,
       {@required int mangaId, @required int chapterId}) {
-    Modular.link.pushNamed(Routes.CHAPTER_SINGLE
+    Modular.link.pushReplacementNamed(Routes.CHAPTER_SINGLE
         .replaceAll(':mangaId', mangaId.toString())
         .replaceAll(':chapterId', chapterId.toString()));
   }
