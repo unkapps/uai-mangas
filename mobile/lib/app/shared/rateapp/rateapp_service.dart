@@ -11,11 +11,11 @@ class RateAppService {
   static Future<bool> initialize() async {
     var instance = await SharedPreferences.getInstance();
 
-    // uncomment for dev purposes
-    await _setOpenAt(DateTime.now().subtract(Duration(days: 1)));
+    // uncomment for dev purposes so that it always open
+    // await _setOpenAt(DateTime.now().subtract(Duration(days: 1)));
 
     if (!instance.containsKey(_SHARED_KEY)) {
-      // first time reaching here, in 3 days we ask for review
+      // first time reaching here, let's ask for review in some days
       _setOpenAt(DateTime.now().add(Duration(days: _MIN_DAYS_APP_USAGE)));
     } else {
       var nextTimeToOpen = DateTime.parse(instance.get(_SHARED_KEY));

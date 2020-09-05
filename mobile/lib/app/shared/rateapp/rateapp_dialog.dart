@@ -4,13 +4,15 @@ import 'rateapp_service.dart';
 
 enum LikeState { NEW, LIKED, DISLIKED, DONE }
 
-class RateappDialog extends StatefulWidget {
+class RateApp extends StatefulWidget {
   @override
-  _RateappDialogState createState() => _RateappDialogState();
+  _RateAppState createState() => _RateAppState();
 }
 
-class _RateappDialogState extends State<RateappDialog> {
-  LikeState likeState = LikeState.NEW;
+class _RateAppState extends State<RateApp> {
+  static final int _animationDuration = 600;
+  LikeState _likeState = LikeState.NEW;
+  double _opacity = 1.0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,61 +24,92 @@ class _RateappDialogState extends State<RateappDialog> {
             future: RateAppService.shouldDisplayRateDialog(),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData || !snapshot.data) {
-                return SizedBox.shrink();
+                return SizedBox();
               } else {
-                return Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      Text(getHeaderText(),
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          RaisedButton(
-                            child: Text(getNotFavorableText()),
-                            color: theme.accentColor,
-                            onPressed: () {
-                              if (likeState == LikeState.NEW) {
-                                updateLikedState(LikeState.DISLIKED);
-                              } else {
-                                updateLikedState(LikeState.DONE);
-                                RateAppService.setOpenLater();
-                              }
-                            },
-                          ),
-                          RaisedButton(
-                            child: Text(
-                              getFavorableText(),
-                              style: TextStyle(
-                                  color: theme.accentColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            color: Colors.white,
-                            onPressed: () {
-                              if (likeState == LikeState.NEW) {
-                                updateLikedState(LikeState.LIKED);
-                              } else {
-                                updateLikedState(LikeState.DONE);
-                                RateAppService.setNeverOpen();
-                                RateAppService.openPlayStore(context);
-                              }
-                            },
-                          ),
-                        ],
-                      )
-                    ]));
+                return AnimatedOpacity(
+                    opacity: _opacity,
+                    duration: Duration(milliseconds: _animationDuration),
+                    child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(children: [
+                          Text(_getHeaderText(),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              _getNegativeButton(theme),
+                              _getPositiveButton(theme),
+                            ],
+                          )
+                        ])));
               }
             }));
   }
 
   void updateLikedState(LikeState newLikedState) {
     setState(() {
-      likeState = newLikedState;
+      _likeState = newLikedState;
     });
   }
 
-  String getHeaderText() {
-    switch (likeState) {
+  Widget _getNegativeButton(ThemeData theme) {
+    return RaisedButton(
+      child: Text(_getNegativeText()),
+      color: theme.accentColor,
+      onPressed: () async {
+        _handleButtonClick(false);
+      },
+    );
+  }
+
+  Widget _getPositiveButton(ThemeData theme) {
+    return RaisedButton(
+      child: Text(
+        _getPositiveText(),
+        style: TextStyle(color: theme.accentColor, fontWeight: FontWeight.bold),
+      ),
+      color: Colors.white,
+      onPressed: () async {
+        _handleButtonClick(true);
+      },
+    );
+  }
+
+  void _handleButtonClick(bool positiveClick) async {
+    switch (_likeState) {
+      case LikeState.NEW:
+        await _changeOpacity();
+        Future.delayed(Duration(milliseconds: _animationDuration), () {
+          updateLikedState(
+              positiveClick ? LikeState.LIKED : LikeState.DISLIKED);
+        });
+        break;
+      case LikeState.LIKED:
+      case LikeState.DISLIKED:
+        updateLikedState(LikeState.DONE);
+        RateAppService.setNeverOpen();
+        if (positiveClick) {
+          RateAppService.openPlayStore(context);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _changeOpacity() async {
+    await setState(() {
+      _opacity = 0;
+    });
+    Future.delayed(Duration(milliseconds: _animationDuration), () {
+      setState(() {
+        _opacity = 1;
+      });
+    });
+  }
+
+  String _getHeaderText() {
+    switch (_likeState) {
       case LikeState.LIKED:
         return 'Que bom! Que tal nos avaliar na Play Store?';
       case LikeState.DISLIKED:
@@ -86,8 +119,8 @@ class _RateappDialogState extends State<RateappDialog> {
     }
   }
 
-  String getFavorableText() {
-    switch (likeState) {
+  String _getPositiveText() {
+    switch (_likeState) {
       case LikeState.LIKED:
         return 'Claro!';
       case LikeState.DISLIKED:
@@ -97,8 +130,8 @@ class _RateappDialogState extends State<RateappDialog> {
     }
   }
 
-  String getNotFavorableText() {
-    switch (likeState) {
+  String _getNegativeText() {
+    switch (_likeState) {
       case LikeState.LIKED:
       case LikeState.DISLIKED:
         return 'Não, obrigado';

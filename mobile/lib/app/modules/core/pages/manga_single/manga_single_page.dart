@@ -186,7 +186,7 @@ class _MangaSinglePageState
                   width: MediaQuery.of(context).size.width.toInt()),
             ),
           ),
-          RateappDialog(),
+          RateApp(),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Text('Próxima leitura'),
