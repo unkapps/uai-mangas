@@ -1,3 +1,6 @@
+## 2.0.1 (03/09/2020)
+- Diversas correções de bugs
+
 ## 2.0.0 (25/08/2020)
 - Adicionar página para visualizar categorias. Simmmm! **Categorias**. Vocês tanto pediram e nós escutamos :D
 - Adicionar modo de leitura horizontal
