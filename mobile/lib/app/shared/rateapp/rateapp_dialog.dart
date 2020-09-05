@@ -46,7 +46,7 @@ class _RateAppState extends State<RateApp> {
             }));
   }
 
-  void updateLikedState(LikeState newLikedState) {
+  void _updateLikedState(LikeState newLikedState) {
     setState(() {
       _likeState = newLikedState;
     });
@@ -80,20 +80,30 @@ class _RateAppState extends State<RateApp> {
       case LikeState.NEW:
         await _changeOpacity();
         Future.delayed(Duration(milliseconds: _animationDuration), () {
-          updateLikedState(
+          _updateLikedState(
               positiveClick ? LikeState.LIKED : LikeState.DISLIKED);
         });
         break;
       case LikeState.LIKED:
       case LikeState.DISLIKED:
-        updateLikedState(LikeState.DONE);
-        RateAppService.setNeverOpen();
+        _updateLikedState(LikeState.DONE);
+        _handleNextOpenTime();
         if (positiveClick) {
           RateAppService.openPlayStore(context);
         }
         break;
       default:
         break;
+    }
+  }
+
+  void _handleNextOpenTime() {
+    if (_likeState == LikeState.LIKED) {
+      // if user is liking the app, let's ask the same question in some time (default 2 weeks)
+      RateAppService.setOpenLater();
+    } else {
+      // if user is not liking the app, let's not ask ever again :)
+      RateAppService.setNeverOpen();
     }
   }
 
