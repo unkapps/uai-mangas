@@ -9,6 +9,7 @@ import 'package:leitor_manga/app/shared/auth/login_dialog.dart';
 import 'package:leitor_manga/app/shared/facebook_page_button.dart';
 import 'package:leitor_manga/app/shared/feed/feed_store.dart';
 import 'package:leitor_manga/app/modules/core/routes.dart';
+import 'package:leitor_manga/app/shared/googleplay_button.dart';
 import 'package:leitor_manga/app/shared/version/version.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -129,6 +130,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    GooglePlayButton(),
                     FacebookPageButton(),
                   ],
                 ),
