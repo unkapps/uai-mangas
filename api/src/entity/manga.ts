@@ -82,7 +82,7 @@ export default class Manga {
     nullable: true,
     select: false,
   })
-  coverFilePath?: string;
+  coverUrlStorage?: string;
 
   justGotSaved?: boolean;
 
