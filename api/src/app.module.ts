@@ -8,6 +8,7 @@ import { CoreModule } from './v1/modules/core/core.module';
 import { AuthModule } from './v1/modules/auth/auth.module';
 import { defaultConnectionConfig } from './config/db.config';
 import { envFilePath } from './config/env.config';
+import { migrationRunner } from './migration-runner';
 
 @Module({
   imports: [
@@ -17,21 +18,21 @@ import { envFilePath } from './config/env.config';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
+        await migrationRunner();
+
         return defaultConnectionConfig();
       },
     }),
     AuthModule,
     CoreModule,
   ],
-  controllers: [
-    AppController,
-  ],
-  providers: [
-    AppService,
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   constructor() {
-    console.log(`Running application in env: ${envFilePath} ${process.env.TYPE_ORM_LOGGING}`);
+    console.log(
+      `Running application in env: ${envFilePath} ${process.env.TYPE_ORM_LOGGING}`,
+    );
   }
 }
