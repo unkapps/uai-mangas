@@ -8,8 +8,11 @@ import 'package:leitor_manga/app/modules/core/routes.dart';
 
 class MangaListView extends StatelessWidget {
   final List<MangaListViewModel> mangas;
+  final bool showNextChapterButton;
 
-  const MangaListView({Key key, @required this.mangas}) : super(key: key);
+  const MangaListView(
+      {Key key, @required this.mangas, this.showNextChapterButton = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,34 +75,38 @@ class MangaListView extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(
-                            height: 30,
-                            width: manga.chapterNumber != null ? 80 : 120,
-                            child: OutlineButton(
-                              onPressed: () {
-                                Modular.link.pushNamed(Routes.MANGA_SINGLE
-                                    .replaceAll(
-                                        ':mangaId', manga.id.toString()));
+                          showNextChapterButton
+                              ? SizedBox(
+                                  height: 30,
+                                  width: manga.chapterNumber != null ? 80 : 120,
+                                  child: OutlineButton(
+                                    onPressed: () {
+                                      Modular.link.pushNamed(Routes.MANGA_SINGLE
+                                          .replaceAll(
+                                              ':mangaId', manga.id.toString()));
 
-                                if (manga.chapterId != null) {
-                                  Modular.link.pushNamed(Routes.CHAPTER_SINGLE
-                                      .replaceAll(
-                                          ':mangaId', manga.id.toString())
-                                      .replaceAll(':chapterId',
-                                          manga.chapterId.toString()));
-                                }
-                              },
-                              child: Text(
-                                manga.chapterNumber ?? 'Começar a ler',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              borderSide: BorderSide(color: theme.accentColor),
-                              shape: StadiumBorder(),
-                            ),
-                          ),
+                                      if (manga.chapterId != null) {
+                                        Modular.link.pushNamed(Routes
+                                            .CHAPTER_SINGLE
+                                            .replaceAll(
+                                                ':mangaId', manga.id.toString())
+                                            .replaceAll(':chapterId',
+                                                manga.chapterId.toString()));
+                                      }
+                                    },
+                                    child: Text(
+                                      manga.chapterNumber ?? 'Começar a ler',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    borderSide:
+                                        BorderSide(color: theme.accentColor),
+                                    shape: StadiumBorder(),
+                                  ),
+                                )
+                              : Container(),
                           manga.date != null
                               ? Text(DateFormat('dd/MM/yyyy')
                                   .format(manga.date.toLocal()))

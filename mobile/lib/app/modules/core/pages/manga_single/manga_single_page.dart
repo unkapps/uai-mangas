@@ -146,14 +146,24 @@ class _MangaSinglePageState
           ),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Row(
-                children: [
-                  Authors(
-                    authors: authors,
-                  ),
-                  MangaFavorite(),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SizedBox(
+                height: 15,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Authors(
+                          authors: authors,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: MangaFavorite(),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
               )),
           Padding(
             padding: EdgeInsets.all(10.0),

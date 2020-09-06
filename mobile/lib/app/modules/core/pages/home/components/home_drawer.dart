@@ -6,7 +6,8 @@ import 'package:leitor_manga/app/modules/core/pages/home/components/feed_count.d
 import 'package:leitor_manga/app/modules/policies/policies_routes.dart';
 import 'package:leitor_manga/app/shared/auth/auth_store.dart';
 import 'package:leitor_manga/app/shared/auth/login_dialog.dart';
-import 'package:leitor_manga/app/shared/facebook_page_button.dart';
+import 'package:leitor_manga/app/shared/buttons/discord_button.dart';
+import 'package:leitor_manga/app/shared/buttons/facebook_page_button.dart';
 import 'package:leitor_manga/app/shared/feed/feed_store.dart';
 import 'package:leitor_manga/app/modules/core/routes.dart';
 import 'package:leitor_manga/app/shared/googleplay_button.dart';
@@ -132,6 +133,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   children: <Widget>[
                     GooglePlayButton(),
                     FacebookPageButton(),
+                    DiscordButton(),
                   ],
                 ),
               ],
