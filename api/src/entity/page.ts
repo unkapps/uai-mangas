@@ -26,7 +26,7 @@ export default class Page {
     length: 255,
     nullable: true,
   })
-  imageFilePath?: string;
+  imageUrlStorage?: string;
 
   @ManyToOne(() => Chapter, (chapter) => chapter.pages)
   chapter: Chapter;
