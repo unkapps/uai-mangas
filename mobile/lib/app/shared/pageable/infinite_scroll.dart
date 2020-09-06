@@ -47,7 +47,13 @@ class _InfiniteScrollState<T> extends State<InfiniteScroll<T>> {
 
               return false;
             },
-            child: widget.child,
+            child: RefreshIndicator(
+              child: widget.child,
+              onRefresh: () {
+                widget.pageableStore.loadItems();
+                return Future.delayed(Duration(seconds: 0), () {});
+              },
+            ),
           ),
         ),
         Container(
