@@ -73,6 +73,7 @@ class _FeedPageState extends State<FeedPage> {
                       child: MangaListView(
                         key: _othersKey,
                         mangas: feedStore.others,
+                        showNextChapterButton: false,
                       ),
                       onRefresh: () {
                         feedStore.load();
