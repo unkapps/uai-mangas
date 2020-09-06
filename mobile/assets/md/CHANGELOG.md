@@ -1,4 +1,5 @@
 ## 2.0.2 (06/09/2020)
+- Recarregar mangás recentes/feed "puxando" para baixo
 - **Adicionar botão do Discord**
 - Em obras com vários autores o ícone de favoritar não aparecia
 
