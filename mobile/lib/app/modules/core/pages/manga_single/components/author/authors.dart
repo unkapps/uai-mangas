@@ -19,8 +19,7 @@ class Authors extends StatelessWidget {
           'Por: ',
           style: style,
         ),
-        SizedBox(
-          height: 15,
+        Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.all(1),

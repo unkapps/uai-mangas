@@ -43,23 +43,42 @@ class _FeedPageState extends State<FeedPage> {
                 children: [
                   Container(
                     padding: EdgeInsets.all(10),
-                    child: MangaListView(
-                      key: _newsKey,
-                      mangas: feedStore.news,
+                    child: RefreshIndicator(
+                      child: MangaListView(
+                        key: _newsKey,
+                        mangas: feedStore.news,
+                      ),
+                      onRefresh: () {
+                        feedStore.load();
+                        return Future.delayed(Duration(seconds: 0), () {});
+                      },
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.all(10),
-                    child: MangaListView(
-                      key: _unreadKey,
-                      mangas: feedStore.unread,
+                    child: RefreshIndicator(
+                      child: MangaListView(
+                        key: _unreadKey,
+                        mangas: feedStore.unread,
+                      ),
+                      onRefresh: () {
+                        feedStore.load();
+                        return Future.delayed(Duration(seconds: 0), () {});
+                      },
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.all(10),
-                    child: MangaListView(
-                      key: _othersKey,
-                      mangas: feedStore.others,
+                    child: RefreshIndicator(
+                      child: MangaListView(
+                        key: _othersKey,
+                        mangas: feedStore.others,
+                        showNextChapterButton: false,
+                      ),
+                      onRefresh: () {
+                        feedStore.load();
+                        return Future.delayed(Duration(seconds: 0), () {});
+                      },
                     ),
                   ),
                 ],
