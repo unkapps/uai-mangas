@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'util/url_helper.dart';
+import 'package:leitor_manga/app/shared/util/url_helper.dart';
 
 class FacebookPageButton extends StatelessWidget {
   const FacebookPageButton({Key key}) : super(key: key);
