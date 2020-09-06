@@ -13,11 +13,7 @@ class DiscordButton extends StatelessWidget {
         onPressed: () async {
           var url = 'https://discord.gg/Kz9NYF';
 
-          if (await canLaunch(url)) {
-            await launch(url);
-          } else {
-            await launch(url);
-          }
+          await launch(url);
         },
       ),
     );
