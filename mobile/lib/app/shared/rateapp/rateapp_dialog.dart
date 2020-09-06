@@ -29,19 +29,34 @@ class _RateAppState extends State<RateApp> {
                 return AnimatedOpacity(
                     opacity: _opacity,
                     duration: Duration(milliseconds: _animationDuration),
-                    child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Column(children: [
-                          Text(_getHeaderText(),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              _getNegativeButton(theme),
-                              _getPositiveButton(theme),
-                            ],
-                          )
-                        ])));
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            onTap: () => _handeClose(),
+                            child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Text('X')),
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 20, 10),
+                            child: Column(children: [
+                              Text(_getHeaderText(),
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  _getNegativeButton(theme),
+                                  _getPositiveButton(theme),
+                                ],
+                              )
+                            ])),
+                      ],
+                    ));
               }
             }));
   }
@@ -95,6 +110,11 @@ class _RateAppState extends State<RateApp> {
       default:
         break;
     }
+  }
+
+  void _handeClose() {
+    RateAppService.setOpenLater();
+    _updateLikedState(LikeState.DONE);
   }
 
   void _handleNextOpenTime() {
