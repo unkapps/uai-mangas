@@ -56,7 +56,6 @@ class UaiPage extends StatelessWidget {
             }
           : null,
       cache: false,
-      
       clearMemoryCacheIfFailed: true,
       retries: 0,
       timeLimit: Duration(seconds: 5),
@@ -66,14 +65,7 @@ class UaiPage extends StatelessWidget {
             SchedulerBinding.instance.scheduleFrameCallback((_) {
               pageStore.setStatus(PageLoadStatus.LOADED, index: index);
             });
-
-            if (allowZoom) {
-              return null;
-            }
-
-            return ExtendedRawImage(
-              image: state.extendedImageInfo?.image,
-            );
+            return null;
           case LoadState.failed:
             SchedulerBinding.instance.scheduleFrameCallback((_) {
               pageStore.setStatus(PageLoadStatus.LOADED, index: index);
