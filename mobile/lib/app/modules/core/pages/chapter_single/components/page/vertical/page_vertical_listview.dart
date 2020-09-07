@@ -73,6 +73,9 @@ class _PageVerticalListViewState extends State<PageVerticalListView> {
 
           return GestureDetector(
             onTap: controller.onTap,
+            onDoubleTap: () => {
+              // TODO: if we figure out the tap position, we could toggle zoom
+            },
             child: Column(
               children: [
                 _getAd(width),
