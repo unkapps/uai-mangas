@@ -18,6 +18,7 @@ import 'package:leitor_manga/app/shared/admob/admob_banner_wrapper.dart';
 import 'package:leitor_manga/app/shared/auth/auth_store.dart';
 import 'package:leitor_manga/app/shared/auth/login_dialog.dart';
 import 'package:leitor_manga/app/shared/feed/feed_store.dart';
+import 'package:leitor_manga/app/shared/rateapp/rateapp_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -195,6 +196,7 @@ class _MangaSinglePageState
                   width: MediaQuery.of(context).size.width.toInt()),
             ),
           ),
+          RateApp(),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Text('Próxima leitura'),

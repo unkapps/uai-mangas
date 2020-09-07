@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:leitor_manga/app/shared/util/url_helper.dart';
 
 class FacebookPageButton extends StatelessWidget {
   const FacebookPageButton({Key key}) : super(key: key);
@@ -14,11 +14,7 @@ class FacebookPageButton extends StatelessWidget {
           var fbProtocolUrl = 'fb://page/100278801776406';
           var fallbackUrl = 'https://facebook.com/uaimangas';
 
-          if (await canLaunch(fbProtocolUrl)) {
-            await launch(fbProtocolUrl);
-          } else {
-            await launch(fallbackUrl);
-          }
+          await UrlHelper.launchUrl(fbProtocolUrl, fallbackUrl);
         },
       ),
     );
