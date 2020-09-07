@@ -57,6 +57,14 @@ abstract class _PageVerticalListviewControllerBase
   @override
   bool showBar = true;
 
+  @computed
+  int scrollUpCounter = 0;
+
+  @computed
+  int scrollDownCounter = 0;
+
+  static final _scrollThreshold = 32;
+
   _PageVerticalListviewControllerBase(ChapterSingleModel chapter) {
     init(chapter);
   }
@@ -125,10 +133,25 @@ abstract class _PageVerticalListviewControllerBase
         pagesStore[currentPage - 1].setStatus(PageLoadStatus.IN_PROGRESS);
       }
 
-      showBar = olderScrollPosition > dy;
+      if (olderScrollPosition > dy) {
+        if (++scrollDownCounter > _scrollThreshold) {
+          showBar = true;
+        }
+        scrollUpCounter = 0;
+      } else {
+        if (++scrollUpCounter > _scrollThreshold) {
+          showBar = false;
+        }
+        scrollDownCounter = 0;
+      }
 
       olderScrollPosition = dy;
     }
+  }
+
+  @action
+  void onTap() {
+    showBar = !showBar;
   }
 
   @action

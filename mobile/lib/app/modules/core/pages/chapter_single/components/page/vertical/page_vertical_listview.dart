@@ -71,12 +71,15 @@ class _PageVerticalListViewState extends State<PageVerticalListView> {
             ));
           }
 
-          return Column(
-            children: [
-              _getAd(width),
-              ...widgets,
-              _getAd(width),
-            ],
+          return GestureDetector(
+            onTap: controller.onTap,
+            child: Column(
+              children: [
+                _getAd(width),
+                ...widgets,
+                _getAd(width),
+              ],
+            ),
           );
         },
       ),
