@@ -95,8 +95,9 @@ class _ChapterSinglePageState
       pageListView,
       Positioned(
         bottom: 0,
-        child: Opacity(
+        child: AnimatedOpacity(
           opacity: controller.barOpacity,
+          duration: Duration(milliseconds: 500),
           child: ChapterBar(
             chapter,
             onChapterChange: (movedFoward) {
