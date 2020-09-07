@@ -57,12 +57,8 @@ abstract class _PageVerticalListviewControllerBase
   @override
   bool showBar = true;
 
-  @computed
-  int scrollUpCounter = 0;
-
-  @computed
-  int scrollDownCounter = 0;
-
+  int _scrollUpCounter = 0;
+  int _scrollDownCounter = 0;
   static final _scrollThreshold = 32;
 
   _PageVerticalListviewControllerBase(ChapterSingleModel chapter) {
@@ -134,15 +130,15 @@ abstract class _PageVerticalListviewControllerBase
       }
 
       if (olderScrollPosition > dy) {
-        if (++scrollDownCounter > _scrollThreshold) {
+        if (++_scrollDownCounter > _scrollThreshold) {
           showBar = true;
         }
-        scrollUpCounter = 0;
+        _scrollUpCounter = 0;
       } else {
-        if (++scrollUpCounter > _scrollThreshold) {
+        if (++_scrollUpCounter > _scrollThreshold) {
           showBar = false;
         }
-        scrollDownCounter = 0;
+        _scrollDownCounter = 0;
       }
 
       olderScrollPosition = dy;
