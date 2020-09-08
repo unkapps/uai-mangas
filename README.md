@@ -8,6 +8,21 @@ Seu funcionamento acontece da seguinte forma:
 - Através da [api](https://github.com/unkapps/uai-mangas/tree/master/api) acontece toda a comunicação com o banco de dados: autenticação do usuário, busca por um mangá, listagem de um mangá e etc.
 - Através do [mobile](https://github.com/unkapps/uai-mangas/tree/master/mobile) está a camada de apresentação.
 
+**Descrição do Google Play**
+```
+Leia + de 7000 de mangás em PORTUGUÊS diretamente pelo seu celular.
+Uai Mangás foi criado com muito amor de fã para fãs para possibilitar a fácil leitura de scans.
+
+Modo de leitura
+- Vertical, igual webtoon (padrão)
+- Horizontal
+
+Funcionalidades:
+- Adicionar mangá como favorito;
+- Busca por nome no acervo de + de 7000 mangás;
+- Receber notificação no lançamento de um novo capitulo!
+```
+
 ## Screenshots
 ![ss](https://github.com/unkapps/uai-mangas/blob/master/mobile/images_src/ss/multiple.jpg)
 
@@ -48,6 +63,7 @@ O projeto foi realizado apenas para diversão e treinamento de algumas tecnologi
 - Padronização arquitetural nos projetos extrator/Api
 - Bugs
 	- [Bug  7](https://github.com/unkapps/uai-mangas/issues/7)
+- Documentação da API através do Swagger
 
 ## Conclusão
 O projeto deixa a desejar em muitos aspectos, principalmente no extrator/api, mas acredito que consegue ter várias partes reaproveitas.
