@@ -1,16 +1,14 @@
-# leitor_manga
+# Mobile
 
-A new Flutter project.
+O mobile é a parte que o usuário interage :D
 
-## Getting Started
+## Instalação
+- `flutter pub get` para instalar os pacotes necessários
+- Através do [console do firebase](https://console.firebase.google.com/) gerar um novo `android\app\google-services.json` caso contrário nada relacionado ao firebase funcionará
+- Alterar o arquivo `lib\app\shared\config\environment_config.dart` e inserir a url do servidor
+- Alterar o arquivo `android\app\src\main\res\values\strings.xml` e inserir o id da aplicação do facebook, caso contrário o login pelo facebook não funcionará
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Recomendações
+- Pensar em uma forma melhor para a url do servidor, pois o environment_config.dart não está bom hahaha
+- Não deixe informações sensíveis no ormconfig.json. Ao invés disso crie variáveis de ambiente
+- Não commitar a chave de assinatura da aplicação
