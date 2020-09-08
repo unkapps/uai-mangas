@@ -9,6 +9,7 @@ Seu funcionamento acontece da seguinte forma:
 - Através do [mobile](https://github.com/unkapps/uai-mangas/tree/master/mobile) está a camada de apresentação.
 
 ## Screenshots
+![ss](https://github.com/unkapps/uai-mangas/blob/master/mobile/images_src/ss/multiple.jpg)
 
 ## Instalação
 - [extrator](https://github.com/unkapps/uai-mangas/tree/master/extrator) 
