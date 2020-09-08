@@ -26,11 +26,6 @@ Funcionalidades:
 ## Screenshots
 ![ss](https://github.com/unkapps/uai-mangas/blob/master/mobile/images_src/ss/multiple.jpg)
 
-## Instalação
-- [extrator](https://github.com/unkapps/uai-mangas/tree/master/extrator) 
-- [api](https://github.com/unkapps/uai-mangas/tree/master/api) 
-- [mobile](https://github.com/unkapps/uai-mangas/tree/master/mobile)
-
 ## Tecnologias
 
 ### Extrator
@@ -54,7 +49,9 @@ Funcionalidades:
 - Pedantic
 
 ## Instalação
-
+- [extrator](https://github.com/unkapps/uai-mangas/tree/master/extrator) 
+- [api](https://github.com/unkapps/uai-mangas/tree/master/api) 
+- [mobile](https://github.com/unkapps/uai-mangas/tree/master/mobile)
 
 ## O que não foi feito
 
