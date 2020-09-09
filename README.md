@@ -1,6 +1,8 @@
 
 # Uai Mangás
 
+[Veja aqui um vídeo demonstrando o funcionamento do app](https://github.com/unkapps/uai-mangas/blob/master/uai%20mangas%20video.mp4)
+
 Percebendo poucas opções de aplicativos Android para leitura de mangás no Brasil e tendo vontade de experimentar algumas tecnologias surgiu este projeto.
 
 Seu funcionamento acontece da seguinte forma:
